@@ -1,0 +1,4 @@
+DROP DATABASE IF EXISTS `SGU_SystemSecurity`;
+CREATE DATABASE IF NOT EXISTS `SGU_SystemSecurity`;
+
+USE `SGU_SystemSecurity`;

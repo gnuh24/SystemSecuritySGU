@@ -24,6 +24,10 @@ public class ProfileService implements IProfileService{
     @Autowired
     private IProfileRepository profileRepository;
 
+
+    @Autowired
+    private IAccountService accountService;
+
     @Autowired
     private ModelMapper modelMapper;
 
@@ -43,6 +47,11 @@ public class ProfileService implements IProfileService{
     @Transactional
     public Profile createProfile(ProfileCreateForm profileCreateForm) {
         Profile profile = modelMapper.map(profileCreateForm, Profile.class);
+
+        if (profile.getPosition().equals(Profile.Position.Manager)){
+            accountService.createAccount(profile);
+        }
+
         return profileRepository.save(profile);
     }
 

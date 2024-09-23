@@ -7,6 +7,9 @@ import lombok.NonNull;
 @AllArgsConstructor
 public class ErrorResponse {
 
+    @NonNull
+    private Integer status;
+
     //Hiển thị cho User xem
     @NonNull
     private String message;

@@ -38,6 +38,10 @@ public class Profile {
     private Gender gender;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Position position = Position.Staff;
+
+    @Column(nullable = false)
     private String fullname;
 
     @Column(nullable = false)
@@ -55,6 +59,12 @@ public class Profile {
 
     public enum Gender{
         Male, Female, Other
+    }
+
+    // Enum for position
+    public enum Position {
+        Staff,
+        Manager
     }
 
 

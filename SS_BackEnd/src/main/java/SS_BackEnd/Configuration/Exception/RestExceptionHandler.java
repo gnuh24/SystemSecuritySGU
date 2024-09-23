@@ -1,8 +1,12 @@
 package SS_BackEnd.Configuration.Exception;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import SS_BackEnd.Configuration.Exception.AuthException.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.constraints.NotNull;
@@ -25,8 +29,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class  RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-//    @Autowired
-//    private AuthExceptionHandler authExceptionHandler;
+    @Autowired
+    private AuthExceptionHandler authExceptionHandler;
 
     // Lỗi mặc định
     // Annotaion này dùng để đánh dấu phương thức này sẽ xử lý tất cả các lỗi phát sinh từ các Controller
@@ -38,26 +42,26 @@ public class  RestExceptionHandler extends ResponseEntityExceptionHandler {
         int code = 1;
         String moreInformation = "http://localhost:8080/api/v1/exception/1";
 
-        ErrorResponse response = new ErrorResponse(message, detailMessage, null, code, moreInformation);
+        ErrorResponse response = new ErrorResponse(400, message, detailMessage, null, code, moreInformation);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
 
     // URL không hợp lệ
     @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(
-        NoHandlerFoundException exception,
-        @NotNull HttpHeaders headers,
-        @NotNull HttpStatusCode status,
-        @NotNull WebRequest request) {
+                                        NoHandlerFoundException exception,
+                                        @NotNull HttpHeaders headers,
+                                        @NotNull HttpStatusCode status,
+                                        @NotNull WebRequest request) {
 
         String message = "URL Không hợp lệ !!!";
         String detailMessage = exception.getLocalizedMessage();
         int code = 2;
         String moreInformation = "http://localhost:8080/api/v1/exception/2";
 
-        ErrorResponse response = new ErrorResponse(message, detailMessage, null, code, moreInformation);
+        ErrorResponse response = new ErrorResponse(status.value(), message, detailMessage, null, code, moreInformation);
 
         return new ResponseEntity<>(response, status);
     }
@@ -76,7 +80,7 @@ public class  RestExceptionHandler extends ResponseEntityExceptionHandler {
         int code = 3;
         String moreInformation = "http://localhost:8080/api/v1/exception/3";
 
-        ErrorResponse response = new ErrorResponse(message, detailMessage, null, code, moreInformation);
+        ErrorResponse response = new ErrorResponse(status.value(), message, detailMessage, null, code, moreInformation);
 
         return new ResponseEntity<>(response, status);
     }
@@ -94,7 +98,7 @@ public class  RestExceptionHandler extends ResponseEntityExceptionHandler {
         int code = 4;
         String moreInformation = "http://localhost:8080/api/v1/exception/4";
 
-        ErrorResponse response = new ErrorResponse(message, detailMessage, null, code, moreInformation);
+        ErrorResponse response = new ErrorResponse(status.value(), message, detailMessage, null, code, moreInformation);
 
         return new ResponseEntity<>(response, status);
     }
@@ -130,7 +134,7 @@ public class  RestExceptionHandler extends ResponseEntityExceptionHandler {
         int code = 5;
         String moreInformation = "http://localhost:8080/api/v1/exception/5";
 
-        ErrorResponse response = new ErrorResponse(message, detailMessage, errors, code, moreInformation);
+        ErrorResponse response = new ErrorResponse(status.value(), message, detailMessage, errors, code, moreInformation);
 
         return new ResponseEntity<>(response, status);
     }
@@ -152,7 +156,7 @@ public class  RestExceptionHandler extends ResponseEntityExceptionHandler {
         int code = 5;
         String moreInformation = "http://localhost:8080/api/v1/exception/5";
 
-        ErrorResponse response = new ErrorResponse(message, detailMessage, errors, code, moreInformation);
+        ErrorResponse response = new ErrorResponse(400, message, detailMessage, errors, code, moreInformation);
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
@@ -173,7 +177,7 @@ public class  RestExceptionHandler extends ResponseEntityExceptionHandler {
         int code = 6;
         String moreInformation = "http://localhost:8080/api/v1/exception/6";
 
-        ErrorResponse response = new ErrorResponse(message, detailMessage, null, code, moreInformation);
+        ErrorResponse response = new ErrorResponse(status.value(), message, detailMessage, null, code, moreInformation);
 
         return new ResponseEntity<>(response, status);
     }
@@ -190,43 +194,42 @@ public class  RestExceptionHandler extends ResponseEntityExceptionHandler {
         int code = 7;
         String moreInformation = "http://localhost:8080/api/v1/exception/7";
 
-        ErrorResponse response = new ErrorResponse(message, detailMessage, null, code, moreInformation);
+        ErrorResponse response = new ErrorResponse(400, message, detailMessage, null, code, moreInformation);
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
 
-//    // TODO: Các lỗi liên quan đến bảo mật nằm trong các phương thức service
-//    @ExceptionHandler(MismatchedTokenAccountException.class)
-//    public void handleMismatchedTokenAccountException(HttpServletRequest request, HttpServletResponse response, MismatchedTokenAccountException ex) throws IOException {
-//        authExceptionHandler.commence(request, response, ex);
-//    }
-//
-//    @ExceptionHandler(InvalidCredentialsException.class)
-//    public void handleInvalidCredentialsException(HttpServletRequest request, HttpServletResponse response, InvalidCredentialsException ex) throws IOException {
-//        authExceptionHandler.commence(request, response, ex);
-//    }
-//
-//    @ExceptionHandler(AccountBannedException.class)
-//    public void handleAccountBannedException(HttpServletRequest request, HttpServletResponse response, AccountBannedException ex) throws IOException {
-//        authExceptionHandler.commence(request, response, ex);
-//    }
-//
-//    @ExceptionHandler(TokenExpiredException.class)
-//    public void handleTokenExpiredException(HttpServletRequest request, HttpServletResponse response, TokenExpiredException ex) throws IOException {
-//        authExceptionHandler.commence(request, response, ex);
-//    }
-//
-//    @ExceptionHandler(InvalidJWTSignatureException.class)
-//    public void handleInvalidJWTSignatureException(HttpServletRequest request, HttpServletResponse response, InvalidJWTSignatureException ex) throws IOException {
-//        authExceptionHandler.commence(request, response, ex);
-//    }
-//
+    // TODO: Các lỗi liên quan đến bảo mật nằm trong các phương thức service
+    @ExceptionHandler(MismatchedTokenAccountException.class)
+    public void handleMismatchedTokenAccountException(HttpServletRequest request, HttpServletResponse response, MismatchedTokenAccountException ex) throws IOException {
+        authExceptionHandler.commence(request, response, ex);
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public void handleInvalidCredentialsException(HttpServletRequest request, HttpServletResponse response, InvalidCredentialsException ex) throws IOException {
+        authExceptionHandler.commence(request, response, ex);
+    }
+
+    @ExceptionHandler(AccountBannedException.class)
+    public void handleAccountBannedException(HttpServletRequest request, HttpServletResponse response, AccountBannedException ex) throws IOException {
+        authExceptionHandler.handle(request, response, ex);
+    }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public void handleTokenExpiredException(HttpServletRequest request, HttpServletResponse response, TokenExpiredException ex) throws IOException {
+        authExceptionHandler.commence(request, response, ex);
+    }
+
+    @ExceptionHandler(InvalidJWTSignatureException.class)
+    public void handleInvalidJWTSignatureException(HttpServletRequest request, HttpServletResponse response, InvalidJWTSignatureException ex) throws IOException {
+        authExceptionHandler.commence(request, response, ex);
+    }
+
 //    @ExceptionHandler(LoggedOutTokenException.class)
 //    public void handleLoggedOutTokenException(HttpServletRequest request, HttpServletResponse response, LoggedOutTokenException ex) throws IOException {
 //        authExceptionHandler.commence(request, response, ex);
 //    }
-//
 
 
 

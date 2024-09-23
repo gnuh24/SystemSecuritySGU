@@ -1,17 +1,18 @@
 USE `SGU_SystemSecurity`;
 
 -- Insert sample data into the `Account` table
-INSERT INTO `Account` 	(`username`, `password`) VALUES
-						('manager001', 'password123');
+INSERT INTO `Account` 	(`username`, 	`password`	, 													`role`, `status`) VALUES
+						('admin', 		'$2a$10$W2neF9.6Agi6kAKVq8q3fec5dHW8KUA.b0VSIGdIZyUravfLpyIFi', "Admin", true),
+						('manager001', 	'$2a$10$W2neF9.6Agi6kAKVq8q3fec5dHW8KUA.b0VSIGdIZyUravfLpyIFi', "Manager", true);
 
 -- Insert sample data into the `Profile` table
-INSERT INTO `Profile` 	(`code`, 		`birthday`,    `status`, `createAt`, 				`updateAt`, 				`gender`, 		`fullname`, 		`phone`, 		`email`, 					`accountId`) VALUES
-						('NV99999999', 	'1985-06-15', 	TRUE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Male',		 	'Mr Bean', 			'123-456-7890', 'john.doe@example.com', 		1),
-						('NV00000001', 	'1990-03-22', 	TRUE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Female', 		'Ngô Tuấn Hưng',	'098-765-4321', 'hungnt.020404@gmail.com', 		NULL),
-						('NV00000002', 	'1988-11-30', 	TRUE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Other', 		'Nguyễn Minh Phúc',	'555-555-5555', 'alice.johnson@example.com', 	NULL),
-						('NV00000003', 	'1985-06-15', 	TRUE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Male', 		'Trương Mậu Điền', 	'123-456-7890', 'john.doe@example.com', 		NULL),
-						('NV00000004', 	'1990-03-22', 	TRUE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Female', 		'Đào Thanh Tú',		'098-765-4321', 'jane.smith@example.com', 		NULL),
-						('NV00000005', 	'1988-11-30', 	FALSE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Other', 		'Đoàn Ánh Dương', 	'555-555-5555', 'alice.johnson@example.com', 	NULL);
+INSERT INTO `Profile` 	(`code`, 		`birthday`,    `status`, `createAt`, 				`updateAt`, 				`gender`, 		`fullname`, 		`phone`, 		`email`, 					`accountId`,		`position`) VALUES
+						('NV99999999', 	'1985-06-15', 	TRUE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Male',		 	'Mr Bean', 			'123-456-7890', 'john.doe@example.com', 		1,				'Manager'),
+						('NV00000001', 	'1990-03-22', 	TRUE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Female', 		'Ngô Tuấn Hưng',	'098-765-4321', 'hungnt.020404@gmail.com', 		NULL,			'Staff'),
+						('NV00000002', 	'1988-11-30', 	TRUE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Other', 		'Nguyễn Minh Phúc',	'555-555-5555', 'alice.johnson@example.com', 	NULL,			'Staff'),
+						('NV00000003', 	'1985-06-15', 	TRUE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Male', 		'Trương Mậu Điền', 	'123-456-7890', 'john.doe@example.com', 		NULL,			'Staff'),
+						('NV00000004', 	'1990-03-22', 	TRUE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Female', 		'Đào Thanh Tú',		'098-765-4321', 'jane.smith@example.com', 		NULL,			'Staff'),
+						('NV00000005', 	'1988-11-30', 	FALSE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Other', 		'Đoàn Ánh Dương', 	'555-555-5555', 'alice.johnson@example.com', 	NULL,			'Staff');
 
 -- Insert sample data into the `FingerPrint` table
 INSERT INTO `FingerPrint` (`profileCode`, `path`, `createAt`) VALUES

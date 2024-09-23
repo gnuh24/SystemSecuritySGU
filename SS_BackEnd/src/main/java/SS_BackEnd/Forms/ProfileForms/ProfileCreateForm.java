@@ -14,5 +14,6 @@ public class ProfileCreateForm {
     private String fullname;
     private String phone;
     private String email;
+    private Profile.Position position;
 }
 

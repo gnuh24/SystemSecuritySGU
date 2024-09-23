@@ -7,6 +7,8 @@ USE `SGU_SystemSecurity`;
 CREATE TABLE IF NOT EXISTS `Account` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `username` NVARCHAR(50) NOT NULL UNIQUE,
+  `role`	ENUM("Manager", "Admin") NOT NULL,
+  `status`	BOOLEAN NOT NULL,
   `password` NVARCHAR(255) NOT NULL
 );
 
@@ -17,7 +19,8 @@ CREATE TABLE IF NOT EXISTS `Profile` (
   `status` BOOLEAN NOT NULL,
   `createAt` DATETIME NOT NULL,
   `updateAt` DATETIME NOT NULL,
-  `gender` ENUM ("Male", "Female", "Other") ,
+  `gender` ENUM ("Male", "Female", "Other") NOT NULL ,
+  `position` ENUM("Staff", "Manager") NOT NULL,
   `fullname` NVARCHAR(255) NOT NULL,
   `phone` NVARCHAR(255) NOT NULL,
   `email` NVARCHAR(255) NOT NULL,

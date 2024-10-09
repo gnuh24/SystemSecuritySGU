@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import SS_BackEnd.Configuration.Exception.AuthException.*;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolation;
@@ -42,8 +43,12 @@ public class  RestExceptionHandler extends ResponseEntityExceptionHandler {
         int code = 1;
         String moreInformation = "http://localhost:8080/api/v1/exception/1";
 
-        ErrorResponse response = new ErrorResponse(400, message, detailMessage, null, code, moreInformation);
+        if (exception instanceof EntityNotFoundException){
+            ErrorResponse response = new ErrorResponse(404, message, detailMessage, null, code, moreInformation);
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
 
+        ErrorResponse response = new ErrorResponse(400, message, detailMessage, null, code, moreInformation);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

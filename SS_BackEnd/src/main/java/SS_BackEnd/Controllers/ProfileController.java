@@ -5,6 +5,7 @@ import SS_BackEnd.Forms.Other.Response;
 import SS_BackEnd.Forms.ProfileForms.*;
 import SS_BackEnd.Services.IProfileService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.modelmapper.internal.bytebuddy.asm.Advice;
@@ -34,17 +35,19 @@ public class ProfileController {
                                                                                String search,
                                                                                ProfileFilterForm form) {
         Page<Profile> entities = profileService.getAllProfiles(profile, form, search);
-
         List<ProfileDTOListElement> dto = modelMapper.map(entities.getContent(), new TypeToken<List<ProfileDTOListElement>>(){} .getType());
-
         Page<ProfileDTOListElement> dtoPage = new PageImpl<>(dto, profile , entities.getTotalElements());
 
-
         Response<Page<ProfileDTOListElement>> response = new Response<>();
-        response.setStatus(200);
-        response.setMessage("Truy vấn thành công");
         response.setData(dtoPage);
 
+        String reponseMessage = "Truy ấn thành công";
+        if (dto.isEmpty()){
+            reponseMessage = "Không tìm thấy bất cứ Profile nào theo yêu cầu !!";
+        }
+
+        response.setStatus(200);
+        response.setMessage(reponseMessage);
         return ResponseEntity.ok(response);
     }
 
@@ -53,26 +56,20 @@ public class ProfileController {
         Profile entities = profileService.getProfileById(code);
         Response<ProfileDTOInDetail> response = new Response<>();
 
-        if (entities != null) {
-            ProfileDTOInDetail dto = modelMapper.map(entities, ProfileDTOInDetail.class);
-
-            response.setStatus(200);
-            response.setMessage("Truy vấn thành công");
-            response.setData(dto);
-
-            return ResponseEntity.ok(response);
+        if (entities == null) {
+            throw new EntityNotFoundException("Không tìm thấy thông tin nhân viên có code: " + code);
         }
 
-        response.setStatus(404);
-        response.setMessage("Không tìm thấy thông tin nhân viên có code: " + code);
-        response.setData(null);
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        ProfileDTOInDetail dto = modelMapper.map(entities, ProfileDTOInDetail.class);
+        response.setStatus(200);
+        response.setMessage("Truy vấn thành công");
+        response.setData(dto);
+        return ResponseEntity.ok(response);
     }
 
 
     @PostMapping("/Create")
-    public ResponseEntity<Response<ProfileDTOInDetail>> createProfile(@ModelAttribute ProfileCreateForm profileCreateForm) {
+    public ResponseEntity<Response<ProfileDTOInDetail>> createProfile(@ModelAttribute @Valid ProfileCreateForm profileCreateForm) {
         try {
             Profile createdProfile = profileService.createProfile(profileCreateForm);
             ProfileDTOInDetail dto = modelMapper.map(createdProfile, ProfileDTOInDetail.class);
@@ -94,8 +91,7 @@ public class ProfileController {
     }
 
     @PatchMapping("/Update")
-    public ResponseEntity<Response<ProfileDTOInDetail>> updateProfile(@ModelAttribute ProfileUpdateForm profileUpdateForm) {
-        try {
+    public ResponseEntity<Response<ProfileDTOInDetail>> updateProfile(@ModelAttribute @Valid ProfileUpdateForm profileUpdateForm) {
             // Gọi service để cập nhật profile
             Profile updatedProfile = profileService.updateProfile(profileUpdateForm);
             ProfileDTOInDetail dto = modelMapper.map(updatedProfile, ProfileDTOInDetail.class);
@@ -106,21 +102,7 @@ public class ProfileController {
             response.setData(dto);
 
             return ResponseEntity.ok(response);
-        } catch (EntityNotFoundException e) {
-            Response<ProfileDTOInDetail> response = new Response<>();
-            response.setStatus(404);
-            response.setMessage("Không tìm thấy profile có mã: " + profileUpdateForm.getProfileCode());
-            response.setData(null);
 
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        } catch (Exception e) {
-            Response<ProfileDTOInDetail> response = new Response<>();
-            response.setStatus(500);
-            response.setMessage("Cập nhật profile thất bại: " + e.getMessage());
-            response.setData(null);
-
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
     }
 
 }

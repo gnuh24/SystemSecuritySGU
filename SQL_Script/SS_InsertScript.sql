@@ -7,7 +7,8 @@ INSERT INTO `Account` 	(`username`, 	`password`	, 													`role`, `status`)
 
 -- Insert sample data into the `Profile` table
 INSERT INTO `Profile` 	(`code`, 		`birthday`,    `status`, `createAt`, 				`updateAt`, 				`gender`, 		`fullname`, 		`phone`, 		`email`, 					`accountId`,		`position`) VALUES
-						('NV99999999', 	'1985-06-15', 	TRUE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Male',		 	'Mr Bean', 			'123-456-7890', 'john.doe@example.com', 		1,				'Manager'),
+						('NV99999998', 	'1985-06-15', 	TRUE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Male',		 	'Mr Admin', 		'123-456-7890', 'admin@example.com', 			1,				'Manager'),
+                        ('NV99999999', 	'1985-06-15', 	TRUE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Male',		 	'Mr Bean', 			'123-456-7890', 'john.doe@example.com', 		2,				'Manager'),
 						('NV00000001', 	'1990-03-22', 	TRUE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Female', 		'Ngô Tuấn Hưng',	'098-765-4321', 'hungnt.020404@gmail.com', 		NULL,			'Staff'),
 						('NV00000002', 	'1988-11-30', 	TRUE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Other', 		'Nguyễn Minh Phúc',	'555-555-5555', 'alice.johnson@example.com', 	NULL,			'Staff'),
 						('NV00000003', 	'1985-06-15', 	TRUE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Male', 		'Trương Mậu Điền', 	'123-456-7890', 'john.doe@example.com', 		NULL,			'Staff'),

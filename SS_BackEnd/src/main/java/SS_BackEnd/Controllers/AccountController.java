@@ -1,16 +1,25 @@
 package SS_BackEnd.Controllers;
 
-import SS_BackEnd.Configuration.Exception.AuthException.AccountBannedException;
-import SS_BackEnd.Configuration.Exception.AuthException.InvalidCredentialsException;
-import SS_BackEnd.Forms.Account.LoginInputForm;
-import SS_BackEnd.Forms.Account.LoginOutputForm;
-import SS_BackEnd.Forms.Account.RefreshInputForm;
+import SS_BackEnd.Entities.Account;
+import SS_BackEnd.Entities.Profile;
+import SS_BackEnd.Forms.Account.*;
 import SS_BackEnd.Forms.Other.Response;
+import SS_BackEnd.Forms.ProfileForms.ProfileDTOInDetail;
+import SS_BackEnd.Forms.ProfileForms.ProfileDTOListElement;
+import SS_BackEnd.Forms.ProfileForms.ProfileFilterForm;
+import SS_BackEnd.Forms.ProfileForms.ProfileUpdateForm;
 import SS_BackEnd.Services.IAccountService;
+import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/Account")
@@ -20,32 +29,46 @@ public class AccountController {
     @Autowired
     private IAccountService accountService;
 
-    @PostMapping("/Login")
-    public ResponseEntity<Response<LoginOutputForm>> login(@ModelAttribute LoginInputForm form) {
+    @Autowired
+    private ModelMapper modelMapper;
 
-        Response<LoginOutputForm> response = new Response<>();
+    @GetMapping("/List")
+    public ResponseEntity<Response<Page<AccountDTOListElement>>> getAllAccount(Pageable profile,
+                                                                               String search,
+                                                                               AccountFilterForm form) {
 
-        LoginOutputForm outputForm = accountService.signInForUser(form);
+        Page<Account> entities = accountService.getAllAccountByAdmin(profile, form, search);
+
+        List<AccountDTOListElement> dto = modelMapper.map(entities.getContent(), new TypeToken<List<AccountDTOListElement>>(){} .getType());
+
+        Page<AccountDTOListElement> dtoPage = new PageImpl<>(dto, profile , entities.getTotalElements());
+
+
+        Response<Page<AccountDTOListElement>> response = new Response<>();
+        response.setData(dtoPage);
+
+        String reponseMessage = "Truy ấn thành công";
+        if (dto.isEmpty()){
+            reponseMessage = "Không tìm thấy bất cứ Account nào theo yêu cầu !!";
+        }
+
         response.setStatus(200);
-        response.setMessage("Đăng nhập thành công !");
-        response.setData(outputForm);
-
+        response.setMessage(reponseMessage);
         return ResponseEntity.ok(response);
-
     }
 
-    @PostMapping("/Refresh")
-    public ResponseEntity<Response<LoginOutputForm>> refreshToken(@ModelAttribute RefreshInputForm form) {
+    @PatchMapping("/Update")
+    public ResponseEntity<Response<AccountDTOListElement>> updateAccount(@ModelAttribute @Valid AccountUpdateForm form) {
+        // Gọi service để cập nhật profile
+        Account updatedAccount = accountService.updateAccount(form);
+        AccountDTOListElement dto = modelMapper.map(updatedAccount, AccountDTOListElement.class);
 
-        Response<LoginOutputForm> response = new Response<>();
-
-        LoginOutputForm outputForm = accountService.refreshToken(form.getToken(), form.getRefreshToken());
+        Response<AccountDTOListElement> response = new Response<>();
         response.setStatus(200);
-        response.setMessage("Refresh Token thành công !");
-        response.setData(outputForm);
+        response.setMessage("Cập nhật trạng thái tài khoản thành công !");
+        response.setData(dto);
 
         return ResponseEntity.ok(response);
-
 
     }
 

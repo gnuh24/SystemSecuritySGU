@@ -32,7 +32,7 @@ public class JWTUtils {
         this.secretKeyForAccessToken = new SecretKeySpec(keyBytes1, "HmacSHA256");
 
         //Khởi tạo Secret key
-        String secreteStringForRefresh = "843567893696976453275974432697R634976R738467T1273472437474474763T478378637664538745673865783678548735687R3";
+        String secreteStringForRefresh = "72437474474763T478378637664538745673865783678548735687R3";
         byte[] keyBytes2 = Base64.getDecoder().decode(secreteStringForRefresh.getBytes(StandardCharsets.UTF_8));
         this.secretKeyForRefreshToken = new SecretKeySpec(keyBytes2, "HmacSHA256");
 

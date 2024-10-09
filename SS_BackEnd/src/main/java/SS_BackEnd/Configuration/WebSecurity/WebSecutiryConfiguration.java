@@ -54,8 +54,11 @@ public class WebSecutiryConfiguration {
                 // TODO: CÁC API LIÊN QUAN ĐẾN PRODUCT
                 // Các API `Auth`
 
-                .requestMatchers(HttpMethod.POST, "/api/Account/Login").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/Account/Refresh").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/Account/List").hasAnyAuthority("Admin")
+                .requestMatchers(HttpMethod.PATCH, "/api/Account/Update").hasAnyAuthority("Admin")
+
+                .requestMatchers(HttpMethod.POST, "/api/Auth/Login").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/Auth/Refresh").permitAll()
 
                 .requestMatchers(HttpMethod.GET, "/api/Profile/List").hasAnyAuthority("Manager")
                 .requestMatchers(HttpMethod.GET, "/api/Profile/Detail").hasAnyAuthority("Manager")

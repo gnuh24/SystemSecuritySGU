@@ -4,13 +4,21 @@ import SS_BackEnd.Configuration.Exception.AuthException.*;
 import SS_BackEnd.Configuration.WebSecurity.JWTUtils;
 import SS_BackEnd.Entities.Account;
 import SS_BackEnd.Entities.Profile;
+import SS_BackEnd.Forms.Account.AccountFilterForm;
+import SS_BackEnd.Forms.Account.AccountUpdateForm;
 import SS_BackEnd.Forms.Account.LoginInputForm;
 import SS_BackEnd.Forms.Account.LoginOutputForm;
 import SS_BackEnd.Repositories.IAccountRepository;
+import SS_BackEnd.Specification.AccountSpecification;
+import SS_BackEnd.Specification.ProfileSpecification;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -126,24 +134,39 @@ public class AccountService implements IAccountService{
     }
 
     @Override
+    public Page<Account> getAllAccountByAdmin(Pageable pageable, AccountFilterForm form, String search) {
+
+        Specification<Account> where = AccountSpecification.buildWhere(search, form);
+
+        return accountRepository.findAll(where, pageable);
+    }
+
+    @Override
     public Account getAccountByUsername(String username) {
         return accountRepository.findByUsername(username);
     }
+
+
 
     @Override
     public Account createAccount(Profile profile) {
 
         Account account = new Account();
-        account.setUsername(profile.getPhone());
+        account.setUsername(profile.getCode());
         account.setPassword(passwordEncoder.encode(convertLocalDateToString(profile.getBirthday())));
         account.setProfile(profile);
         return accountRepository.save(account);
     }
 
     @Override
-    public Account updateAccount(Integer id, Boolean status) {
-        Account account = getAccountById(id);
-        account.setStatus(status);
+    public Account updateAccount(AccountUpdateForm form) {
+        Account account = getAccountById(form.getId());
+
+        if (account == null) {
+            throw new EntityNotFoundException("Không tìm thấy account có id: " + form.getId());
+        }
+
+        account.setStatus(form.getStatus());
         return accountRepository.save(account);
     }
 

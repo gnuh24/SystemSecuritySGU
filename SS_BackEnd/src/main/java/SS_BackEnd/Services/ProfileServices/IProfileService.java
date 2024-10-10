@@ -1,4 +1,4 @@
-package SS_BackEnd.Services;
+package SS_BackEnd.Services.ProfileServices;
 
 import SS_BackEnd.Entities.Profile;
 import SS_BackEnd.Forms.ProfileForms.ProfileCreateForm;

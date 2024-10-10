@@ -1,4 +1,4 @@
-package SS_BackEnd.Services;
+package SS_BackEnd.Services.AccountServices;
 
 import SS_BackEnd.Configuration.Exception.AuthException.AccountBannedException;
 import SS_BackEnd.Configuration.Exception.AuthException.InvalidCredentialsException;

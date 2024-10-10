@@ -5,7 +5,7 @@ import SS_BackEnd.Configuration.Exception.AuthException.AuthExceptionHandler;
 import SS_BackEnd.Configuration.Exception.AuthException.InvalidJWTSignatureException;
 import SS_BackEnd.Configuration.Exception.AuthException.TokenExpiredException;
 import SS_BackEnd.Entities.Account;
-import SS_BackEnd.Services.IAccountService;
+import SS_BackEnd.Services.AccountServices.IAccountService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;

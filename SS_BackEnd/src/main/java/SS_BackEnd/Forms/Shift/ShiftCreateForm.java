@@ -39,5 +39,5 @@ public class ShiftCreateForm {
     @NotNull(message = "Trạng thái OT không được để trống")
     private Boolean isOT;
 
-    private List<String> listProfile;
+    private List<String> profileCodes;
 }

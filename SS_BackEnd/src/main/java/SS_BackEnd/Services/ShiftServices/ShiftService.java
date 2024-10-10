@@ -1,4 +1,4 @@
-package SS_BackEnd.Services;
+package SS_BackEnd.Services.ShiftServices;
 
 
 import SS_BackEnd.Entities.Shift;
@@ -6,6 +6,7 @@ import SS_BackEnd.Forms.Shift.ShiftCreateForm;
 import SS_BackEnd.Forms.Shift.ShiftFilterForm;
 import SS_BackEnd.Forms.Shift.ShiftUpdateForm;
 import SS_BackEnd.Repositories.IShiftRepository;
+import SS_BackEnd.Services.ShiftSignUpServices.IShiftSignUpService;
 import SS_BackEnd.Specification.ShiftSpecification;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 @Service
-public class ShiftService implements IShiftService{
+public class ShiftService implements IShiftService {
 
     @Autowired
     private IShiftRepository shiftRepository;
@@ -54,7 +55,7 @@ public class ShiftService implements IShiftService{
     public Shift createShift(ShiftCreateForm form) {
         Shift shift = modelMapper.map(form, Shift.class);
         shift = shiftRepository.save(shift);
-        shiftSignUpService.createSignUp(shift.getId(), form.getListProfile());
+        shiftSignUpService.createSignUp(shift.getId(), form.getProfileCodes());
         return shift;
     }
 

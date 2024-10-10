@@ -2,7 +2,7 @@ package SS_BackEnd.Configuration.WebSecurity;
 
 
 import SS_BackEnd.Configuration.Exception.AuthException.AuthExceptionHandler;
-import SS_BackEnd.Services.IAccountService;
+import SS_BackEnd.Services.AccountServices.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -66,9 +66,13 @@ public class WebSecutiryConfiguration {
                 .requestMatchers(HttpMethod.PATCH, "/api/Profile/Update").hasAnyAuthority("Manager")
 
                 .requestMatchers(HttpMethod.GET, "/api/Shift/List").hasAnyAuthority("Manager")
-//                .requestMatchers(HttpMethod.GET, "/api/Profile/Detail").hasAnyAuthority("Manager")
+                .requestMatchers(HttpMethod.GET, "/api/Shift/Detail").hasAnyAuthority("Manager")
                 .requestMatchers(HttpMethod.POST, "/api/Shift/Create").hasAnyAuthority("Manager")
                 .requestMatchers(HttpMethod.PATCH, "/api/Shift/Update").hasAnyAuthority("Manager")
+
+
+                .requestMatchers(HttpMethod.POST, "/api/ShiftSignUp/Create").hasAnyAuthority("Manager")
+                .requestMatchers(HttpMethod.DELETE, "/api/ShiftSignUp/Delete").hasAnyAuthority("Manager")
 
                 // Xác thực tất cả các request
                 .anyRequest()

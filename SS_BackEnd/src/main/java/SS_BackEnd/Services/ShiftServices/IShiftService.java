@@ -1,4 +1,4 @@
-package SS_BackEnd.Services;
+package SS_BackEnd.Services.ShiftServices;
 
 import SS_BackEnd.Entities.Shift;
 import SS_BackEnd.Forms.Shift.ShiftCreateForm;

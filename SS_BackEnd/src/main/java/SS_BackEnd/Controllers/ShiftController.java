@@ -1,12 +1,9 @@
 package SS_BackEnd.Controllers;
 
-import SS_BackEnd.Entities.Profile;
 import SS_BackEnd.Entities.Shift;
 import SS_BackEnd.Forms.Other.Response;
-import SS_BackEnd.Forms.ProfileForms.*;
 import SS_BackEnd.Forms.Shift.*;
-import SS_BackEnd.Services.IProfileService;
-import SS_BackEnd.Services.IShiftService;
+import SS_BackEnd.Services.ShiftServices.IShiftService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;

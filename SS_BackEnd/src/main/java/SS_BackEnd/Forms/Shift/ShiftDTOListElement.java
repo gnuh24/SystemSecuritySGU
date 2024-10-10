@@ -28,8 +28,8 @@ public class ShiftDTOListElement {
     @JsonFormat(pattern = "HH:mm:ss dd/MM/yyyy")
     private LocalDateTime breakEndTime;
 
-    private Boolean isActive = true;
+    private Boolean isActive;
 
-    private Boolean isOT = false;
+    private Boolean isOT;
 
 }

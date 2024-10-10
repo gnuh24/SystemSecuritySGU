@@ -8,7 +8,10 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class ShiftSignUpDTOForShiftDTOInDetail {
+public class ShiftSignUpDTOForCreating {
+
+    @JsonProperty("shiftId")
+    private Integer idShiftId;
 
     private ProfileDTOListElement profile;
 

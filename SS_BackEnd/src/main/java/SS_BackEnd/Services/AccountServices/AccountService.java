@@ -1,4 +1,4 @@
-package SS_BackEnd.Services;
+package SS_BackEnd.Services.AccountServices;
 
 import SS_BackEnd.Configuration.Exception.AuthException.*;
 import SS_BackEnd.Configuration.WebSecurity.JWTUtils;
@@ -10,7 +10,6 @@ import SS_BackEnd.Forms.Account.LoginInputForm;
 import SS_BackEnd.Forms.Account.LoginOutputForm;
 import SS_BackEnd.Repositories.IAccountRepository;
 import SS_BackEnd.Specification.AccountSpecification;
-import SS_BackEnd.Specification.ProfileSpecification;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.persistence.EntityNotFoundException;
@@ -30,7 +29,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 @Service
-public class AccountService implements IAccountService{
+public class AccountService implements IAccountService {
 
     @Autowired
     private IAccountRepository accountRepository;

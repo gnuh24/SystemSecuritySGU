@@ -1,4 +1,4 @@
-package SS_BackEnd.Services;
+package SS_BackEnd.Services.ProfileServices;
 
 
 import SS_BackEnd.Entities.Profile;
@@ -6,6 +6,8 @@ import SS_BackEnd.Forms.ProfileForms.ProfileCreateForm;
 import SS_BackEnd.Forms.ProfileForms.ProfileFilterForm;
 import SS_BackEnd.Forms.ProfileForms.ProfileUpdateForm;
 import SS_BackEnd.Repositories.IProfileRepository;
+import SS_BackEnd.Services.AccountServices.IAccountService;
+import SS_BackEnd.Services.ProfileServices.IProfileService;
 import SS_BackEnd.Specification.ProfileSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
@@ -19,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 @Service
-public class ProfileService implements IProfileService{
+public class ProfileService implements IProfileService {
 
     @Autowired
     private IProfileRepository profileRepository;

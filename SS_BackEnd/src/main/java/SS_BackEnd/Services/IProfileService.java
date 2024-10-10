@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface IProfileService {
 
+    Boolean isProfileExistsByCode(String code);
+
     Profile getProfileById(String profileCode);
 
     Page<Profile> getAllProfiles(Pageable pageable, ProfileFilterForm form, String search);

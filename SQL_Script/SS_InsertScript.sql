@@ -26,19 +26,19 @@ INSERT INTO `Shift` (`createAt`, `updateAt`, `startTime`, `endTime`, `breakStart
 				('2024-01-01 08:00:00', '2024-01-01 08:00:00', '2024-01-01 08:00:00', '2024-01-01 16:00:00', '2024-01-01 12:00:00', '2024-01-01 12:30:00', 'Early Shift', TRUE, FALSE);
 
 -- Insert sample data into the `ShiftSignUp` table
-INSERT INTO `ShiftSignUp` (`shiftId`, `profileCode`) VALUES
-							(1, 'NV00000001'),
-							(1, 'NV00000002'),
-							(2, 'NV00000001');
+INSERT INTO `ShiftSignUp` (`shiftId`, `profileCode`, `signUpTime`) VALUES
+							(1, 'NV00000001', NOW()),
+							(1, 'NV00000002', NOW()),
+							(2, 'NV00000001', NOW());
 
 -- Insert sample data into the `CheckIn` table
-INSERT INTO `CheckIn` (`shiftId`, `profileCode`, `checkInTime`, `createAt`, `Status`, `imgsource`) VALUES
-						(1, 'NV00000001', '2024-01-01 07:05:00', '2024-01-01 07:05:00', 'OnTime', '/path/to/checkin1.jpg'),
-						(1, 'NV00000002', '2024-01-01 07:10:00', '2024-01-01 07:10:00', 'Late', '/path/to/checkin2.jpg'),
-						(2, 'NV00000001', '2024-01-01 08:05:00', '2024-01-01 08:05:00', 'OnTime', '/path/to/checkin3.jpg');
+INSERT INTO `CheckIn` (`shiftId`, `profileCode`, `checkInTime`, `Status`, `image`) VALUES
+						(1, 'NV00000001', '2024-01-01 07:05:00',  'OnTime', '/path/to/checkin1.jpg'),
+						(1, 'NV00000002', '2024-01-01 07:10:00', 'Late', '/path/to/checkin2.jpg'),
+						(2, 'NV00000001', '2024-01-01 08:05:00', 'OnTime', '/path/to/checkin3.jpg');
 
 -- Insert sample data into the `CheckOut` table
-INSERT INTO `CheckOut` (`shiftId`, `profileCode`, `checkOutTime`, `Status`, `createAt`, `imgsource`) VALUES
-						(1, 'NV00000001', '2024-01-01 17:30:00', 'OnTime', '2024-01-01 17:30:00', '/path/to/checkout1.jpg'),
-						(1, 'NV00000002', '2024-01-01 17:25:00', 'OnTime', '2024-01-01 17:25:00', '/path/to/checkout2.jpg'),
-						(2, 'NV00000001', '2024-01-01 16:00:00', 'LeavingEarly', '2024-01-01 16:00:00', '/path/to/checkout3.jpg');
+INSERT INTO `CheckOut` (`shiftId`, `profileCode`, `checkOutTime`, `Status`,`image`) VALUES
+						(1, 'NV00000001', '2024-01-01 17:30:00', 'OnTime', '/path/to/checkout1.jpg'),
+						(1, 'NV00000002', '2024-01-01 17:25:00', 'OnTime',  '/path/to/checkout2.jpg'),
+						(2, 'NV00000001', '2024-01-01 16:00:00', 'LeavingEarly', '/path/to/checkout3.jpg');

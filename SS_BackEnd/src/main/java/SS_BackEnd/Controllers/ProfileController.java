@@ -32,7 +32,7 @@ public class ProfileController {
 
     @GetMapping("/List")
     public ResponseEntity<Response<Page<ProfileDTOListElement>>> getAllProfile(Pageable profile,
-                                                                               String search,
+                                                                               @RequestParam(required = false) String search,
                                                                                ProfileFilterForm form) {
         Page<Profile> entities = profileService.getAllProfiles(profile, form, search);
         List<ProfileDTOListElement> dto = modelMapper.map(entities.getContent(), new TypeToken<List<ProfileDTOListElement>>(){} .getType());
@@ -70,7 +70,6 @@ public class ProfileController {
 
     @PostMapping("/Create")
     public ResponseEntity<Response<ProfileDTOInDetail>> createProfile(@ModelAttribute @Valid ProfileCreateForm profileCreateForm) {
-        try {
             Profile createdProfile = profileService.createProfile(profileCreateForm);
             ProfileDTOInDetail dto = modelMapper.map(createdProfile, ProfileDTOInDetail.class);
 
@@ -80,14 +79,7 @@ public class ProfileController {
             response.setData(dto);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (Exception e) {
-            Response<ProfileDTOInDetail> response = new Response<>();
-            response.setStatus(500);
-            response.setMessage("Tạo profile thất bại: " + e.getMessage());
-            response.setData(null);
 
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
     }
 
     @PatchMapping("/Update")

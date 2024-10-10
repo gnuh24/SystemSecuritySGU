@@ -32,6 +32,11 @@ public class ProfileService implements IProfileService{
     private ModelMapper modelMapper;
 
     @Override
+    public Boolean isProfileExistsByCode(String code) {
+        return profileRepository.existsById(code);
+    }
+
+    @Override
     public Profile getProfileById(String profileCode) {
         return profileRepository.findById(profileCode).orElse(null);
     }

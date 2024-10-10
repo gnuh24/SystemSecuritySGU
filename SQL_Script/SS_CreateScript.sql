@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS `Shift` (
 CREATE TABLE IF NOT EXISTS `ShiftSignUp` (
   `shiftId` INT ,
   `profileCode` NVARCHAR(255) ,
+  `signUpTime` DATETIME NOT NULL,
 	PRIMARY KEY (`ShiftId`, `ProfileCode`),
 	FOREIGN KEY (`shiftId`) 			REFERENCES `Shift`(`id`) ,
 	FOREIGN KEY (`profileCode`) 		REFERENCES `Profile`(`code`)
@@ -64,9 +65,8 @@ CREATE TABLE IF NOT EXISTS `CheckIn` (
   `shiftId` INT ,
   `profileCode` NVARCHAR(255) ,
   `checkInTime` DATETIME NOT NULL,
-  `createAt` DATETIME NOT NULL,
   `Status`		ENUM("OnTime", "Late") NOT NULL,
-  `imgsource` NVARCHAR(255) NOT NULL,
+  `image` NVARCHAR(255) NOT NULL,
   PRIMARY KEY(`shiftId`, `profileCode`),
   FOREIGN KEY (`shiftId`) 			REFERENCES `Shift`(`id`) ,
   FOREIGN KEY (`profileCode`) 		REFERENCES `Profile`(`code`)
@@ -77,10 +77,8 @@ CREATE TABLE IF NOT EXISTS `CheckOut` (
   `shiftId` INT ,
   `profileCode` NVARCHAR(255) ,
   `checkOutTime` DATETIME NOT NULL,
-	`Status`	ENUM("OnTime", "LeavingEarly") NOT NULL,
-
-  `createAt` DATETIME NOT NULL,
-  `imgsource` NVARCHAR(255) NOT NULL,
+  `Status`	ENUM("OnTime", "LeavingEarly") NOT NULL,
+  `image` NVARCHAR(255) NOT NULL,
 	PRIMARY KEY(`shiftId`, `profileCode`),
   FOREIGN KEY (`shiftId`) REFERENCES `Shift`(`id`) ,
   FOREIGN KEY (`profileCode`) REFERENCES `Profile`(`code`) 

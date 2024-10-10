@@ -57,6 +57,9 @@ public class Profile {
     @OneToMany(mappedBy = "profile")
     private List<FingerPrint> fingerPrints;
 
+    @OneToMany(mappedBy = "profile")
+    private List<ShiftSignUp> shiftSignUps;
+
     public enum Gender{
         Male, Female, Other
     }

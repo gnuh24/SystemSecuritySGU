@@ -34,7 +34,7 @@ public class AccountController {
 
     @GetMapping("/List")
     public ResponseEntity<Response<Page<AccountDTOListElement>>> getAllAccount(Pageable profile,
-                                                                               String search,
+                                                                               @RequestParam(required = false) String search,
                                                                                AccountFilterForm form) {
 
         Page<Account> entities = accountService.getAllAccountByAdmin(profile, form, search);

@@ -82,7 +82,6 @@ public class CheckInService implements ICheckInService{
         entity.setProfile(profile);
 
         String path = ImageService.saveImage(ImageService.checkInImage, form.getImage());
-        System.err.println("Path: " + path);
         entity.setImage(path);
 
         return checkInRepository.save(entity);

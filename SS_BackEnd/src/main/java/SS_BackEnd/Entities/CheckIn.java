@@ -12,24 +12,23 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "CheckIn")
 public class CheckIn {
 
     @EmbeddedId
     private CheckInId id;
 
-    @Column(name = "checkInTime", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime checkInTime = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "Status", nullable = false)
+    @Column(nullable = false)
     private Status status;
 
 
 //    @Column(nullable = false)
 //    private Boolean isValid = false;
 
-    @Column(name = "image", nullable = false)
+    @Column(nullable = false)
     private String image;
 
     @ManyToOne

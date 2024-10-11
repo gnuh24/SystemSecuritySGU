@@ -78,6 +78,10 @@ public class WebSecutiryConfiguration {
                 .requestMatchers(HttpMethod.GET, "/api/CheckIn/Image").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/CheckIn/Create").permitAll()
 
+                .requestMatchers(HttpMethod.GET, "/api/CheckOut/List").hasAnyAuthority("Manager")
+                .requestMatchers(HttpMethod.GET, "/api/CheckOut/Image").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/CheckOut/Create").permitAll()
+
                 // Xác thực tất cả các request
                 .anyRequest()
                 .authenticated()

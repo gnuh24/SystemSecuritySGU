@@ -12,26 +12,24 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "CheckOut")
 public class CheckOut {
 
     @EmbeddedId
     private CheckOutId id;
 
-    @Column(name = "checkOutTime", nullable = false)
-    private LocalDateTime checkOutTime;
+    @Column(nullable = false)
+    private LocalDateTime checkOutTime = LocalDateTime.now();
 
-    @Enumerated(EnumType.STRING) // Store as string in the database
-    @Column(name = "Status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Status status;
 
-    @Column(nullable = false)
-    private Boolean isValid = false;
+//    @Column(nullable = false)
+//    private Boolean isValid = false;
 
-    @Column(name = "image", nullable = false)
+    @Column(nullable = false)
     private String image;
 
-    // Relationship mappings
     @ManyToOne
     @MapsId("shiftId")
     @JoinColumn(name = "shiftId", referencedColumnName = "id")

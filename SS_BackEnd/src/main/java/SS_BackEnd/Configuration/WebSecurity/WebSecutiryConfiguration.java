@@ -74,6 +74,10 @@ public class WebSecutiryConfiguration {
                 .requestMatchers(HttpMethod.POST, "/api/ShiftSignUp/Create").hasAnyAuthority("Manager")
                 .requestMatchers(HttpMethod.DELETE, "/api/ShiftSignUp/Delete").hasAnyAuthority("Manager")
 
+                .requestMatchers(HttpMethod.GET, "/api/CheckIn/List").hasAnyAuthority("Manager")
+                .requestMatchers(HttpMethod.GET, "/api/CheckIn/Image").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/CheckIn/Create").permitAll()
+
                 // Xác thực tất cả các request
                 .anyRequest()
                 .authenticated()

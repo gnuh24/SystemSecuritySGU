@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS `CheckIn` (
   `profileCode` NVARCHAR(255) ,
   `checkInTime` DATETIME NOT NULL,
   `Status`		ENUM("OnTime", "Late") NOT NULL,
+--   `isValid`		BOOLEAN NOT NULL,
   `image` NVARCHAR(255) NOT NULL,
   PRIMARY KEY(`shiftId`, `profileCode`),
   FOREIGN KEY (`shiftId`) 			REFERENCES `Shift`(`id`) ,
@@ -78,6 +79,8 @@ CREATE TABLE IF NOT EXISTS `CheckOut` (
   `profileCode` NVARCHAR(255) ,
   `checkOutTime` DATETIME NOT NULL,
   `Status`	ENUM("OnTime", "LeavingEarly") NOT NULL,
+--   `isValid`		BOOLEAN NOT NULL,
+
   `image` NVARCHAR(255) NOT NULL,
 	PRIMARY KEY(`shiftId`, `profileCode`),
   FOREIGN KEY (`shiftId`) REFERENCES `Shift`(`id`) ,

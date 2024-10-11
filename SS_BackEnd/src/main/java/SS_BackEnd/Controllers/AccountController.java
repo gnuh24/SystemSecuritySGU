@@ -38,7 +38,6 @@ public class AccountController {
 
         Page<AccountDTOListElement> dtoPage = new PageImpl<>(dto, profile , entities.getTotalElements());
 
-
         Response<Page<AccountDTOListElement>> response = new Response<>();
         response.setData(dtoPage);
 
@@ -46,7 +45,6 @@ public class AccountController {
         if (dto.isEmpty()){
             reponseMessage = "Không tìm thấy bất cứ Account nào theo yêu cầu !!";
         }
-
         response.setStatus(200);
         response.setMessage(reponseMessage);
         return ResponseEntity.ok(response);

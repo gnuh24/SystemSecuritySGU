@@ -44,4 +44,7 @@ public class Shift {
     @OneToMany(mappedBy = "shift")
     private List<ShiftSignUp> signUps;
 
+    @OneToMany(mappedBy = "shift")
+    private List<CheckIn> checkIns;  // Thêm danh sách CheckIn liên quan
+
 }

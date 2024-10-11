@@ -1,5 +1,6 @@
 package SS_BackEnd.Forms.Shift;
 
+import SS_BackEnd.Forms.CheckIn.CheckInDTOForCreateCheckIn;
 import SS_BackEnd.Forms.ShiftSignUp.ShiftSignUpDTOForShiftDTOInDetail;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -37,5 +38,7 @@ public class ShiftDTOInDetail {
     private Boolean isOT;
 
     private List<ShiftSignUpDTOForShiftDTOInDetail> signUps;
+
+    private List<CheckInDTOForCreateCheckIn> checkIns;
 
 }

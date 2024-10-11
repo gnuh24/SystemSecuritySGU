@@ -19,16 +19,19 @@ public class CheckIn {
     private CheckInId id;
 
     @Column(name = "checkInTime", nullable = false)
-    private LocalDateTime checkInTime;
+    private LocalDateTime checkInTime = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Status", nullable = false)
     private Status status;
 
+
+//    @Column(nullable = false)
+//    private Boolean isValid = false;
+
     @Column(name = "image", nullable = false)
     private String image;
 
-    // Relationship mappings
     @ManyToOne
     @MapsId("shiftId")
     @JoinColumn(name = "shiftId", referencedColumnName = "id")

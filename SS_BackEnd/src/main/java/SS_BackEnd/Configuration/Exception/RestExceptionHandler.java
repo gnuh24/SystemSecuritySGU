@@ -1,6 +1,8 @@
 package SS_BackEnd.Configuration.Exception;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,6 +48,11 @@ public class  RestExceptionHandler extends ResponseEntityExceptionHandler {
         if (exception instanceof EntityNotFoundException){
             ErrorResponse response = new ErrorResponse(404, message, detailMessage, null, code, moreInformation);
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
+        if (exception instanceof FileNotFoundException){
+            ErrorResponse response = new ErrorResponse(400, "Không tìm thấy ảnh !!", detailMessage, null, code, moreInformation);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
         ErrorResponse response = new ErrorResponse(400, message, detailMessage, null, code, moreInformation);

@@ -25,6 +25,9 @@ public class CheckOut {
     @Column(name = "Status", nullable = false)
     private Status status;
 
+    @Column(nullable = false)
+    private Boolean isValid = false;
+
     @Column(name = "image", nullable = false)
     private String image;
 

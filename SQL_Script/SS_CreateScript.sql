@@ -31,9 +31,10 @@ CREATE TABLE IF NOT EXISTS `Profile` (
 -- FingerPrint Table
 CREATE TABLE IF NOT EXISTS `FingerPrint` (
   `profileCode` NVARCHAR(255) ,
+  `imageName` VARCHAR(255) NOT NULL,
   `path` VARCHAR(255) NOT NULL,
   `createAt` DATETIME NOT NULL,
-  PRIMARY KEY (`ProfileCode`, `Path`),
+  PRIMARY KEY (`ProfileCode`, `imageName`),
   FOREIGN KEY (`profileCode`) REFERENCES `Profile`(`code`)
 );
 

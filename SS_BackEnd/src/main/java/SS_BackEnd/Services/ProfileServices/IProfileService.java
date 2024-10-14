@@ -7,6 +7,8 @@ import SS_BackEnd.Forms.ProfileForms.ProfileUpdateForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.io.IOException;
+
 public interface IProfileService {
 
     Boolean isProfileExistsByCode(String code);
@@ -15,7 +17,7 @@ public interface IProfileService {
 
     Page<Profile> getAllProfiles(Pageable pageable, ProfileFilterForm form, String search);
 
-    Profile createProfile(ProfileCreateForm profileCreateForm);
+    Profile createProfile(ProfileCreateForm profileCreateForm) throws IOException;
 
     Profile updateProfile(ProfileUpdateForm profileUpdateForm);
 }

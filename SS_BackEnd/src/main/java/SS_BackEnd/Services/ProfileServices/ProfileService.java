@@ -7,6 +7,7 @@ import SS_BackEnd.Forms.ProfileForms.ProfileFilterForm;
 import SS_BackEnd.Forms.ProfileForms.ProfileUpdateForm;
 import SS_BackEnd.Repositories.IProfileRepository;
 import SS_BackEnd.Services.AccountServices.IAccountService;
+import SS_BackEnd.Services.FingerPrintServices.IFingerPrintService;
 import SS_BackEnd.Services.ProfileServices.IProfileService;
 import SS_BackEnd.Specification.ProfileSpecification;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,6 +19,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Service
@@ -25,6 +27,9 @@ public class ProfileService implements IProfileService {
 
     @Autowired
     private IProfileRepository profileRepository;
+
+    @Autowired
+    private IFingerPrintService fingerPrintService;
 
 
     @Autowired
@@ -52,14 +57,20 @@ public class ProfileService implements IProfileService {
 
     @Override
     @Transactional
-    public Profile createProfile(ProfileCreateForm profileCreateForm) {
+    public Profile createProfile(ProfileCreateForm profileCreateForm) throws IOException {
         Profile profile = modelMapper.map(profileCreateForm, Profile.class);
 
         if (profile.getPosition().equals(Profile.Position.Manager)){
             accountService.createAccount(profile);
         }
 
-        return profileRepository.save(profile);
+        profile = profileRepository.save(profile);
+
+        for (int i=1; i <= profileCreateForm.getImages().size(); i++){
+            fingerPrintService.createFingerPrint(i, profile, profileCreateForm.getImages().get(i-1));
+        }
+
+        return profile;
     }
 
     @Override

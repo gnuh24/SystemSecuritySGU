@@ -16,9 +16,9 @@ INSERT INTO `Profile` 	(`code`, 		`birthday`,    `status`, `createAt`, 				`upda
 						('NV00000005', 	'1988-11-30', 	FALSE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Other', 		'Đoàn Ánh Dương', 	'555-555-5555', 'alice.johnson@example.com', 	NULL,			'Staff');
 
 -- Insert sample data into the `FingerPrint` table
-INSERT INTO `FingerPrint` (`profileCode`, `path`, `createAt`) VALUES
-							('NV00000001', '/path/to/fingerprint1.jpg', '2024-01-01 08:00:00'),
-							('NV00000001', '/path/to/fingerprint2.jpg', '2024-01-01 08:00:00');
+INSERT INTO `FingerPrint` (`profileCode`, `imageName`,`path`, `createAt`) VALUES
+							('NV00000001','1_1' ,'/path/to/fingerprint1.jpg', '2024-01-01 08:00:00'),
+							('NV00000001', '1_2','/path/to/fingerprint2.jpg', '2024-01-01 08:00:00');
 
 -- Insert sample data into the `Shift` table
 INSERT INTO `Shift` (`createAt`, `updateAt`, `startTime`, `endTime`, `breakStartTime`, `breakEndTime`, `shiftName`, `isActive`, `isOT`) VALUES

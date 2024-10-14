@@ -3,8 +3,10 @@ package SS_BackEnd.Forms.ProfileForms;
 import SS_BackEnd.Entities.Profile;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Data
@@ -30,5 +32,7 @@ public class ProfileCreateForm {
 
     @NotNull(message = "Chức vụ không được để trống.")
     private Profile.Position position;
+
+    private List<MultipartFile> images;
 }
 

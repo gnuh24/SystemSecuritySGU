@@ -1,30 +1,32 @@
 package SS_BackEnd.Entities;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import jakarta.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
 public class FingerPrint {
 
-    @Id
-    @Column(length = 10)
-    private String profileCode;
+    @EmbeddedId
+    private FingerPrintId id;
 
-    @Column(nullable = false)
+    @Column(name = "path", nullable = false)
     private String path;
 
-    @Column(nullable = false)
+    @Column(name = "createAt", nullable = false)
     private LocalDateTime createAt = LocalDateTime.now();
 
     @ManyToOne
-    @JoinColumn(name = "profileCode", insertable = false, updatable = false)
-    private Profile profile;
-}
+    @JoinColumn(name = "profileCode", referencedColumnName = "code", insertable = false, updatable = false)
+    private Profile profile; // Assuming you have a Profile entity
 
+    @Data
+    @NoArgsConstructor
+    public static class FingerPrintId implements Serializable {
+        private String profileCode;
+        private String imageName;
+    }
+}

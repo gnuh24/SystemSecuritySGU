@@ -39,7 +39,8 @@
 
         /* Đánh dấu dòng được chọn */
         .selected {
-            background-color: #D0E6FF; /* Màu nền cho dòng được chọn */
+            background-color: #D0E6FF;
+            /* Màu nền cho dòng được chọn */
         }
     </style>
 </head>
@@ -124,7 +125,7 @@
                 data: {
                     search: search,
                     status: status,
-                    page: page - 1,  // Chuyển page để API tính từ 0
+                    page: page - 1, // Chuyển page để API tính từ 0
                     size: pageSize
                 },
                 headers: {
@@ -196,100 +197,100 @@
         });
 
         $("#editNV").on("click", function() {
-    const selectedRows = $("#tableBody tr.selected"); // Lấy các dòng được chọn
-    if (selectedRows.length === 0) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Thông báo!',
-            text: 'Vui lòng chọn ít nhất một tài khoản!',
-        });
-        return;
-    }
-
-    // Biến để theo dõi các yêu cầu cập nhật thành công
-    let updatePromises = [];
-
-    selectedRows.each(function() {
-        const statusCell = $(this).find("td:last-child"); // Lấy ô trạng thái
-        const accountId = $(this).find("td:first-child").text().trim(); // Giả sử ID ở cột đầu tiên
-        const roleCell = $(this).find("td:nth-child(2)").text().trim(); // Giả sử vai trò ở cột thứ hai
-        const currentStatus = statusCell.text().trim() === 'Active'; // Kiểm tra trạng thái hiện tại
-        const newStatus = !currentStatus; // Chuyển đổi trạng thái
-
-        // Kiểm tra xem tài khoản có vai trò admin hay không
-        if (roleCell.toLowerCase() === 'admin') { // Chuyển đổi thành chữ thường để so sánh chính xác
-            Swal.fire({
-                icon: 'error',
-                title: 'Không được phép!',
-                text: 'Tài khoản admin không thể thay đổi trạng thái!',
-            });
-            return; // Ngừng xử lý nếu vai trò là admin
-        }
-
-        // Kiểm tra xem accountId và newStatus có giá trị hợp lệ không
-        if (!accountId || newStatus === undefined) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Lỗi',
-                text: 'Có lỗi xảy ra khi xác định ID hoặc trạng thái.',
-            });
-            return; // Ngừng xử lý nếu có lỗi
-        }
-
-        // Gọi API để cập nhật trạng thái
-        // Tạo đối tượng FormData
-        const formData = new FormData();
-        formData.append('id', parseInt(accountId)); // Thêm id vào FormData
-        formData.append('status', newStatus); // Thêm trạng thái mới vào FormData
-
-        const promise = $.ajax({
-            url: 'http://localhost:8080/api/Account/Update',
-            type: 'PATCH', // Sử dụng PATCH
-            data: formData, // Sử dụng FormData thay vì JSON
-            processData: false, // Không xử lý dữ liệu
-            contentType: false, // Không đặt content type (để trình duyệt tự động thiết lập)
-            headers: {
-                'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcyODQ4MDQyOCwiZXhwIjoxNzMxMDcyNDI4fQ.7C3KggJVAVY2uTtqduQ-5lG-OSAqujQ8SivUUQDVcrQ'
-            }
-        });
-
-        promise.done(function(updateResponse) {
-            // Xử lý kết quả từ server
-            console.log("Cập nhật thành công:", updateResponse);
-            if (updateResponse.status === 200) {
-                // Cập nhật lại trạng thái hiển thị
-                statusCell.text(newStatus ? 'Active' : 'Inactive'); // Cập nhật trạng thái hiển thị
+            const selectedRows = $("#tableBody tr.selected"); // Lấy các dòng được chọn
+            if (selectedRows.length === 0) {
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Cập nhật thành công!',
-                    text: updateResponse.message // Sử dụng thông báo từ server
+                    icon: 'warning',
+                    title: 'Thông báo!',
+                    text: 'Vui lòng chọn ít nhất một tài khoản!',
                 });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Cập nhật thất bại!',
-                    text: updateResponse.message || 'Có lỗi xảy ra khi cập nhật.',
-                });
+                return;
             }
-        }).fail(function(jqXHR) {
-            console.error("Lỗi khi gọi API cập nhật trạng thái:", jqXHR.responseText);
-            Swal.fire({
-                icon: 'error',
-                title: 'Lỗi khi gọi API',
-                text: 'Vui lòng kiểm tra lại yêu cầu.',
+
+            // Biến để theo dõi các yêu cầu cập nhật thành công
+            let updatePromises = [];
+
+            selectedRows.each(function() {
+                const statusCell = $(this).find("td:last-child"); // Lấy ô trạng thái
+                const accountId = $(this).find("td:first-child").text().trim(); // Giả sử ID ở cột đầu tiên
+                const roleCell = $(this).find("td:nth-child(2)").text().trim(); // Giả sử vai trò ở cột thứ hai
+                const currentStatus = statusCell.text().trim() === 'Active'; // Kiểm tra trạng thái hiện tại
+                const newStatus = !currentStatus; // Chuyển đổi trạng thái
+
+                // Kiểm tra xem tài khoản có vai trò admin hay không
+                if (roleCell.toLowerCase() === 'admin') { // Chuyển đổi thành chữ thường để so sánh chính xác
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Không được phép!',
+                        text: 'Tài khoản admin không thể thay đổi trạng thái!',
+                    });
+                    return; // Ngừng xử lý nếu vai trò là admin
+                }
+
+                // Kiểm tra xem accountId và newStatus có giá trị hợp lệ không
+                if (!accountId || newStatus === undefined) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Có lỗi xảy ra khi xác định ID hoặc trạng thái.',
+                    });
+                    return; // Ngừng xử lý nếu có lỗi
+                }
+
+                // Gọi API để cập nhật trạng thái
+                // Tạo đối tượng FormData
+                const formData = new FormData();
+                formData.append('id', parseInt(accountId)); // Thêm id vào FormData
+                formData.append('status', newStatus); // Thêm trạng thái mới vào FormData
+
+                const promise = $.ajax({
+                    url: 'http://localhost:8080/api/Account/Update',
+                    type: 'PATCH', // Sử dụng PATCH
+                    data: formData, // Sử dụng FormData thay vì JSON
+                    processData: false, // Không xử lý dữ liệu
+                    contentType: false, // Không đặt content type (để trình duyệt tự động thiết lập)
+                    headers: {
+                        'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcyODQ4MDQyOCwiZXhwIjoxNzMxMDcyNDI4fQ.7C3KggJVAVY2uTtqduQ-5lG-OSAqujQ8SivUUQDVcrQ'
+                    }
+                });
+
+                promise.done(function(updateResponse) {
+                    // Xử lý kết quả từ server
+                    console.log("Cập nhật thành công:", updateResponse);
+                    if (updateResponse.status === 200) {
+                        // Cập nhật lại trạng thái hiển thị
+                        statusCell.text(newStatus ? 'Active' : 'Inactive'); // Cập nhật trạng thái hiển thị
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Cập nhật thành công!',
+                            text: updateResponse.message // Sử dụng thông báo từ server
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Cập nhật thất bại!',
+                            text: updateResponse.message || 'Có lỗi xảy ra khi cập nhật.',
+                        });
+                    }
+                }).fail(function(jqXHR) {
+                    console.error("Lỗi khi gọi API cập nhật trạng thái:", jqXHR.responseText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi khi gọi API',
+                        text: 'Vui lòng kiểm tra lại yêu cầu.',
+                    });
+                });
+
+                // Thêm promise vào mảng để xử lý đồng thời
+                updatePromises.push(promise);
             });
+
+            // Sau khi tất cả các yêu cầu đã được gửi đi
+            $.when.apply($, updatePromises).then(function() {
+                // Không cần xử lý ở đây nữa vì đã xử lý thành công trong mỗi promise
+            });
+            console.log("ID:", accountId, "Status:", newStatus);
         });
-
-        // Thêm promise vào mảng để xử lý đồng thời
-        updatePromises.push(promise);
-    });
-
-    // Sau khi tất cả các yêu cầu đã được gửi đi
-    $.when.apply($, updatePromises).then(function() {
-        // Không cần xử lý ở đây nữa vì đã xử lý thành công trong mỗi promise
-    });
-    console.log("ID:", accountId, "Status:", newStatus);
-});
 
 
         // Khởi tạo danh sách tài khoản khi trang được tải

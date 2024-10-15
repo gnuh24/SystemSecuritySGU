@@ -6,6 +6,7 @@ import java.io.IOException;
 import SS_BackEnd.Configuration.Exception.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 @Component
+
+@Slf4j
 public class AuthExceptionHandler implements AuthenticationEntryPoint, AccessDeniedHandler {
 
     @Autowired
@@ -32,7 +35,10 @@ public class AuthExceptionHandler implements AuthenticationEntryPoint, AccessDen
                          AuthenticationException authException) throws IOException {
 
         String message = "Lỗi xác thực danh tính !!";
+
         String detailMessage = authException.getLocalizedMessage();
+        log.warn(authException.getLocalizedMessage());
+
         int code = 8;
         String moreInformation = "http://localhost:8080/api/v1/exception/8";
 

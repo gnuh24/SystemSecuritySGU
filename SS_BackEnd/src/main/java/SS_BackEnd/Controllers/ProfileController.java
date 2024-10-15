@@ -6,6 +6,7 @@ import SS_BackEnd.Forms.ProfileForms.*;
 import SS_BackEnd.Services.ProfileServices.IProfileService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/Profile")
 @CrossOrigin(origins = "*")
+@Slf4j
 public class ProfileController {
 
     @Autowired
@@ -40,12 +42,13 @@ public class ProfileController {
 
         Response<Page<ProfileDTOListElement>> response = new Response<>();
         response.setData(dtoPage);
-
         String reponseMessage = "Truy ấn thành công";
+
+
         if (dto.isEmpty()){
             reponseMessage = "Không tìm thấy bất cứ Profile nào theo yêu cầu !!";
         }
-
+        log.info(reponseMessage);
         response.setStatus(200);
         response.setMessage(reponseMessage);
         return ResponseEntity.ok(response);

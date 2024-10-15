@@ -25,7 +25,7 @@ public class Profile {
     private LocalDate birthday;
 
     @Column(nullable = false)
-    private Boolean status = false;
+    private Boolean status = true;
 
     @Column(nullable = false)
     private LocalDateTime createAt = LocalDateTime.now();

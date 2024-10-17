@@ -18,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -28,7 +29,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/CheckOut")
-@CrossOrigin(origins = "*")
 public class CheckOutController {
 
     @Autowired
@@ -36,6 +36,9 @@ public class CheckOutController {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @GetMapping(value = "/List")
     public ResponseEntity<Response<List<CheckOutDTOForCreateCheckOut>>> getListCheckOut(Pageable pageable,
@@ -76,6 +79,9 @@ public class CheckOutController {
         CheckOut entities = checkOutService.createCheckOut(form);
 
         CheckOutDTOForCreateCheckOut dto = modelMapper.map(entities, CheckOutDTOForCreateCheckOut.class);
+
+        // Broadcast the new check-in to WebSocket topic
+        messagingTemplate.convertAndSend("/topic/checkOutUpdates", dto);
 
         Response<CheckOutDTOForCreateCheckOut> response = new Response<>();
         response.setStatus(201);

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check-Ins</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        img {
+            width: 100px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Check-Ins</h1>
+    <table id="checkInTable">
+        <thead>
+            <tr>
+                <th>Shift ID</th>
+                <th>Status</th>
+                <th>Check-In Time</th>
+                <th>Image</th>
+                <th>Profile Code</th>
+                <th>Full Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Check-in rows will be added here dynamically -->
+        </tbody>
+    </table>
+
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+    <script>
+        // The Manager Token
+        const managerToken = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMDAxIiwiaWF0IjoxNzI3MDk3MTUwLCJleHAiOjE3Mjk2ODkxNTB9.7rMknTboogqhKHDgy4urBUzlFpGu7BkSOYrEzt8PAjA';
+
+        // Load initial check-ins
+        function loadInitialCheckIns() {
+            fetch('http://localhost:8080/api/CheckIn/List?shiftId=1', {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + managerToken,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const checkIns = data.data;
+                const tableBody = document.querySelector("#checkInTable tbody");
+                tableBody.innerHTML = '';  // Clear any existing rows
+
+                checkIns.forEach(checkIn => {
+                    addCheckInToTable(checkIn);
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching check-ins:", error);
+            });
+        }
+
+        // Add a check-in to the table
+        function addCheckInToTable(checkIn) {
+            const tableBody = document.querySelector("#checkInTable tbody");
+
+            const row = document.createElement("tr");
+
+            // Shift ID
+            const shiftIdCell = document.createElement("td");
+            shiftIdCell.textContent = checkIn.shiftId;
+            row.appendChild(shiftIdCell);
+
+            // Status
+            const statusCell = document.createElement("td");
+            statusCell.textContent = checkIn.status;
+            row.appendChild(statusCell);
+
+            // Check-in Time
+            const timeCell = document.createElement("td");
+            timeCell.textContent = checkIn.checkInTime;
+            row.appendChild(timeCell);
+
+            // Image
+            const imageCell = document.createElement("td");
+            const image = document.createElement("img");
+            image.src = `http://localhost:8080/api/CheckIn/Image?image=${checkIn.image}`;
+            image.alt = "Check-In Image";
+            imageCell.appendChild(image);
+            row.appendChild(imageCell);
+
+            // Profile Code
+            const codeCell = document.createElement("td");
+            codeCell.textContent = checkIn.profile.code;
+            row.appendChild(codeCell);
+
+            // Full Name
+            const fullnameCell = document.createElement("td");
+            fullnameCell.textContent = checkIn.profile.fullname;
+            row.appendChild(fullnameCell);
+
+            // Phone
+            const phoneCell = document.createElement("td");
+            phoneCell.textContent = checkIn.profile.phone;
+            row.appendChild(phoneCell);
+
+            // Email
+            const emailCell = document.createElement("td");
+            emailCell.textContent = checkIn.profile.email;
+            row.appendChild(emailCell);
+
+            // Add the row to the table
+            tableBody.appendChild(row);
+        }
+
+      // Set up WebSocket connection
+        function setupWebSocket() {
+            const socket = new SockJS('http://localhost:8080/ws');
+            const stompClient = Stomp.over(socket);
+
+            stompClient.connect({}, (frame) => {
+                console.log("Connected to WebSocket:", frame);
+
+                // Subscribe to the topic for check-in updates
+                stompClient.subscribe('/topic/checkInUpdates', (message) => {
+                    const newCheckIn = JSON.parse(message.body);
+                    addCheckInToTable(newCheckIn);
+                });
+            }, (error) => {
+                // Log any connection errors
+                console.error("Error connecting to WebSocket:", error);
+            });
+        }
+
+        // Load initial check-ins and set up WebSocket
+        window.onload = function () {
+            loadInitialCheckIns();
+            setupWebSocket();
+        };
+    </script>
+</body>
+</html>

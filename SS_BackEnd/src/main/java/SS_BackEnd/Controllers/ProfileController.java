@@ -22,7 +22,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/Profile")
-@CrossOrigin(origins = "*")
 @Slf4j
 public class ProfileController {
 

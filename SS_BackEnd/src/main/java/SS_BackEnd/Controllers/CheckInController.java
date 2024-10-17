@@ -24,6 +24,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -34,7 +35,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/CheckIn")
-@CrossOrigin(origins = "*")
 public class CheckInController {
 
     @Autowired
@@ -42,6 +42,9 @@ public class CheckInController {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @GetMapping(value = "/List")
     public ResponseEntity<Response<List<CheckInDTOForCreateCheckIn>>> getListCheckIn(Pageable pageable,
@@ -81,10 +84,14 @@ public class CheckInController {
     @PostMapping("/Create")
     public ResponseEntity<Response<CheckInDTOForCreateCheckIn>> createCheckIn(@ModelAttribute @Valid CheckInCreateForm form) throws IOException, EmployeeTerminatedException {
 
+        // Create the check-in
         CheckIn entities = checkInService.createCheckIn(form);
-
         CheckInDTOForCreateCheckIn dto = modelMapper.map(entities , CheckInDTOForCreateCheckIn.class);
 
+        // Broadcast the new check-in to WebSocket topic
+        messagingTemplate.convertAndSend("/topic/checkInUpdates", dto);
+
+        // Build the response
         Response<CheckInDTOForCreateCheckIn> response = new Response<>();
         response.setStatus(201);
         response.setMessage("Điểm danh ca làm thành công !");

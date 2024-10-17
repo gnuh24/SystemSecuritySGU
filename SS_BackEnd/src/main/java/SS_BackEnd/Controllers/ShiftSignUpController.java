@@ -24,7 +24,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/ShiftSignUp")
-@CrossOrigin(origins = "*")
 public class ShiftSignUpController {
 
     @Autowired

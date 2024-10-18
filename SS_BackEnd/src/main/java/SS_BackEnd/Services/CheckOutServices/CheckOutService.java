@@ -11,6 +11,7 @@ import SS_BackEnd.Other.ImageService;
 import SS_BackEnd.Repositories.ICheckOutRepository;
 import SS_BackEnd.Services.ProfileServices.IProfileService;
 import SS_BackEnd.Services.ShiftServices.IShiftService;
+import SS_BackEnd.Services.ShiftSignUpServices.IShiftSignUpService;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,9 @@ public class CheckOutService implements ICheckOutService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private IShiftSignUpService shiftSignUpService;
+
     @Override
     public List<CheckOut> getAllCheckOutByShiftId(Pageable pageable, Integer shiftId) {
 
@@ -57,6 +61,10 @@ public class CheckOutService implements ICheckOutService {
         Profile profile = profileService.getProfileById(form.getProfileCode());
         if (profile == null) {
             throw new EntityNotFoundException("Không tìm thấy nhân viên có code: " + form.getProfileCode());
+        }
+
+        if (!shiftSignUpService.isThisShiftIncludesThisProfile(shift.getId(), profile.getCode())){
+            throw new EntityNotFoundException("Nhân viên " + form.getProfileCode() + " chưa được đăng ký vào ca làm " + shift.getId());
         }
 
         if (!profile.getStatus()) {

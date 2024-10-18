@@ -31,6 +31,14 @@ public class ShiftSignUpService implements IShiftSignUpService {
 
 
     @Override
+    public Boolean isThisShiftIncludesThisProfile(Integer shiftId, String profileCode) {
+        ShiftSignUp.ShiftSignUpId id = new ShiftSignUp.ShiftSignUpId();
+        id.setShiftId(shiftId);
+        id.setProfileCode(profileCode);
+        return shiftSignUpRepository.existsById(id);
+    }
+
+    @Override
     public void createSignUp(Integer shiftId, List<String> listProfile) {
 
         if (!shiftService.isShiftExistsById(shiftId))

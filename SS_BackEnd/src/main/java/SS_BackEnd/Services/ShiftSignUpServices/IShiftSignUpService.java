@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface IShiftSignUpService {
 
+    Boolean isThisShiftIncludesThisProfile(Integer shiftId, String profileCode);
     void createSignUp(Integer shiftId, List<String> listProfile);
     List<ShiftSignUp> createSignUp(ShiftSignUpCreateForm form);
     void deleteSignUp(Integer shiftId, String profileCode);

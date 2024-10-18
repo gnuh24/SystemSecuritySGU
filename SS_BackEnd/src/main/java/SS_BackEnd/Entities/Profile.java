@@ -67,7 +67,7 @@ public class Profile {
     // Enum for position
     public enum Position {
         Employee,
-            Manager
+        Manager
     }
 
 

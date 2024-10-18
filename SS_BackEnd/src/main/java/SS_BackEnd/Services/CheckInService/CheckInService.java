@@ -12,6 +12,7 @@ import SS_BackEnd.Repositories.ICheckInRepository;
 import SS_BackEnd.Services.EmailServices.IEmailService;
 import SS_BackEnd.Services.ProfileServices.IProfileService;
 import SS_BackEnd.Services.ShiftServices.IShiftService;
+import SS_BackEnd.Services.ShiftSignUpServices.IShiftSignUpService;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,9 @@ public class CheckInService implements ICheckInService{
     @Autowired
     private IEmailService emailService;
 
+    @Autowired
+    private IShiftSignUpService shiftSignUpService;
+
     @Override
     public List<CheckIn> getAllCheckInByShiftId(Pageable pageable, Integer shiftId) {
 
@@ -62,6 +66,10 @@ public class CheckInService implements ICheckInService{
         Profile profile = profileService.getProfileById(form.getProfileCode());
         if (profile == null){
             throw new EntityNotFoundException("Không tìm thấy nhân viên có code: " + form.getProfileCode());
+        }
+
+        if (!shiftSignUpService.isThisShiftIncludesThisProfile(shift.getId(), profile.getCode())){
+            throw new EntityNotFoundException("Nhân viên " + form.getProfileCode() + " chưa được đăng ký vào ca làm " + shift.getId());
         }
 
         if (!profile.getStatus()){

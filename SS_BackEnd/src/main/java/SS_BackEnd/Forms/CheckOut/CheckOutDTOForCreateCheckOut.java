@@ -15,7 +15,7 @@ public class CheckOutDTOForCreateCheckOut {
     private CheckIn.Status status;
 
     @JsonFormat(pattern = "HH:mm:ss dd/MM/yyyy")
-    private LocalDateTime checkInTime;
+    private LocalDateTime checkOutTime;
 
     private String image;
 

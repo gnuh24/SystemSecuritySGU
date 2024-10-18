@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `Profile` (
   `createAt` DATETIME NOT NULL,
   `updateAt` DATETIME NOT NULL,
   `gender` ENUM ("Male", "Female", "Other") NOT NULL ,
-  `position` ENUM("Staff", "Manager") NOT NULL,
+  `position` ENUM("Employee", "Manager") NOT NULL,
   `fullname` NVARCHAR(255) NOT NULL,
   `phone` NVARCHAR(255) NOT NULL,
   `email` NVARCHAR(255) NOT NULL,

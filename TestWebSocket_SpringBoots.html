@@ -58,7 +58,7 @@
 
         // Load initial check-ins
         function loadInitialCheckIns() {
-            fetch('http://localhost:8080/api/CheckIn/List?shiftId=1', {
+            fetch('http://localhost:8080/api/CheckIn/List?shiftId=3', {
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + managerToken,
@@ -76,7 +76,7 @@
                 });
             })
             .catch(error => {
-                console.error("Error fetching check-ins:", error);
+                console.error("Lỗi call API:", error);
             });
         }
 
@@ -133,30 +133,56 @@
             tableBody.appendChild(row);
         }
 
-      // Set up WebSocket connection
         function setupWebSocket() {
+            console.log("Setting up WebSocket...");
             const socket = new SockJS('http://localhost:8080/ws');
             const stompClient = Stomp.over(socket);
-
+        
             stompClient.connect({}, (frame) => {
-                console.log("Connected to WebSocket:", frame);
-
-                // Subscribe to the topic for check-in updates
+                console.log("WebSocket connected: ", frame);
                 stompClient.subscribe('/topic/checkInUpdates', (message) => {
                     const newCheckIn = JSON.parse(message.body);
                     addCheckInToTable(newCheckIn);
+        
+                    // Create and download the test.txt file with the message
+                    createAndDownloadFile("Received WebSocket message: " + message.body);
                 });
             }, (error) => {
-                // Log any connection errors
-                console.error("Error connecting to WebSocket:", error);
+                console.error("WebSocket connection error:", error);
             });
         }
+        
+        function createAndDownloadFile(content) {
+            // Create a Blob from the content
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+        
+            // Create a temporary link element
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'test.txt'; // Set the file name
+        
+            // Programmatically click the link to trigger the download
+            link.click();
+        
+            // Clean up the URL object
+            URL.revokeObjectURL(url);
+        }
+        
+    
+    
 
-        // Load initial check-ins and set up WebSocket
-        window.onload = function () {
+    let isInitialized = false;
+
+    window.onload = function () {
+        if (!isInitialized) {
+            console.log("Initializing page...");
             loadInitialCheckIns();
             setupWebSocket();
-        };
+            isInitialized = true; // Prevent further initialization
+        }
+    };
+    
     </script>
 </body>
 </html>

@@ -13,6 +13,7 @@ import SS_BackEnd.Forms.ShiftSignUp.ShiftSignUpDeleteForm;
 import SS_BackEnd.Other.ImageService;
 import SS_BackEnd.Services.CheckInService.ICheckInService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/CheckIn")
+
+@Slf4j
 public class CheckInController {
 
     @Autowired

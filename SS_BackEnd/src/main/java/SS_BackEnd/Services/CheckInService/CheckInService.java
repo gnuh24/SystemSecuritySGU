@@ -9,6 +9,7 @@ import SS_BackEnd.Entities.Shift;
 import SS_BackEnd.Forms.CheckIn.CheckInCreateForm;
 import SS_BackEnd.Other.ImageService;
 import SS_BackEnd.Repositories.ICheckInRepository;
+import SS_BackEnd.Services.EmailServices.IEmailService;
 import SS_BackEnd.Services.ProfileServices.IProfileService;
 import SS_BackEnd.Services.ShiftServices.IShiftService;
 import jakarta.persistence.EntityNotFoundException;
@@ -36,6 +37,9 @@ public class CheckInService implements ICheckInService{
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private IEmailService emailService;
 
     @Override
     public List<CheckIn> getAllCheckInByShiftId(Pageable pageable, Integer shiftId) {
@@ -65,8 +69,8 @@ public class CheckInService implements ICheckInService{
         }
 
 
-        CheckIn checkIn = getCheckInById(form.getShiftId(), form.getProfileCode());
-        if ( checkIn != null ){
+        CheckIn existsCheckIn = getCheckInById(form.getShiftId(), form.getProfileCode());
+        if ( existsCheckIn != null ){
             throw new EntityAlreadyExistsException("Nhân viên " + form.getProfileCode() + " đã checkIn ca làm ");
         }
 
@@ -83,8 +87,14 @@ public class CheckInService implements ICheckInService{
 
         String path = ImageService.saveImage(ImageService.checkInImage, form.getImage());
         entity.setImage(path);
+        CheckIn newCheckIn = checkInRepository.save(entity);
 
-        return checkInRepository.save(entity);
+
+//        if (entity.getStatus().equals(CheckIn.Status.Late)){
+//            emailService.sendWarningEmail(newCheckIn);
+//        }
+
+        return newCheckIn;
     }
 
     @Override

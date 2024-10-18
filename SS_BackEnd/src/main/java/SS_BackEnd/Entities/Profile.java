@@ -39,7 +39,7 @@ public class Profile {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Position position = Position.Staff;
+    private Position position = Position.Employee;
 
     @Column(nullable = false)
     private String fullname;
@@ -66,7 +66,7 @@ public class Profile {
 
     // Enum for position
     public enum Position {
-            Staff,
+        Employee,
             Manager
     }
 

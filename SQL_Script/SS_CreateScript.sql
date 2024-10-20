@@ -45,8 +45,8 @@ CREATE TABLE IF NOT EXISTS `Shift` (
   `updateAt` DATETIME NOT NULL,
   `startTime` DATETIME NOT NULL,
   `endTime` DATETIME NOT NULL,
-  `breakStartTime` DATETIME NOT NULL,
-  `breakEndTime` DATETIME NOT NULL,
+  `breakStartTime` DATETIME,
+  `breakEndTime` DATETIME,
   `shiftName` NVARCHAR(255) NOT NULL,
   `isActive` BOOLEAN NOT NULL,
   `isOT` BOOLEAN NOT NULL

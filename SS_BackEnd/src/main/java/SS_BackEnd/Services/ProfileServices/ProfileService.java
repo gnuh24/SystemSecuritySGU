@@ -59,12 +59,12 @@ public class ProfileService implements IProfileService {
     @Transactional
     public Profile createProfile(ProfileCreateForm profileCreateForm) throws IOException {
         Profile profile = modelMapper.map(profileCreateForm, Profile.class);
+        profile = profileRepository.save(profile);
 
         if (profile.getPosition().equals(Profile.Position.Manager)){
             accountService.createAccount(profile);
         }
 
-        profile = profileRepository.save(profile);
 
         for (int i=1; i <= profileCreateForm.getImages().size(); i++){
             fingerPrintService.createFingerPrint(i, profile, profileCreateForm.getImages().get(i-1));

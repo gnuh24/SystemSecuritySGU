@@ -51,7 +51,7 @@ th, td {
         width: 100%;
     }
 
-    #editEmployeeModal{
+    #editShiftModal{
         display: flex;
     }
 </style>
@@ -164,37 +164,50 @@ th, td {
                                         </div>
 
 
-                                        <!-- Modal Sửa Nhân Viên -->
-                                        <div class="modal" id="editEmployeeModal" style="display: none;"> <!-- Thêm style display: none; để ẩn modal ban đầu -->
+                                        <!-- Modal Sửa ca làm -->
+                                        <div class="modal" id="editShiftModal" style="display: none;"> <!-- Thêm style display: none; để ẩn modal ban đầu -->
                                             <div class="modal-content">
                                                 <h3>Sửa ca làm</h3>
 
                                                 <div class="input-group">
-                                                    <label for="editEmployeeName"><strong>Tên nhân viên:</strong></label>
-                                                    <input type="text" id="editEmployeeName" required placeholder="Nhập tên nhân viên">
+                                                    <label for="editShiftName"><strong>Tên ca làm:</strong></label>
+                                                    <input type="text" id="editShiftName" required placeholder="Nhập tên ca làm">
                                                 </div>
 
                                                 <div class="input-group">
-                                                    <label for="editEmployeeGender"><strong>Giới tính:</strong></label>
-                                                    <select id="editEmployeeGender" required>
-                                                        <option value="Male">Nam</option>
-                                                        <option value="Female">Nữ</option>
+                                                    <label for="editStartTime"><strong>Thời gian bắt đầu:</strong></label>
+                                                    <input type="datetime-local" id="editStartTime" required>
+                                                </div>
+
+                                                <div class="input-group">
+                                                    <label for="editEndTime"><strong>Thời gian kết thúc:</strong></label>
+                                                    <input type="datetime-local" id="editEndTime" required>
+                                                </div>
+
+                                                <div class="input-group">
+                                                    <label for="editBreakStartTime"><strong>Bắt đầu thời gian nghỉ:</strong></label>
+                                                    <input type="datetime-local" id="editBreakStartTime" required>
+                                                </div>
+
+                                                <div class="input-group">
+                                                    <label for="editBreakEndTime"><strong>Kết thúc thời gian nghỉ:</strong></label>
+                                                    <input type="datetime-local" id="editBreakEndTime" required>
+                                                </div>
+
+                                                <div class="input-group">
+                                                    <label for="editIsActive"><strong>Trạng thái ca làm:</strong></label>
+                                                    <select id="editIsActive" required>
+                                                        <option value="active">Active</option>
+                                                        <option value="inActive">inActive</option>
                                                     </select>
                                                 </div>
 
                                                 <div class="input-group">
-                                                    <label for="editEmployeeBirthday"><strong>Ngày sinh:</strong></label>
-                                                    <input type="date" id="editEmployeeBirthday" required>
-                                                </div>
-
-                                                <div class="input-group">
-                                                    <label for="editEmployeePhone"><strong>Số điện thoại:</strong></label>
-                                                    <input type="text" id="editEmployeePhone" required placeholder="Nhập số điện thoại">
-                                                </div>
-
-                                                <div class="input-group">
-                                                    <label for="editEmployeeEmail"><strong>Email:</strong></label>
-                                                    <input type="email" id="editEmployeeEmail" required placeholder="Nhập email">
+                                                    <label for="editIsOT"><strong>Tăng ca:</strong></label>
+                                                    <select id="editIsOT" required>
+                                                        <option value="OT">Có</option>
+                                                        <option value="nonOT">Không</option>
+                                                    </select>
                                                 </div>
 
                                                 <button id="saveEditEmployee" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Lưu thay đổi</button>
@@ -363,10 +376,10 @@ $(document).ready(function() {
     $("#detailsNV").click(function() {
         const selectedRow = $("tr.selected");
         if (selectedRow.length === 0) {
-            Swal.fire('Chưa chọn nhân viên!', 'Vui lòng chọn một nhân viên để xem chi tiết.', 'warning');
+            Swal.fire('Chưa chọn ca làm!', 'Vui lòng chọn một ca làm để xem chi tiết.', 'warning');
         } else {
-            const employeeCode = selectedRow.find("td").eq(0).text();
-            getEmployeeDetails(employeeCode);
+            const shiftCode = selectedRow.find("td").eq(0).text();
+            getEmployeeDetails(shiftCode);
         }
     });
 
@@ -526,17 +539,17 @@ $("#saveShift").click(function() {
 $("#editNV").click(function() {
     const selectedRow = $("tr.selected"); 
     if (selectedRow.length === 0) {
-        Swal.fire('Chưa chọn nhân viên!', 'Vui lòng chọn một nhân viên để sửa.', 'warning');
+        Swal.fire('Chưa chọn ca làm!', 'Vui lòng chọn một ca làm để sửa.', 'warning');
     } else {
-        const employeeCode = selectedRow.find("td").first().text().trim(); 
-        openEditModal(employeeCode); 
+        const shiftCode = selectedRow.find("td").first().text().trim(); 
+        openEditModal(shiftCode); 
     }
 });
 
 $("#saveEditEmployee").on('click', function() {
     const selectedRow = $("tr.selected"); 
     if (selectedRow.length === 0) {
-        Swal.fire('Chưa chọn nhân viên!', 'Vui lòng chọn một nhân viên để sửa.', 'warning');
+        Swal.fire('Chưa chọn ca làm!', 'Vui lòng chọn một ca làm để sửa.', 'warning');
         return; 
     }
 
@@ -545,11 +558,11 @@ $("#saveEditEmployee").on('click', function() {
         return; 
     }
     
-    const employeeCode = selectedRow.find("td").first().text().trim(); 
+    const shiftCode = selectedRow.find("td").first().text().trim(); 
     const formData = new FormData(); 
 
-    formData.append('profileCode', employeeCode);
-    formData.append('fullname', $("#editEmployeeName").val().trim());
+    formData.append('profileCode', shiftCode);
+    formData.append('fullname', $("#editShiftName").val().trim());
     formData.append('gender', $("#editEmployeeGender").val());
     formData.append('birthday', $("#editEmployeeBirthday").val());
     formData.append('phone', $("#editEmployeePhone").val().trim());
@@ -564,12 +577,12 @@ $("#saveEditEmployee").on('click', function() {
         contentType: false, 
         data: formData,
         headers: {
-            'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMDAxIiwiaWF0IjoxNzI3MDk3MTUwLCJleHAiOjE3Mjk2ODkxNTB9.7rMknTboogqhKHDgy4urBUzlFpGu7BkSOYrEzt8PAjA' 
+            'Authorization': 'Bearer ' + token
         },
         success: function(response) {
             if (response.status === 200) {
                 Swal.fire('Thành công', 'Cập nhật thông tin nhân viên thành công!', 'success');
-                $("#editEmployeeModal").hide(); 
+                $("#editShiftModal").hide(); 
                 refreshEmployeeList(); 
             } else {
                 Swal.fire('Lỗi', 'Không thể cập nhật thông tin nhân viên.', 'error');
@@ -587,23 +600,25 @@ $("#saveEditEmployee").on('click', function() {
 });
 
 
-function openEditModal(employeeCode) {
+function openEditModal(shiftCode) {
     $.ajax({
-        url: `http://localhost:8080/api/Shift/Detail?code=${employeeCode}`,
+        url: `http://localhost:8080/api/Shift/Detail?id=${shiftCode}`,
         type: 'GET',
         dataType: "json",
         headers: {
-            'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMDAxIiwiaWF0IjoxNzI3MDk3MTUwLCJleHAiOjE3Mjk2ODkxNTB9.7rMknTboogqhKHDgy4urBUzlFpGu7BkSOYrEzt8PAjA' // Thay thế bằng token của bạn
+            'Authorization': 'Bearer ' + token // Thay thế bằng token của bạn
         },
         success: function(response) {
             if (response.status === 200 && response.data) {
-                $("#editEmployeeId").val(response.data.id); 
-                $("#editEmployeeName").val(response.data.fullname);
-                $("#editEmployeeGender").val(response.data.gender);
-                $("#editEmployeeBirthday").val(response.data.birthday);
-                $("#editEmployeePhone").val(response.data.phone);
-                $("#editEmployeeEmail").val(response.data.email);
-                $("#editEmployeeModal").show();
+                $("#editShiftId").val(response.data.id); 
+                $("#editShiftName").val(response.data.shiftName);
+                $("#editStartTime").val(response.data.startTime);
+                $("#editEndTime").val(response.data.endTime);
+                $("#editBreakStartTime").val(response.data.breakStartTime);
+                $("#editBreakEndTime").val(response.data.breakEndTime);
+                $("#editIsActive").val(response.data.isActive ? 'active' : 'inActive');
+                $("#editIsOT").val(response.data.isOT ? 'OT' : 'nonOT');
+                $("#editShiftModal").show();
             } else {
                 Swal.fire('Lỗi', 'Không tìm thấy thông tin chi tiết.', 'error');
             }
@@ -617,17 +632,17 @@ function openEditModal(employeeCode) {
 
 // Đóng modal
 $("#closeEditModal").on('click', function() {
-    $("#editEmployeeModal").hide();
+    $("#editShiftModal").hide();
 });
 });
 
-function getEmployeeDetails(employeeCode) {
+function getEmployeeDetails(shiftCode) {
             $.ajax({
-                url: `http://localhost:8080/api/Profile/Detail?code=${employeeCode}`,
+                url: `http://localhost:8080/api/Profile/Detail?code=${shiftCode}`,
                 type: 'GET',
                 dataType: "json",
                 headers: {
-                    'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMDAxIiwiaWF0IjoxNzI3MDk3MTUwLCJleHAiOjE3Mjk2ODkxNTB9.7rMknTboogqhKHDgy4urBUzlFpGu7BkSOYrEzt8PAjA'
+                    'Authorization': 'Bearer ' + token
                 },
                 success: function(response) {
                     if (response.status === 200 && response.data) {

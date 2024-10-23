@@ -215,7 +215,7 @@
         // Hàm gọi API để lấy dữ liệu và hiển thị trên bảng
         function getAllTaiKhoan(search, status, page) {
             $.ajax({
-                url: 'http://localhost:8080/api/Profile/List',
+                url: 'http://localhost:8080/api/Shift/List',
                 type: 'GET',
                 dataType: "json",
                 data: {
@@ -234,11 +234,11 @@
                             response.data.content.forEach(function(account) {
                                 var row = `
                             <tr>
-                                <td>${account.code}</td>
-                                <td>${account.fullname}</td>
-                                <td>${account.email}</td>
-                                <td>${account.phone}</td>
-                                <td>${account.status === "true" ? 'Active' : 'Inactive'}</td>
+                                <td>${account.id}</td>
+                                <td>${account.shiftName}</td>
+                                <td>${account.startTime}</td>
+                                <td>${account.endTime}</td>
+                                <td>${account.isActive === "true" ? 'Active' : 'Inactive'}</td>
                             </tr>
                         `;
                                 $("#tableBody").append(row);

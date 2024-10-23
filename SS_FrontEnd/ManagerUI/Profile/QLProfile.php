@@ -248,7 +248,7 @@ th, td {
         var currentPage = 1;
         var pageSize = 5;
         var totalPages = 1;
-
+        const token = localStorage.getItem('token');
 // Hàm gọi API để lấy dữ liệu và hiển thị trên bảng
 function getAllTaiKhoan(search, status, pageNumber) {
     var searchConverted = removeAccentsAndToLowerCase(search);
@@ -264,7 +264,7 @@ function getAllTaiKhoan(search, status, pageNumber) {
             size: pageSize
         },
         headers: {
-            'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMDAxIiwiaWF0IjoxNzI3MDk3MTUwLCJleHAiOjE3Mjk2ODkxNTB9.7rMknTboogqhKHDgy4urBUzlFpGu7BkSOYrEzt8PAjA'
+            'Authorization': 'Bearer ' + token
         },
         success: function(response) {
             $("#tableBody").empty();
@@ -449,7 +449,7 @@ $("#saveEmployee").click(function() {
         contentType: false, 
         data: formData,
         headers: {
-            'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMDAxIiwiaWF0IjoxNzI3MDk3MTUwLCJleHAiOjE3Mjk2ODkxNTB9.7rMknTboogqhKHDgy4urBUzlFpGu7BkSOYrEzt8PAjA' // Thay YOUR_JWT_TOKEN bằng token thật của bạn
+            'Authorization': 'Bearer ' + token // Thay YOUR_JWT_TOKEN bằng token thật của bạn
         },
         success: function(response) {
             if (response.status === 200) {
@@ -513,7 +513,7 @@ $("#saveEditEmployee").on('click', function() {
         contentType: false, 
         data: formData,
         headers: {
-            'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMDAxIiwiaWF0IjoxNzI3MDk3MTUwLCJleHAiOjE3Mjk2ODkxNTB9.7rMknTboogqhKHDgy4urBUzlFpGu7BkSOYrEzt8PAjA' // Thay thế bằng token của bạn
+            'Authorization': 'Bearer ' + token // Thay thế bằng token của bạn
         },
         success: function(response) {
             if (response.status === 200) {
@@ -542,7 +542,7 @@ function openEditModal(employeeCode) {
         type: 'GET',
         dataType: "json",
         headers: {
-            'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMDAxIiwiaWF0IjoxNzI3MDk3MTUwLCJleHAiOjE3Mjk2ODkxNTB9.7rMknTboogqhKHDgy4urBUzlFpGu7BkSOYrEzt8PAjA' // Thay thế bằng token của bạn
+            'Authorization': 'Bearer ' + token
         },
         success: function(response) {
             if (response.status === 200 && response.data) {
@@ -576,7 +576,7 @@ function getEmployeeDetails(employeeCode) {
                 type: 'GET',
                 dataType: "json",
                 headers: {
-                    'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMDAxIiwiaWF0IjoxNzI3MDk3MTUwLCJleHAiOjE3Mjk2ODkxNTB9.7rMknTboogqhKHDgy4urBUzlFpGu7BkSOYrEzt8PAjA'
+                    'Authorization': 'Bearer ' + token
                 },
                 success: function(response) {
                     if (response.status === 200 && response.data) {

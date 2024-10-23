@@ -89,7 +89,7 @@ th, td {
                                                 <option value="false">InActive</option>
                                             </select>
 
-                                            <button id="addNV" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #7FFF00; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer; width">
+                                            <button id="addShift" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #7FFF00; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer; width">
                                                 <i class="fa-solid fa-plus" style="margin-right: 8px; color: white;"></i>
                                                 Thêm ca làm
                                             </button>
@@ -158,7 +158,7 @@ th, td {
                                                 <input type="hidden" id="createAt">
                                                 <input type="hidden" id="updateAt">
 
-                                                <button id="saveEmployee" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Lưu</button>
+                                                <button id="saveShift" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Lưu</button>
                                                 <button id="closeAddModal" style="margin-top: 1rem; background-color: #ff4d4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Đóng</button>
                                             </div>
                                         </div>
@@ -251,6 +251,7 @@ th, td {
         var currentPage = 1;
         var pageSize = 5;
         var totalPages = 1;
+        const token = localStorage.getItem('token');
 
 // Hàm gọi API để lấy dữ liệu và hiển thị trên bảng
 function getAllTaiKhoan(search, status, pageNumber) {
@@ -267,7 +268,7 @@ function getAllTaiKhoan(search, status, pageNumber) {
             size: pageSize
         },
         headers: {
-            'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMDAxIiwiaWF0IjoxNzI5Njg5MzAyLCJleHAiOjE3MzIyODEzMDJ9.M-qI-hIUID1fszeC7tcJSqa2alxK5WvG-IZ2IdQwT5A'
+            'Authorization': 'Bearer ' + token
         },
         success: function(response) {
             $("#tableBody").empty();
@@ -380,14 +381,14 @@ $(document).ready(function() {
 
 
     
-    $("#addNV").click(function() {
-    $("#employeeCode").val('');
-    $("#employeeName").val('');
-    $("#employeeGender").val('Male'); 
-    $("#employeeBirthday").val(''); 
-    $("#employeePhone").val('');
-    $("#employeeEmail").val('');
-    $("#employeePosition").val('Employee'); 
+    $("#addShift").click(function() {
+    $("#shiftName").val('');
+    $("#startTime").val('');
+    $("#endTime").val('');
+    $("#breakStartTime").val('');
+    $("#breakEndTime").val('');
+    $("#isActive").val('active');
+    $("#isOT").val('OT');
     $("#addEmployeeModal").show();
 });
 
@@ -406,78 +407,120 @@ $("#closeAddModal").click(function() {
     $("#addEmployeeModal").hide();
 });
 
-$("#saveEmployee").click(function() {
-    const fullname = $("#employeeName").val().trim();
-    const gender = $("#employeeGender").val();
-    const birthday = $("#employeeBirthday").val(); 
-    const phone = $("#employeePhone").val().trim();
-    const email = $("#employeeEmail").val().trim();
-    const position = $("#employeePosition").val(); // Vị trí
+$("#saveShift").click(function() {
+    const shiftName = $("#shiftName").val().trim();
 
-    
-
-    if (!fullname || !gender || !birthday || !phone || !email || !position) {
-        Swal.fire('Lỗi', 'Vui lòng điền tất cả các trường bắt buộc.', 'error');
-        return; 
+    // Hàm để định dạng thời gian thành yyyy-MM-dd'T'HH:mm:ss
+    function formatDateTime(date) {
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2); // Tháng cần thêm số 0 ở trước
+        const day = ('0' + date.getDate()).slice(-2); // Ngày cần thêm số 0 ở trước
+        const hours = ('0' + date.getHours()).slice(-2);
+        const minutes = ('0' + date.getMinutes()).slice(-2);
+        const seconds = ('0' + date.getSeconds()).slice(-2);
+        return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
     }
 
-    if (!/^\d{10}$/.test(phone)) {
-        Swal.fire('Lỗi', 'Số điện thoại phải có đúng 10 chữ số.', 'error');
-        return; 
-    }
+    const startTime = formatDateTime(new Date($("#startTime").val())); // Chuyển đổi định dạng thời gian
+    const endTime = formatDateTime(new Date($("#endTime").val()));
+    const breakStartTime = formatDateTime(new Date($("#breakStartTime").val()));
+    const breakEndTime = formatDateTime(new Date($("#breakEndTime").val()));
 
-    const formData = new FormData();
-    formData.append('fullname', fullname);
-    formData.append('gender', gender);
-    formData.append('birthday', birthday);
-    formData.append('phone', phone);
-    formData.append('email', email);
-    formData.append('position', position);
-    formData.append('status', true);
-    formData.append('createAt', new Date().toISOString().split('T')[0] + " 08:00:00");
-    formData.append('updateAt', new Date().toISOString().split('T')[0] + " 08:00:00");
+    const isActive = $("#isActive").val();
+    const isOT = $("#isOT").val();
 
-
-    const imagesInput = document.getElementById('employeeImages'); 
-    const images = imagesInput.files; 
-
-    if (images.length > 0) {
-        for (let i = 0; i < images.length; i++) {
-            formData.append('images', images[i]); 
-        }
-    } else {
-        Swal.fire('Lỗi', 'Vui lòng chọn ít nhất một ảnh.', 'error');
+    if (!shiftName) {
+        Swal.fire('Lỗi', 'Vui lòng nhập tên ca làm.', 'error');
         return;
     }
 
+    if (!startTime) {
+        Swal.fire('Lỗi', 'Vui lòng chọn thời gian bắt đầu.', 'error');
+        return;
+    }
+
+    if (!endTime) {
+        Swal.fire('Lỗi', 'Vui lòng chọn thời gian kết thúc.', 'error');
+        return;
+    }
+
+    if (!breakStartTime) {
+        Swal.fire('Lỗi', 'Vui lòng chọn thời gian bắt đầu nghỉ.', 'error');
+        return;
+    }
+
+    if (!breakEndTime) {
+        Swal.fire('Lỗi', 'Vui lòng chọn thời gian kết thúc nghỉ.', 'error');
+        return;
+    }
+
+    if (!isActive) {
+        Swal.fire('Lỗi', 'Vui lòng chọn trạng thái ca làm.', 'error');
+        return;
+    }
+
+    if (!isOT) {
+        Swal.fire('Lỗi', 'Vui lòng chọn tăng ca.', 'error');
+        return;
+    }
+
+    // Kiểm tra xem thời gian bắt đầu có sớm hơn thời gian kết thúc không
+    if (new Date(startTime) >= new Date(endTime)) {
+        Swal.fire('Lỗi', 'Thời gian bắt đầu phải sớm hơn thời gian kết thúc.', 'error');
+        return;
+    }
+
+    // Kiểm tra xem thời gian bắt đầu nghỉ có sớm hơn thời gian kết thúc nghỉ không
+    if (new Date(breakStartTime) >= new Date(breakEndTime)) {
+        Swal.fire('Lỗi', 'Thời gian bắt đầu nghỉ phải sớm hơn thời gian kết thúc nghỉ.', 'error');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('shiftName', shiftName);
+    formData.append('startTime', startTime);
+    formData.append('endTime', endTime);
+    formData.append('breakStartTime', breakStartTime);
+    formData.append('breakEndTime', breakEndTime);
+    formData.append('isActive', isActive === 'active');
+    formData.append('isOT', isOT === 'OT');
+    formData.append('status', true);
+    formData.append('createAt', new Date().toISOString());
+    formData.append('updateAt', new Date().toISOString());
+
+    // Gửi yêu cầu Ajax
     $.ajax({
-        url: 'http://localhost:8080/api/Shift/Create',
+        url: 'http://localhost:8080/api/Shift/Create',  // Đường dẫn API của bạn
         type: 'POST',
-        processData: false, 
-        contentType: false, 
+        processData: false,
+        contentType: false,
         data: formData,
         headers: {
-            'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMDAxIiwiaWF0IjoxNzI3MDk3MTUwLCJleHAiOjE3Mjk2ODkxNTB9.7rMknTboogqhKHDgy4urBUzlFpGu7BkSOYrEzt8PAjA' // Thay YOUR_JWT_TOKEN bằng token thật của bạn
+            'Authorization': 'Bearer ' + token // Thay bằng token thật của bạn
         },
         success: function(response) {
             if (response.status === 200) {
-                Swal.fire('Thành công', 'Thêm nhân viên thành công!', 'success');
+                Swal.fire('Thành công', 'Thêm ca làm thành công!', 'success');
                 $("#addEmployeeModal").hide();
-                getAllTaiKhoan('', '', currentPage); 
+                // Gọi hàm để cập nhật danh sách ca làm nếu cần
+                // Ví dụ: getAllShifts();
             } else {
-                Swal.fire('Thành công', 'Thêm nhân viên thành công!', 'success');
+                Swal.fire('Lỗi', 'Thêm ca làm thất bại.', 'error');
             }
         },
         error: function(xhr) {
-            console.error("Lỗi khi gọi API thêm nhân viên", xhr.responseJSON);
+            console.error("Lỗi khi gọi API thêm ca làm", xhr.responseJSON);
             if (xhr.responseJSON && xhr.responseJSON.error) {
                 Swal.fire('Lỗi', xhr.responseJSON.error, 'error');
             } else {
-                Swal.fire('Lỗi', 'Có lỗi xảy ra khi thêm nhân viên.', 'error');
+                Swal.fire('Lỗi', 'Có lỗi xảy ra khi thêm ca làm.', 'error');
             }
         }
     });
 });
+
+
+
 
 
 $("#editNV").click(function() {
@@ -521,7 +564,7 @@ $("#saveEditEmployee").on('click', function() {
         contentType: false, 
         data: formData,
         headers: {
-            'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMDAxIiwiaWF0IjoxNzI3MDk3MTUwLCJleHAiOjE3Mjk2ODkxNTB9.7rMknTboogqhKHDgy4urBUzlFpGu7BkSOYrEzt8PAjA' // Thay thế bằng token của bạn
+            'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMDAxIiwiaWF0IjoxNzI3MDk3MTUwLCJleHAiOjE3Mjk2ODkxNTB9.7rMknTboogqhKHDgy4urBUzlFpGu7BkSOYrEzt8PAjA' 
         },
         success: function(response) {
             if (response.status === 200) {

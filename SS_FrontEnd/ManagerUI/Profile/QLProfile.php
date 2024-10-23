@@ -252,7 +252,7 @@ th, td {
 // Hàm gọi API để lấy dữ liệu và hiển thị trên bảng
 function getAllTaiKhoan(search, status, pageNumber) {
     var searchConverted = removeAccentsAndToLowerCase(search);
-
+    const token = localStorage.getItem('token');
     $.ajax({
         url: 'http://localhost:8080/api/Profile/List',
         type: 'GET',

@@ -54,6 +54,39 @@ th, td {
     #editShiftModal{
         display: flex;
     }
+
+    /* Kiểu nút mũi tên */
+    .arrow-button {
+        position: relative;
+        left: -56%;
+        font-weight: bold;
+        font-size: 12px;
+        padding: 5px 10px;
+        background-color: #4CAF50; /* Màu nền xanh lá cây */
+        color: white; /* Màu chữ trắng */
+        border: none; /* Xóa đường viền */
+        border-radius: 5px; /* Các góc bo tròn */
+        cursor: pointer; /* Con trỏ hình bàn tay khi hover */
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        font-family: 'Arial', sans-serif;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .arrow-button:hover {
+        background-color: #45a049; /* Màu khi hover (nhấn chuột vào) */
+        box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2); /* Đổ bóng mạnh hơn khi hover */
+    }
+
+    .arrow-button:active {
+        transform: scale(0.98); /* Hiệu ứng khi nhấn giữ */
+    }
+
+    /* Đảm bảo không có khoảng cách không mong muốn xung quanh */
+    .input-group {
+        display: flex;
+        align-items: center;
+    }
+
 </style>
 
 </head>
@@ -110,7 +143,7 @@ th, td {
                                             </button>
                                         </div>
                                         <div class="modal1" id="addShiftModal">
-                                            <div class="modal-content">
+                                            <div class="modal-content addShiftForm">
                                                 <h3>Thêm Ca Làm</h3>
 
                                                 <div class="input-group">
@@ -155,11 +188,12 @@ th, td {
                                                 </div>
 
                                                 <div class="input-group">
-                                                    <label for="employees"><strong>Chọn nhân viên:</strong></label>
-                                                    <div id="employees" class="checkbox-group" required style="position: relative; left: -10%; font-weight: bold; font-size: 14px">
-                                                        <!-- Checkboxes will be added here dynamically -->
-                                                    </div>
+                                                    <label for="employees">
+                                                        <strong>Chọn nhân viên:</strong>
+                                                    </label>
+                                                    <button id="openEmployeeModal" class="arrow-button">>>>></button>
                                                 </div>
+
 
 
                                                 <input type="hidden" id="shiftStatus" value="true">
@@ -171,6 +205,25 @@ th, td {
                                             </div>
                                         </div>
 
+                                        <div class="modal" id="employeeModal" style="display: none;">
+                                            <div class="modal-content" style="position: relative; left: 940px; top: 220px">
+                                                <h3>Chọn nhân viên</h3>
+                                                <table id="employeeTable" border="1" style="width: 100%; text-align: left;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>ID</th>
+                                                            <th>Tên nhân viên</th>
+                                                            <th>Chọn</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="employeeTableBody">
+                                                        <!-- Các hàng của bảng sẽ được thêm động ở đây -->
+                                                    </tbody>
+                                                </table>
+                                                <button id="selectEmployees" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Chọn</button>
+                                                <button id="closeEmployeeModal" style="margin-top: 1rem; background-color: #ff4d4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Đóng</button>
+                                            </div>
+                                        </div>
 
                                         <!-- Modal Sửa ca làm -->
                                         <div class="modal" id="editShiftModal" style="display: none;"> <!-- Thêm style display: none; để ẩn modal ban đầu -->
@@ -443,23 +496,34 @@ function loadEmployees(search, status, pageNumber) {
             size: pageSize
         },
         headers: {
-            'Authorization': 'Bearer ' + token  // Replace with your actual token
+            'Authorization': 'Bearer ' + token  // Thay bằng token của bạn
         },
         success: function(response) {
             if (response && response.data.content) {
-                const employeeSelect = $("#employees");
-                employeeSelect.empty();  // Clear any existing options
+                const employeeTableBody = $("#employeeTableBody");
+                employeeTableBody.empty();  // Xóa hàng cũ trong bảng
+
                 response.data.content.forEach(employee => {
+                    const row = $('<tr></tr>');  // Tạo hàng mới cho bảng
+                    
+                    // Tạo cột ID
+                    const idCell = $('<td></td>').text(employee.code);
+                    row.append(idCell);
+                    
+                    // Tạo cột tên nhân viên
+                    const nameCell = $('<td></td>').text(employee.fullname);
+                    row.append(nameCell);
+                    
+                    // Tạo cột checkbox
+                    const checkboxCell = $('<td></td>');
                     const checkbox = $('<input>')
                         .attr('type', 'checkbox')
                         .attr('id', 'employee_' + employee.code)
                         .attr('value', employee.code);
-                    
-                    const label = $('<label></label>')
-                        .attr('for', 'employee_' + employee.code)
-                        .text(employee.fullname);
-                    
-                    employeeSelect.append(checkbox).append(label).append('<br>');
+                    checkboxCell.append(checkbox);
+                    row.append(checkboxCell);
+
+                    employeeTableBody.append(row);  // Thêm hàng vào bảng
                 });
             } else {
                 Swal.fire('Lỗi', 'Không thể tải danh sách nhân viên.', 'error');
@@ -471,26 +535,54 @@ function loadEmployees(search, status, pageNumber) {
     });
 }
 
+$("#selectEmployees").click(function() {
+    const selectedEmployees = [];
+    $("#employeeTableBody input[type='checkbox']:checked").each(function() {
+        selectedEmployees.push($(this).val());  // Lấy mã nhân viên đã chọn
+    });
+
+    console.log("Danh sách nhân viên đã chọn: ", selectedEmployees);  // Hiển thị danh sách nhân viên đã chọn
+
+    // Đóng modal và chỉnh lại CSS
+    $(".addShiftForm").css({
+        "right": "0px"
+    });
+    $("#employeeModal").hide();
+});
+
 loadEmployees('','',1);
 
+$("#openEmployeeModal").click(function() {
+    $("#employeeModal").show();
+    $(".addShiftForm").css({
+        "position": "relative",
+        "right": "200px"
+    });
+});
 
-
+// Ẩn modal khi nhấn nút Đóng
+$("#closeEmployeeModal").click(function() {
+    $("#employeeModal").hide();
+    $(".addShiftForm").css({
+        "right": "0px"
+    });
+});
 
 $("#saveShift").click(function() {
     const shiftName = $("#shiftName").val().trim();
 
-    // Hàm để định dạng thời gian thành yyyy-MM-dd'T'HH:mm:ss
+    // Hàm định dạng thời gian thành yyyy-MM-dd'T'HH:mm:ss
     function formatDateTime(date) {
         const year = date.getFullYear();
-        const month = ('0' + (date.getMonth() + 1)).slice(-2); // Tháng cần thêm số 0 ở trước
-        const day = ('0' + date.getDate()).slice(-2); // Ngày cần thêm số 0 ở trước
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        const day = ('0' + date.getDate()).slice(-2);
         const hours = ('0' + date.getHours()).slice(-2);
         const minutes = ('0' + date.getMinutes()).slice(-2);
         const seconds = ('0' + date.getSeconds()).slice(-2);
         return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
     }
 
-    const startTime = formatDateTime(new Date($("#startTime").val())); // Chuyển đổi định dạng thời gian
+    const startTime = formatDateTime(new Date($("#startTime").val()));
     const endTime = formatDateTime(new Date($("#endTime").val()));
     const breakStartTime = formatDateTime(new Date($("#breakStartTime").val()));
     const breakEndTime = formatDateTime(new Date($("#breakEndTime").val()));
@@ -498,12 +590,11 @@ $("#saveShift").click(function() {
     const isActive = $("#isActive").val();
     const isOT = $("#isOT").val();
 
-    // Thu thập danh sách các nhân viên được tick (checkbox)
+    // Thu thập danh sách nhân viên đã chọn từ modal
     const selectedEmployees = [];
-    $("#employees input[type='checkbox']:checked").each(function() {
+    $("#employeeTableBody input[type='checkbox']:checked").each(function() {
         selectedEmployees.push($(this).val()); // Lấy giá trị của checkbox
     });
-
 
     if (!shiftName) {
         Swal.fire('Lỗi', 'Vui lòng nhập tên ca làm.', 'error');
@@ -552,8 +643,7 @@ $("#saveShift").click(function() {
         return;
     }
 
-    
-
+    // Tạo dữ liệu form
     const formData = new FormData();
     formData.append('shiftName', shiftName);
     formData.append('startTime', startTime);
@@ -566,17 +656,16 @@ $("#saveShift").click(function() {
     formData.append('createAt', new Date().toISOString());
     formData.append('updateAt', new Date().toISOString());
 
-
-    // Thêm danh sách mã nhân viên được tick vào formData
-    let i = 0;
-    selectedEmployees.forEach(function(employeeCode) {
-        formData.append('profileCodes[' + i + ']', employeeCode);
-        i++;
+    // Thêm danh sách nhân viên đã chọn vào formData
+    selectedEmployees.forEach(function(employeeCode, index) {
+        formData.append(`profileCodes[${index}]`, employeeCode);
     });
 
+    // Hiển thị dữ liệu để kiểm tra trước khi gửi
     for (let [key, value] of formData.entries()) {
         console.log(`${key}: ${value}`);
     }
+
     // Gửi yêu cầu Ajax
     $.ajax({
         url: 'http://localhost:8080/api/Shift/Create',  // Đường dẫn API của bạn
@@ -591,22 +680,18 @@ $("#saveShift").click(function() {
             if (response.status === 201) {
                 Swal.fire('Thành công', 'Thêm ca làm thành công!', 'success');
                 $("#addShiftModal").hide();
-                // Gọi hàm để cập nhật danh sách ca làm nếu cần
-                // Ví dụ: getAllShifts();
+                // Cập nhật danh sách ca làm nếu cần
             } else {
                 Swal.fire('Lỗi', 'Thêm ca làm thất bại.', 'error');
             }
         },
         error: function(xhr) {
             console.error("Lỗi khi gọi API thêm ca làm", xhr.responseJSON);
-            if (xhr.responseJSON && xhr.responseJSON.error) {
-                Swal.fire('Lỗi', xhr.responseJSON.error, 'error');
-            } else {
-                Swal.fire('Lỗi', 'Có lỗi xảy ra khi thêm ca làm.', 'error');
-            }
+            Swal.fire('Lỗi', 'Có lỗi xảy ra khi thêm ca làm.', 'error');
         }
     });
 });
+
 
 
 

@@ -109,7 +109,7 @@ th, td {
                                                 Xem chi tiết
                                             </button>
                                         </div>
-                                        <div class="modal1" id="addEmployeeModal">
+                                        <div class="modal1" id="addShiftModal">
                                             <div class="modal-content">
                                                 <h3>Thêm Ca Làm</h3>
 
@@ -135,7 +135,7 @@ th, td {
 
                                                 <div class="input-group">
                                                     <label for="breakEndTime"><strong>Kết thúc thời gian nghỉ:</strong></label>
-                                                    <input type="datetime-local" id="breakStartTime" required>
+                                                    <input type="datetime-local" id="breakEndTime" required>
                                                 </div>
 
                                                 <div class="input-group">
@@ -154,7 +154,15 @@ th, td {
                                                     </select>
                                                 </div>
 
-                                                <input type="hidden" id="employeeStatus" value="true">
+                                                <div class="input-group">
+                                                    <label for="employees"><strong>Chọn nhân viên:</strong></label>
+                                                    <div id="employees" class="checkbox-group" required style="position: relative; left: -10%; font-weight: bold; font-size: 14px">
+                                                        <!-- Checkboxes will be added here dynamically -->
+                                                    </div>
+                                                </div>
+
+
+                                                <input type="hidden" id="shiftStatus" value="true">
                                                 <input type="hidden" id="createAt">
                                                 <input type="hidden" id="updateAt">
 
@@ -209,6 +217,8 @@ th, td {
                                                         <option value="nonOT">Không</option>
                                                     </select>
                                                 </div>
+
+
 
                                                 <button id="saveEditEmployee" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Lưu thay đổi</button>
                                                 <button id="closeEditModal" style="margin-top: 1rem; background-color: #ff4d4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Đóng</button>
@@ -267,7 +277,7 @@ th, td {
         const token = localStorage.getItem('token');
 
 // Hàm gọi API để lấy dữ liệu và hiển thị trên bảng
-function getAllTaiKhoan(search, status, pageNumber) {
+function getAllCaLam(search, status, pageNumber) {
     var searchConverted = removeAccentsAndToLowerCase(search);
 
     $.ajax({
@@ -348,7 +358,7 @@ function changePage(pageNumber) {
         return; 
     }
     currentPage = pageNumber;
-    getAllTaiKhoan($('#searchInput').val(), $('#selectQuyen').val(), currentPage);
+    getAllCaLam($('#searchInput').val(), $('#selectQuyen').val(), currentPage);
 }
 
 function removeAccentsAndToLowerCase(str) {
@@ -356,21 +366,21 @@ function removeAccentsAndToLowerCase(str) {
 }
 
 
-getAllTaiKhoan('', '', 1); 
+getAllCaLam('', '', 1); 
 
 $(document).ready(function() {
-    getAllTaiKhoan('', '', currentPage);
+    getAllCaLam('', '', currentPage);
 
     $("#searchInput").on("input", function() {
         var searchValue = $(this).val();
         var statusValue = $("#selectQuyen").val();
-        getAllTaiKhoan(searchValue, statusValue, currentPage);
+        getAllCaLam(searchValue, statusValue, currentPage);
     });
 
     $("#selectQuyen").on("change", function() {
         var searchValue = $("#searchInput").val();
         var statusValue = $(this).val();
-        getAllTaiKhoan(searchValue, statusValue, currentPage);
+        getAllCaLam(searchValue, statusValue, currentPage);
     });
 
     $("#detailsNV").click(function() {
@@ -402,23 +412,69 @@ $(document).ready(function() {
     $("#breakEndTime").val('');
     $("#isActive").val('active');
     $("#isOT").val('OT');
-    $("#addEmployeeModal").show();
+    $("#addShiftModal").show();
 });
 
 $("#closeAddModal").click(function() {
-    $("#addEmployeeModal").hide();
+    $("#addShiftModal").hide();
 });
 
 
 
 $("#closeAddModal").click(function () {
-    $("#addEmployeeModal").hide(); 
+    $("#addShiftModal").hide(); 
 });
 
 
 $("#closeAddModal").click(function() {
-    $("#addEmployeeModal").hide();
+    $("#addShiftModal").hide();
 });
+
+// Function to load employee options
+function loadEmployees(search, status, pageNumber) {
+    $.ajax({
+        url: 'http://localhost:8080/api/Profile/List',  
+        type: 'GET',
+        dataType: "json",
+        data: {
+            search: search,
+            status: status,
+            pageNumber: pageNumber,
+            size: pageSize
+        },
+        headers: {
+            'Authorization': 'Bearer ' + token  // Replace with your actual token
+        },
+        success: function(response) {
+            if (response && response.data.content) {
+                const employeeSelect = $("#employees");
+                employeeSelect.empty();  // Clear any existing options
+                response.data.content.forEach(employee => {
+                    const checkbox = $('<input>')
+                        .attr('type', 'checkbox')
+                        .attr('id', 'employee_' + employee.code)
+                        .attr('value', employee.code);
+                    
+                    const label = $('<label></label>')
+                        .attr('for', 'employee_' + employee.code)
+                        .text(employee.fullname);
+                    
+                    employeeSelect.append(checkbox).append(label).append('<br>');
+                });
+            } else {
+                Swal.fire('Lỗi', 'Không thể tải danh sách nhân viên.', 'error');
+            }
+        },
+        error: function() {
+            Swal.fire('Lỗi', 'Có lỗi xảy ra khi tải danh sách nhân viên.', 'error');
+        }
+    });
+}
+
+loadEmployees('','',1);
+
+
+
 
 $("#saveShift").click(function() {
     const shiftName = $("#shiftName").val().trim();
@@ -441,6 +497,13 @@ $("#saveShift").click(function() {
 
     const isActive = $("#isActive").val();
     const isOT = $("#isOT").val();
+
+    // Thu thập danh sách các nhân viên được tick (checkbox)
+    const selectedEmployees = [];
+    $("#employees input[type='checkbox']:checked").each(function() {
+        selectedEmployees.push($(this).val()); // Lấy giá trị của checkbox
+    });
+
 
     if (!shiftName) {
         Swal.fire('Lỗi', 'Vui lòng nhập tên ca làm.', 'error');
@@ -489,6 +552,8 @@ $("#saveShift").click(function() {
         return;
     }
 
+    
+
     const formData = new FormData();
     formData.append('shiftName', shiftName);
     formData.append('startTime', startTime);
@@ -501,6 +566,17 @@ $("#saveShift").click(function() {
     formData.append('createAt', new Date().toISOString());
     formData.append('updateAt', new Date().toISOString());
 
+
+    // Thêm danh sách mã nhân viên được tick vào formData
+    let i = 0;
+    selectedEmployees.forEach(function(employeeCode) {
+        formData.append('profileCodes[' + i + ']', employeeCode);
+        i++;
+    });
+
+    for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+    }
     // Gửi yêu cầu Ajax
     $.ajax({
         url: 'http://localhost:8080/api/Shift/Create',  // Đường dẫn API của bạn
@@ -512,9 +588,9 @@ $("#saveShift").click(function() {
             'Authorization': 'Bearer ' + token // Thay bằng token thật của bạn
         },
         success: function(response) {
-            if (response.status === 200) {
+            if (response.status === 201) {
                 Swal.fire('Thành công', 'Thêm ca làm thành công!', 'success');
-                $("#addEmployeeModal").hide();
+                $("#addShiftModal").hide();
                 // Gọi hàm để cập nhật danh sách ca làm nếu cần
                 // Ví dụ: getAllShifts();
             } else {

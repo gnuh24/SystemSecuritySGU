@@ -585,7 +585,7 @@ $("#saveShift").click(function() {
         contentType: false,
         data: formData,
         headers: {
-            'Authorization': 'Bearer ' + token // Thay bằng token thật của bạn
+            'Authorization': 'Bearer ' + token 
         },
         success: function(response) {
             if (response.status === 201) {

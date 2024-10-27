@@ -1,0 +1,12 @@
+Phuc6: 0
+Phuc4: 1
+NV00000006: 2
+Phuc9: 3
+Phuc10: 4
+Phuc5: 5
+Phuc2: 6
+Phuc7: 7
+Hung: 8
+Phuc8: 9
+Phuc1: 10
+Phuc3: 11

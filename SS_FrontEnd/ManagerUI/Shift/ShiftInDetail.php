@@ -1,0 +1,1 @@
+File này chứa thông tin chi tiết ca làm

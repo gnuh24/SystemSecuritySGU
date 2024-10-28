@@ -90,6 +90,23 @@ public class ShiftSpecification implements Specification<Shift> {
                 }
             }
 
+//            if (form.getFrom() != null) {
+//                ShiftSpecification from = new ShiftSpecification("from", form.getFrom());
+//                if (where != null) {
+//                    where = where.and(from);
+//                } else {
+//                    where = Specification.where(from);
+//                }
+//            }
+//
+//            if (form.getTo()!= null) {
+//                ShiftSpecification to = new ShiftSpecification("to", form.getTo());
+//                if (where != null) {
+//                    where = where.and(to);
+//                } else {
+//                    where = Specification.where(to);
+//                }
+//            }
 
         }
 

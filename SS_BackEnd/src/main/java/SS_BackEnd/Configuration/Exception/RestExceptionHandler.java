@@ -238,11 +238,4 @@ public class  RestExceptionHandler extends ResponseEntityExceptionHandler {
         authExceptionHandler.commence(request, response, ex);
     }
 
-//    @ExceptionHandler(LoggedOutTokenException.class)
-//    public void handleLoggedOutTokenException(HttpServletRequest request, HttpServletResponse response, LoggedOutTokenException ex) throws IOException {
-//        authExceptionHandler.commence(request, response, ex);
-//    }
-
-
-
 }

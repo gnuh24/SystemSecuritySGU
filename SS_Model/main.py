@@ -15,7 +15,7 @@ import pandas as pd
 app = Flask(__name__)
 
 # Đường dẫn chứa dữ liệu huấn luyện
-data_path = 'NVTU'
+data_path = 'Data'
 
 
 def load_label_mapping(filepath):
@@ -128,14 +128,14 @@ def train():
         return jsonify({'error': 'No valid images found'}), 400
 
     # Đường dẫn tới các thư mục lưu trữ
-    NVTU_path = 'NVTU'
+    dataPath = 'Data'
     test_path = 'test'
 
     # Đảm bảo các thư mục tồn tại
-    os.makedirs(NVTU_path, exist_ok=True)
+    os.makedirs(dataPath, exist_ok=True)
     os.makedirs(test_path, exist_ok=True)
 
-    # Lưu các tệp vào thư mục NVTU
+    # Lưu các tệp vào thư mục Data
     saved_paths = []
     for file in files:
         file.seek(0)  # Đặt con trỏ về đầu tệp
@@ -149,8 +149,8 @@ def train():
             print(f"Không thể nhận diện ảnh từ file: {file.filename}")
             continue  # Bỏ qua nếu không phải là ảnh hợp lệ
 
-        # Lưu tệp vào thư mục NVTU
-        file_path = os.path.join(NVTU_path, file.filename)
+        # Lưu tệp vào thư mục Data
+        file_path = os.path.join(dataPath, file.filename)
         with open(file_path, 'wb') as f:
             f.write(file_bytes)
         saved_paths.append(file_path)
@@ -165,7 +165,7 @@ def train():
         with open(test_file_path, 'wb') as f:
             f.write(file_bytes)
 
-    train_data = loading_data(NVTU_path)
+    train_data = loading_data(dataPath)
     img, labels = [], []
 
     for label, image in train_data:

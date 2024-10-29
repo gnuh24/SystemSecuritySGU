@@ -378,7 +378,6 @@
                 success: function(response) {
                     $("#tableBody").empty();
                     if (response.status === 200 && response.data) {
-                        console.log(response.data.content);
                         if (response.data.content.length > 0) {
                             response.data.content.forEach(function(account) {
                                 var row = `
@@ -570,9 +569,6 @@
                 $("#employeeTableBody input[type='checkbox']:checked").each(function() {
                     selectedEmployees.push($(this).val()); // Lấy mã nhân viên đã chọn
                 });
-
-                console.log("Danh sách nhân viên đã chọn: ", selectedEmployees); // Hiển thị danh sách nhân viên đã chọn
-
                 // Đóng modal và chỉnh lại CSS
                 $(".addShiftForm").css({
                     "right": "0px"
@@ -691,11 +687,6 @@
                     formData.append(`profileCodes[${index}]`, employeeCode);
                 });
 
-                // Hiển thị dữ liệu để kiểm tra trước khi gửi
-                for (let [key, value] of formData.entries()) {
-                    console.log(`${key}: ${value}`);
-                }
-
                 // Gửi yêu cầu Ajax
                 $.ajax({
                     url: 'http://localhost:8080/api/Shift/Create', // Đường dẫn API của bạn
@@ -727,7 +718,7 @@
 
 
 
-            $("#editNV").click(function() {
+            $("#editShift").click(function() {
                 const selectedRow = $("tr.selected");
                 if (selectedRow.length === 0) {
                     Swal.fire('Chưa chọn ca làm!', 'Vui lòng chọn một ca làm để sửa.', 'warning');
@@ -797,33 +788,45 @@
                     type: 'GET',
                     dataType: "json",
                     headers: {
-                        'Authorization': 'Bearer ' + token // Thay thế bằng token của bạn
+                        'Authorization': 'Bearer ' + token // Replace with your token
                     },
                     success: function(response) {
                         if (response.status === 200 && response.data) {
-                            $("#editShiftId").val(response.data.id);
-                            $("#editShiftName").val(response.data.shiftName);
-                            $("#editStartTime").val(response.data.startTime);
-                            $("#editEndTime").val(response.data.endTime);
-                            $("#editBreakStartTime").val(response.data.breakStartTime);
-                            $("#editBreakEndTime").val(response.data.breakEndTime);
-                            $("#editIsActive").val(response.data.isActive ? 'active' : 'inActive');
-                            $("#editIsOT").val(response.data.isOT ? 'OT' : 'nonOT');
+                            const data = response.data;
+
+                            // Format date-time strings to 'YYYY-MM-DDTHH:MM'
+                            function formatDateTime(dateString) {
+                                const [time, date] = dateString.split(" ");
+                                const [day, month, year] = date.split("/");
+                                return `${year}-${month}-${day}T${time.slice(0, 5)}`;
+                            }
+
+                            $("#editShiftId").val(data.id);
+                            $("#editShiftName").val(data.shiftName);
+                            $("#editStartTime").val(formatDateTime(data.startTime));
+                            $("#editEndTime").val(formatDateTime(data.endTime));
+                            $("#editBreakStartTime").val(formatDateTime(data.breakStartTime));
+                            $("#editBreakEndTime").val(formatDateTime(data.breakEndTime));
+                            $("#editIsActive").val(data.isActive ? 'active' : 'inActive');
+                            $("#editIsOT").val(data.isOT ? 'OT' : 'nonOT');
+
+                            // Show the modal
                             $("#editShiftModal").show();
                         } else {
                             Swal.fire('Lỗi', 'Không tìm thấy thông tin chi tiết.', 'error');
                         }
                     },
                     error: function() {
-                        console.error("Lỗi khi gọi API chi tiết nhân viên");
+                        console.error("Lỗi khi gọi API chi tiết ca làm");
                         Swal.fire('Lỗi', 'Không thể lấy thông tin chi tiết.', 'error');
                     }
                 });
             }
 
+
             // Đóng modal
-            $("#closeEditModal").on('click', function() {
-                $("#editShiftModal").hide();
+        $("#closeEditModal").on('click', function() {
+            $("#editShiftModal").hide();
             });
         });
 

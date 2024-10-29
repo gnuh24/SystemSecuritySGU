@@ -25,11 +25,11 @@ public class ShiftCreateForm {
     @FutureOrPresent(message = "Thời gian kết thúc phải ở hiện tại hoặc tương lai")
     private LocalDateTime endTime;
 
-    @NotNull(message = "Thời gian bắt đầu nghỉ không được để trống")
+//    @NotNull(message = "Thời gian bắt đầu nghỉ không được để trống")
     @FutureOrPresent(message = "Thời gian bắt đầu nghỉ phải ở hiện tại hoặc tương lai")
     private LocalDateTime breakStartTime;
 
-    @NotNull(message = "Thời gian kết thúc nghỉ không được để trống")
+//    @NotNull(message = "Thời gian kết thúc nghỉ không được để trống")
     @FutureOrPresent(message = "Thời gian kết thúc nghỉ phải ở hiện tại hoặc tương lai")
     private LocalDateTime breakEndTime;
 

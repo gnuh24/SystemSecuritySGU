@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 public class ShiftFilterForm {
@@ -16,5 +17,9 @@ public class ShiftFilterForm {
     private Boolean isActive;
 
     private Boolean isOT;
+
+    private Date from;
+
+    private Date to;
 
 }

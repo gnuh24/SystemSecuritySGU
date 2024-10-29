@@ -13,8 +13,12 @@ ob_start();
     <link rel="icon" href="./logo-removebg.png" type="image/x-icon">
     <title>Fingerprint Login</title>
     <link rel="stylesheet" href="./login.css">
+
     <!-- jQuery library (for Ajax) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Include SweetAlert Library -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -35,8 +39,7 @@ ob_start();
         </div>
     </div>
 
-    <!-- Include SweetAlert Library -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <script>
         $(document).ready(function() {

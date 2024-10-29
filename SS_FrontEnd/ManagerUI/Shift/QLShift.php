@@ -10,84 +10,97 @@
     <title>Quản lý ca làm</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-    table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: center;
-    max-height: 500px; /* Giới hạn chiều cao tối đa */
-    overflow-y: auto; /* Hiển thị thanh cuộn nếu vượt quá chiều cao tối đa */
-    transition: height 0.3s ease; /* Hiệu ứng thay đổi chiều cao */
-}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            max-height: 500px;
+            /* Giới hạn chiều cao tối đa */
+            overflow-y: auto;
+            /* Hiển thị thanh cuộn nếu vượt quá chiều cao tối đa */
+            transition: height 0.3s ease;
+            /* Hiệu ứng thay đổi chiều cao */
+        }
 
 
-th, td {
-    padding: 0.5rem; /* Giảm padding để thu gọn kích thước hàng */
-    border: 1px solid #ddd;
-}
+        th,
+        td {
+            padding: 0.5rem;
+            /* Giảm padding để thu gọn kích thước hàng */
+            border: 1px solid #ddd;
+        }
 
 
-    .modal, .modal1 {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        justify-content: center;
-        align-items: center;
-    }
+        .modal,
+        .modal1 {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
 
-    .modal1 {
-        display: flex;
-    }
+        .modal1 {
+            display: flex;
+        }
 
-    .modal-content {
-        background-color: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        max-width: 500px;
-        width: 100%;
-    }
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
 
-    #editShiftModal{
-        display: flex;
-    }
+        #editShiftModal {
+            display: flex;
+        }
 
-    /* Kiểu nút mũi tên */
-    .arrow-button {
-        position: relative;
-        left: -56%;
-        font-weight: bold;
-        font-size: 12px;
-        padding: 5px 10px;
-        background-color: #4CAF50; /* Màu nền xanh lá cây */
-        color: white; /* Màu chữ trắng */
-        border: none; /* Xóa đường viền */
-        border-radius: 5px; /* Các góc bo tròn */
-        cursor: pointer; /* Con trỏ hình bàn tay khi hover */
-        transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        font-family: 'Arial', sans-serif;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    }
+        /* Kiểu nút mũi tên */
+        .arrow-button {
+            position: relative;
+            left: -56%;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            /* Màu nền xanh lá cây */
+            color: white;
+            /* Màu chữ trắng */
+            border: none;
+            /* Xóa đường viền */
+            border-radius: 5px;
+            /* Các góc bo tròn */
+            cursor: pointer;
+            /* Con trỏ hình bàn tay khi hover */
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            font-family: 'Arial', sans-serif;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-    .arrow-button:hover {
-        background-color: #45a049; /* Màu khi hover (nhấn chuột vào) */
-        box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2); /* Đổ bóng mạnh hơn khi hover */
-    }
+        .arrow-button:hover {
+            background-color: #45a049;
+            /* Màu khi hover (nhấn chuột vào) */
+            box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2);
+            /* Đổ bóng mạnh hơn khi hover */
+        }
 
-    .arrow-button:active {
-        transform: scale(0.98); /* Hiệu ứng khi nhấn giữ */
-    }
+        .arrow-button:active {
+            transform: scale(0.98);
+            /* Hiệu ứng khi nhấn giữ */
+        }
 
-    /* Đảm bảo không có khoảng cách không mong muốn xung quanh */
-    .input-group {
-        display: flex;
-        align-items: center;
-    }
-
-</style>
+        /* Đảm bảo không có khoảng cách không mong muốn xung quanh */
+        .input-group {
+            display: flex;
+            align-items: center;
+        }
+    </style>
 
 </head>
 
@@ -345,29 +358,30 @@ th, td {
         var totalPages = 1;
         const token = localStorage.getItem('token');
 
-// Hàm gọi API để lấy dữ liệu và hiển thị trên bảng
-function getAllCaLam(search, status, pageNumber) {
-    var searchConverted = removeAccentsAndToLowerCase(search);
+        // Hàm gọi API để lấy dữ liệu và hiển thị trên bảng
+        function getAllCaLam(search, status, pageNumber) {
+            var searchConverted = removeAccentsAndToLowerCase(search);
 
-    $.ajax({
-        url: 'http://localhost:8080/api/Shift/List',
-        type: 'GET',
-        dataType: "json",
-        data: {
-            search: searchConverted,
-            status: status,
-            pageNumber: pageNumber,
-            size: pageSize
-        },
-        headers: {
-            'Authorization': 'Bearer ' + token
-        },
-        success: function(response) {
-            $("#tableBody").empty();
-            if (response.status === 200 && response.data) {
-                if (response.data.content.length > 0) {
-                    response.data.content.forEach(function(account) {
-                        var row = `
+            $.ajax({
+                url: 'http://localhost:8080/api/Shift/List',
+                type: 'GET',
+                dataType: "json",
+                data: {
+                    search: searchConverted,
+                    status: status,
+                    pageNumber: pageNumber,
+                    size: pageSize
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+                success: function(response) {
+                    $("#tableBody").empty();
+                    if (response.status === 200 && response.data) {
+                        console.log(response.data.content);
+                        if (response.data.content.length > 0) {
+                            response.data.content.forEach(function(account) {
+                                var row = `
                             <tr>
                                 <td>${account.id}</td>
                                 <td>${account.shiftName}</td>
@@ -375,508 +389,445 @@ function getAllCaLam(search, status, pageNumber) {
                                 <td>${account.endTime}</td>
                                 <td>${account.breakStartTime}</td>
                                 <td>${account.breakEndTime}</td>
-                                <td>${account.isOT === "true" ? 'Có' : 'Không'}</td>
-                                <td>${account.isActive === "true" ? 'Active' : 'Inactive'}</td>
+                                <td>${account.isOT === true ? 'Có' : 'Không'}</td>
+                                <td>${account.isActive === true ? 'Active' : 'Inactive'}</td>
                             </tr>
                         `;
-                        $("#tableBody").append(row);
-                    });
+                                $("#tableBody").append(row);
+                            });
 
-                    adjustTableHeight(response.data.content.length);
+                            adjustTableHeight(response.data.content.length);
+                        } else {
+                            $("#tableBody").append('<tr><td colspan="5">Không có dữ liệu</td></tr>');
+                        }
+
+                        totalPages = response.data.totalPages;
+                        renderPagination(currentPage, totalPages);
+                    } else {
+                        $("#tableBody").append('<tr><td colspan="5">Không có dữ liệu</td></tr>');
+                    }
+                },
+                error: function() {
+                    console.error("Lỗi khi gọi API");
+                    $("#tableBody").empty().append('<tr><td colspan="5">Lỗi khi gọi API</td></tr>');
+                }
+            });
+        }
+
+        function adjustTableHeight(rowCount) {
+            var rowHeight = 50;
+            var tableMaxHeight = 400;
+            var totalHeight = rowCount * rowHeight;
+
+            if (totalHeight > tableMaxHeight) {
+                $('table').css('height', tableMaxHeight + 'px');
+            } else {
+                $('table').css('height', totalHeight + 'px');
+            }
+        }
+
+        function renderPagination(currentPage, totalPages) {
+            var paginationHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                paginationHTML += `<button class="${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+            }
+
+            $('#pagination').html(paginationHTML);
+        }
+
+        function changePage(pageNumber) {
+            if (pageNumber < 1 || pageNumber > totalPages) {
+                return;
+            }
+            currentPage = pageNumber;
+            getAllCaLam($('#searchInput').val(), $('#selectQuyen').val(), currentPage);
+        }
+
+        function removeAccentsAndToLowerCase(str) {
+            return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        }
+
+
+        getAllCaLam('', '', 1);
+
+        $(document).ready(function() {
+            getAllCaLam('', '', currentPage);
+
+            $("#searchInput").on("input", function() {
+                var searchValue = $(this).val();
+                var statusValue = $("#selectQuyen").val();
+                getAllCaLam(searchValue, statusValue, currentPage);
+            });
+
+            $("#selectQuyen").on("change", function() {
+                var searchValue = $("#searchInput").val();
+                var statusValue = $(this).val();
+                getAllCaLam(searchValue, statusValue, currentPage);
+            });
+
+            $("#detailsNV").click(function() {
+                const selectedRow = $("tr.selected");
+                if (selectedRow.length === 0) {
+                    Swal.fire('Chưa chọn ca làm!', 'Vui lòng chọn một ca làm để xem chi tiết.', 'warning');
                 } else {
-                    $("#tableBody").append('<tr><td colspan="5">Không có dữ liệu</td></tr>');
+                    const shiftCode = selectedRow.find("td").eq(0).text();
+                    getEmployeeDetails(shiftCode);
                 }
+            });
 
-                totalPages = response.data.totalPages;
-                renderPagination(currentPage, totalPages);
-            } else {
-                $("#tableBody").append('<tr><td colspan="5">Không có dữ liệu</td></tr>');
-            }
-        },
-        error: function() {
-            console.error("Lỗi khi gọi API");
-            $("#tableBody").empty().append('<tr><td colspan="5">Lỗi khi gọi API</td></tr>');
-        }
-    });
-}
+            $("#closeModal").click(function() {
+                $("#detailsModal").hide();
+            });
 
-function adjustTableHeight(rowCount) {
-    var rowHeight = 50; 
-    var tableMaxHeight = 400; 
-    var totalHeight = rowCount * rowHeight;
-
-    if (totalHeight > tableMaxHeight) {
-        $('table').css('height', tableMaxHeight + 'px');
-    } else {
-        $('table').css('height', totalHeight + 'px');
-    }
-}
-
-function renderPagination(currentPage, totalPages) {
-    var paginationHTML = '';
-
-    for (let i = 1; i <= totalPages; i++) {
-        paginationHTML += `<button class="${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
-    }
-
-    $('#pagination').html(paginationHTML);
-}
-
-function changePage(pageNumber) {
-    if (pageNumber < 1 || pageNumber > totalPages) {
-        return; 
-    }
-    currentPage = pageNumber;
-    getAllCaLam($('#searchInput').val(), $('#selectQuyen').val(), currentPage);
-}
-
-function removeAccentsAndToLowerCase(str) {
-    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-}
-
-
-getAllCaLam('', '', 1); 
-
-$(document).ready(function() {
-    getAllCaLam('', '', currentPage);
-
-    $("#searchInput").on("input", function() {
-        var searchValue = $(this).val();
-        var statusValue = $("#selectQuyen").val();
-        getAllCaLam(searchValue, statusValue, currentPage);
-    });
-
-    $("#selectQuyen").on("change", function() {
-        var searchValue = $("#searchInput").val();
-        var statusValue = $(this).val();
-        getAllCaLam(searchValue, statusValue, currentPage);
-    });
-
-    $("#detailsShift").click(function() {
-        const selectedRow = $("tr.selected");
-        if (selectedRow.length === 0) {
-            Swal.fire('Chưa chọn ca làm!', 'Vui lòng chọn một ca làm để xem chi tiết.', 'warning');
-        } else {
-            const shiftCode = selectedRow.find("td").eq(0).text();
-            getEmployeeDetails(shiftCode);
-        }
-    });
-
-    $("#closeModal").click(function() {
-        $("#detailsModal").hide();
-    });
-
-    $(document).on('click', 'tr', function() {
-        $('tr').removeClass('selected');
-        $(this).addClass('selected');
-    });
-
-
-    
-    $("#addShift").click(function() {
-    $("#shiftName").val('');
-    $("#startTime").val('');
-    $("#endTime").val('');
-    $("#breakStartTime").val('');
-    $("#breakEndTime").val('');
-    $("#isActive").val('active');
-    $("#isOT").val('OT');
-    $("#addShiftModal").show();
-});
-
-$("#closeAddModal").click(function() {
-    $("#addShiftModal").hide();
-});
+            $(document).on('click', 'tr', function() {
+                $('tr').removeClass('selected');
+                $(this).addClass('selected');
+            });
 
 
 
-$("#closeAddModal").click(function () {
-    $("#addShiftModal").hide(); 
-});
+            $("#addShift").click(function() {
+                $("#shiftName").val('');
+                $("#startTime").val('');
+                $("#endTime").val('');
+                $("#breakStartTime").val('');
+                $("#breakEndTime").val('');
+                $("#isActive").val('active');
+                $("#isOT").val('OT');
+                $("#addShiftModal").show();
+            });
 
-
-$("#closeAddModal").click(function() {
-    $("#addShiftModal").hide();
-});
-
-// Function to load employee options
-function loadEmployees(search, status, pageNumber) {
-    $.ajax({
-        url: 'http://localhost:8080/api/Profile/List',  
-        type: 'GET',
-        dataType: "json",
-        data: {
-            search: search,
-            status: status,
-            pageNumber: pageNumber,
-            size: pageSize
-        },
-        headers: {
-            'Authorization': 'Bearer ' + token  // Thay bằng token của bạn
-        },
-        success: function(response) {
-            if (response && response.data.content) {
-                const employeeTableBody = $("#employeeTableBody");
-                employeeTableBody.empty();  // Xóa hàng cũ trong bảng
-
-                response.data.content.forEach(employee => {
-                    const row = $('<tr></tr>');  // Tạo hàng mới cho bảng
-                    
-                    // Tạo cột ID
-                    const idCell = $('<td></td>').text(employee.code);
-                    row.append(idCell);
-                    
-                    // Tạo cột tên nhân viên
-                    const nameCell = $('<td></td>').text(employee.fullname);
-                    row.append(nameCell);
-                    
-                    // Tạo cột checkbox
-                    const checkboxCell = $('<td></td>');
-                    const checkbox = $('<input>')
-                        .attr('type', 'checkbox')
-                        .attr('id', 'employee_' + employee.code)
-                        .attr('value', employee.code);
-                    checkboxCell.append(checkbox);
-                    row.append(checkboxCell);
-
-                    employeeTableBody.append(row);  // Thêm hàng vào bảng
-                });
-            } else {
-                Swal.fire('Lỗi', 'Không thể tải danh sách nhân viên.', 'error');
-            }
-        },
-        error: function() {
-            Swal.fire('Lỗi', 'Có lỗi xảy ra khi tải danh sách nhân viên.', 'error');
-        }
-    });
-}
-
-$("#selectEmployees").click(function() {
-    const selectedEmployees = [];
-    $("#employeeTableBody input[type='checkbox']:checked").each(function() {
-        selectedEmployees.push($(this).val());  // Lấy mã nhân viên đã chọn
-    });
-    // Đóng modal và chỉnh lại CSS
-    $(".addShiftForm").css({
-        "right": "0px"
-    });
-    $("#employeeModal").hide();
-});
-
-loadEmployees('','',1);
-
-$("#openEmployeeModal").click(function() {
-    $("#employeeModal").show();
-    $(".addShiftForm").css({
-        "position": "relative",
-        "right": "200px"
-    });
-});
-
-// Ẩn modal khi nhấn nút Đóng
-$("#closeEmployeeModal").click(function() {
-    $("#employeeModal").hide();
-    $(".addShiftForm").css({
-        "right": "0px"
-    });
-});
-
-$("#saveShift").click(function() {
-    const shiftName = $("#shiftName").val().trim();
-
-    // Hàm định dạng thời gian thành yyyy-MM-dd'T'HH:mm:ss
-    function formatDateTime(date) {
-        const year = date.getFullYear();
-        const month = ('0' + (date.getMonth() + 1)).slice(-2);
-        const day = ('0' + date.getDate()).slice(-2);
-        const hours = ('0' + date.getHours()).slice(-2);
-        const minutes = ('0' + date.getMinutes()).slice(-2);
-        const seconds = ('0' + date.getSeconds()).slice(-2);
-        return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
-    }
-
-    const startTime = formatDateTime(new Date($("#startTime").val()));
-    const endTime = formatDateTime(new Date($("#endTime").val()));
-    const breakStartTime = formatDateTime(new Date($("#breakStartTime").val()));
-    const breakEndTime = formatDateTime(new Date($("#breakEndTime").val()));
-
-    const isActive = $("#isActive").val();
-    const isOT = $("#isOT").val();
-
-    // Thu thập danh sách nhân viên đã chọn từ modal
-    const selectedEmployees = [];
-    $("#employeeTableBody input[type='checkbox']:checked").each(function() {
-        selectedEmployees.push($(this).val()); // Lấy giá trị của checkbox
-    });
-
-    if (!shiftName) {
-        Swal.fire('Lỗi', 'Vui lòng nhập tên ca làm.', 'error');
-        return;
-    }
-
-    if (!startTime) {
-        Swal.fire('Lỗi', 'Vui lòng chọn thời gian bắt đầu.', 'error');
-        return;
-    }
-
-    if (!endTime) {
-        Swal.fire('Lỗi', 'Vui lòng chọn thời gian kết thúc.', 'error');
-        return;
-    }
-
-    if (!breakStartTime) {
-        Swal.fire('Lỗi', 'Vui lòng chọn thời gian bắt đầu nghỉ.', 'error');
-        return;
-    }
-
-    if (!breakEndTime) {
-        Swal.fire('Lỗi', 'Vui lòng chọn thời gian kết thúc nghỉ.', 'error');
-        return;
-    }
-
-    if (!isActive) {
-        Swal.fire('Lỗi', 'Vui lòng chọn trạng thái ca làm.', 'error');
-        return;
-    }
-
-    if (!isOT) {
-        Swal.fire('Lỗi', 'Vui lòng chọn tăng ca.', 'error');
-        return;
-    }
-
-    // Kiểm tra xem thời gian bắt đầu có sớm hơn thời gian kết thúc không
-    if (new Date(startTime) >= new Date(endTime)) {
-        Swal.fire('Lỗi', 'Thời gian bắt đầu phải sớm hơn thời gian kết thúc.', 'error');
-        return;
-    }
-
-    // Kiểm tra xem thời gian bắt đầu nghỉ có sớm hơn thời gian kết thúc nghỉ không
-    if (new Date(breakStartTime) >= new Date(breakEndTime)) {
-        Swal.fire('Lỗi', 'Thời gian bắt đầu nghỉ phải sớm hơn thời gian kết thúc nghỉ.', 'error');
-        return;
-    }
-
-    // Tạo dữ liệu form
-    const formData = new FormData();
-    formData.append('shiftName', shiftName);
-    formData.append('startTime', startTime);
-    formData.append('endTime', endTime);
-    formData.append('breakStartTime', breakStartTime);
-    formData.append('breakEndTime', breakEndTime);
-    formData.append('isActive', isActive === 'active');
-    formData.append('isOT', isOT === 'OT');
-    formData.append('status', true);
-    formData.append('createAt', new Date().toISOString());
-    formData.append('updateAt', new Date().toISOString());
-
-    // Thêm danh sách nhân viên đã chọn vào formData
-    selectedEmployees.forEach(function(employeeCode, index) {
-        formData.append(`profileCodes[${index}]`, employeeCode);
-    });
-
-    // // Hiển thị dữ liệu để kiểm tra trước khi gửi
-    // for (let [key, value] of formData.entries()) {
-    //     console.log(`${key}: ${value}`);
-    // }
-
-    // Gửi yêu cầu Ajax
-    $.ajax({
-        url: 'http://localhost:8080/api/Shift/Create',  // Đường dẫn API của bạn
-        type: 'POST',
-        processData: false,
-        contentType: false,
-        data: formData,
-        headers: {
-            'Authorization': 'Bearer ' + token 
-        },
-        success: function(response) {
-            if (response.status === 201) {
-                Swal.fire('Thành công', 'Thêm ca làm thành công!', 'success');
+            $("#closeAddModal").click(function() {
                 $("#addShiftModal").hide();
-                // Cập nhật danh sách ca làm nếu cần
-            } else {
-                Swal.fire('Lỗi', 'Thêm ca làm thất bại.', 'error');
+            });
+
+
+
+            $("#closeAddModal").click(function() {
+                $("#addShiftModal").hide();
+            });
+
+
+            $("#closeAddModal").click(function() {
+                $("#addShiftModal").hide();
+            });
+
+            // Function to load employee options
+            function loadEmployees(search, status, pageNumber) {
+                $.ajax({
+                    url: 'http://localhost:8080/api/Profile/List',
+                    type: 'GET',
+                    dataType: "json",
+                    data: {
+                        search: search,
+                        status: status,
+                        pageNumber: pageNumber,
+                        size: pageSize
+                    },
+                    headers: {
+                        'Authorization': 'Bearer ' + token // Thay bằng token của bạn
+                    },
+                    success: function(response) {
+                        if (response && response.data.content) {
+                            const employeeTableBody = $("#employeeTableBody");
+                            employeeTableBody.empty(); // Xóa hàng cũ trong bảng
+
+                            response.data.content.forEach(employee => {
+                                const row = $('<tr></tr>'); // Tạo hàng mới cho bảng
+
+                                // Tạo cột ID
+                                const idCell = $('<td></td>').text(employee.code);
+                                row.append(idCell);
+
+                                // Tạo cột tên nhân viên
+                                const nameCell = $('<td></td>').text(employee.fullname);
+                                row.append(nameCell);
+
+                                // Tạo cột checkbox
+                                const checkboxCell = $('<td></td>');
+                                const checkbox = $('<input>')
+                                    .attr('type', 'checkbox')
+                                    .attr('id', 'employee_' + employee.code)
+                                    .attr('value', employee.code);
+                                checkboxCell.append(checkbox);
+                                row.append(checkboxCell);
+
+                                employeeTableBody.append(row); // Thêm hàng vào bảng
+                            });
+                        } else {
+                            Swal.fire('Lỗi', 'Không thể tải danh sách nhân viên.', 'error');
+                        }
+                    },
+                    error: function() {
+                        Swal.fire('Lỗi', 'Có lỗi xảy ra khi tải danh sách nhân viên.', 'error');
+                    }
+                });
             }
-        },
-        error: function(xhr) {
-            console.error("Lỗi khi gọi API thêm ca làm", xhr.responseJSON);
-            Swal.fire('Lỗi', 'Có lỗi xảy ra khi thêm ca làm.', 'error');
-        }
-    });
-});
 
-
-
-
-
-
-// Declare currentShiftData globally
-let currentShiftData = null;
-
-$("#editShift").click(function() {
-    const selectedRow = $("tr.selected"); 
-    if (selectedRow.length === 0) {
-        Swal.fire('Chưa chọn ca làm!', 'Vui lòng chọn một ca làm để sửa.', 'warning');
-    } else {
-        const shiftCode = selectedRow.find("td").first().text().trim(); 
-        openEditModal(shiftCode); 
-    }
-});
-
-
-function openEditModal(shiftCode) {
-    $.ajax({
-        url: `http://localhost:8080/api/Shift/Detail?id=${shiftCode}`,
-        type: 'GET',
-        dataType: "json",
-        headers: {
-            'Authorization': 'Bearer ' + token // Replace with your token
-        },
-        success: function(response) {
-            if (response.status === 200 && response.data) {
-                currentShiftData = response.data; // Assign the fetched shift data to currentShiftData
-                console.log(currentShiftData.signUps);
-                function formatDateTime(dateString) {
-                    const [time, date] = dateString.split(" ");
-                    const [day, month, year] = date.split("/");
-                    return `${year}-${month}-${day}T${time.slice(0, 5)}`;
-                }
-
-                $("#editShiftId").val(currentShiftData.id);
-                $("#editShiftName").val(currentShiftData.shiftName);
-                $("#editStartTime").val(formatDateTime(currentShiftData.startTime));
-                $("#editEndTime").val(formatDateTime(currentShiftData.endTime));
-                $("#editBreakStartTime").val(formatDateTime(currentShiftData.breakStartTime));
-                $("#editBreakEndTime").val(formatDateTime(currentShiftData.breakEndTime));
-                $("#editIsActive").val(currentShiftData.isActive ? 'active' : 'inActive');
-                $("#editIsOT").val(currentShiftData.isOT ? 'OT' : 'nonOT');
-
-                // Show the modal
-                $("#editShiftModal").show();
-            } else {
-                Swal.fire('Lỗi', 'Không tìm thấy thông tin chi tiết.', 'error');
-            }
-        },
-        error: function() {
-            console.error("Lỗi khi gọi API chi tiết ca làm");
-            Swal.fire('Lỗi', 'Không thể lấy thông tin chi tiết.', 'error');
-        }
-    });
-}
-
-// Event listener to open the employee modal
-$("#openEditEmployeeModal").click(function() {
-    const selectedEmployees = currentShiftData ? currentShiftData.signUps || [] : [];
-    openEmployeeModal(selectedEmployees);
-});
-
-function openEmployeeModal(selectedEmployees) {
-    // Clear existing rows
-    $("#employeeTableBody").empty();
-
-    // Fetch the list of all employees
-    $.ajax({
-        url: "http://localhost:8080/api/Profile/List", // Replace with the actual endpoint to get all employees
-        type: 'GET',
-        dataType: 'json',
-        headers: {
-            'Authorization': 'Bearer ' + token // Replace with your actual token
-        },
-        success: function(response) {
-            if (response.status === 200 && response.data) {
-                // Loop through each employee
-                response.data.forEach(employee => {
-                    const isChecked = selectedEmployees.some(e => e.profile.code === employee.code);
-                    const row = `
-                        <tr>
-                            <td>${employee.code}</td>
-                            <td>${employee.fullname}</td>
-                            <td><input type="checkbox" class="employeeCheckbox" data-employee-id="${employee.code}" ${isChecked ? 'checked' : ''}></td>
-                        </tr>
-                    `;
-                    $("#employeeTableBody").append(row);
+            $("#selectEmployees").click(function() {
+                const selectedEmployees = [];
+                $("#employeeTableBody input[type='checkbox']:checked").each(function() {
+                    selectedEmployees.push($(this).val()); // Lấy mã nhân viên đã chọn
                 });
 
-                // Show the employee modal
-                $("#editEmployeeModal").show();
-            } else {
-                Swal.fire('Lỗi', 'Không tìm thấy danh sách nhân viên.', 'error');
+                console.log("Danh sách nhân viên đã chọn: ", selectedEmployees); // Hiển thị danh sách nhân viên đã chọn
+
+                // Đóng modal và chỉnh lại CSS
+                $(".addShiftForm").css({
+                    "right": "0px"
+                });
+                $("#employeeModal").hide();
+            });
+
+            loadEmployees('', '', 1);
+
+            $("#openEmployeeModal").click(function() {
+                $("#employeeModal").show();
+                $(".addShiftForm").css({
+                    "position": "relative",
+                    "right": "200px"
+                });
+            });
+
+            // Ẩn modal khi nhấn nút Đóng
+            $("#closeEmployeeModal").click(function() {
+                $("#employeeModal").hide();
+                $(".addShiftForm").css({
+                    "right": "0px"
+                });
+            });
+
+            $("#saveShift").click(function() {
+                const shiftName = $("#shiftName").val().trim();
+
+                // Hàm định dạng thời gian thành yyyy-MM-dd'T'HH:mm:ss
+                function formatDateTime(date) {
+                    const year = date.getFullYear();
+                    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                    const day = ('0' + date.getDate()).slice(-2);
+                    const hours = ('0' + date.getHours()).slice(-2);
+                    const minutes = ('0' + date.getMinutes()).slice(-2);
+                    const seconds = ('0' + date.getSeconds()).slice(-2);
+                    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+                }
+
+                const startTime = formatDateTime(new Date($("#startTime").val()));
+                const endTime = formatDateTime(new Date($("#endTime").val()));
+                const breakStartTime = formatDateTime(new Date($("#breakStartTime").val()));
+                const breakEndTime = formatDateTime(new Date($("#breakEndTime").val()));
+
+                const isActive = $("#isActive").val();
+                const isOT = $("#isOT").val();
+
+                // Thu thập danh sách nhân viên đã chọn từ modal
+                const selectedEmployees = [];
+                $("#employeeTableBody input[type='checkbox']:checked").each(function() {
+                    selectedEmployees.push($(this).val()); // Lấy giá trị của checkbox
+                });
+
+                if (!shiftName) {
+                    Swal.fire('Lỗi', 'Vui lòng nhập tên ca làm.', 'error');
+                    return;
+                }
+
+                if (!startTime) {
+                    Swal.fire('Lỗi', 'Vui lòng chọn thời gian bắt đầu.', 'error');
+                    return;
+                }
+
+                if (!endTime) {
+                    Swal.fire('Lỗi', 'Vui lòng chọn thời gian kết thúc.', 'error');
+                    return;
+                }
+
+                if (!breakStartTime) {
+                    Swal.fire('Lỗi', 'Vui lòng chọn thời gian bắt đầu nghỉ.', 'error');
+                    return;
+                }
+
+                if (!breakEndTime) {
+                    Swal.fire('Lỗi', 'Vui lòng chọn thời gian kết thúc nghỉ.', 'error');
+                    return;
+                }
+
+                if (!isActive) {
+                    Swal.fire('Lỗi', 'Vui lòng chọn trạng thái ca làm.', 'error');
+                    return;
+                }
+
+                if (!isOT) {
+                    Swal.fire('Lỗi', 'Vui lòng chọn tăng ca.', 'error');
+                    return;
+                }
+
+                // Kiểm tra xem thời gian bắt đầu có sớm hơn thời gian kết thúc không
+                if (new Date(startTime) >= new Date(endTime)) {
+                    Swal.fire('Lỗi', 'Thời gian bắt đầu phải sớm hơn thời gian kết thúc.', 'error');
+                    return;
+                }
+
+                // Kiểm tra xem thời gian bắt đầu nghỉ có sớm hơn thời gian kết thúc nghỉ không
+                if (new Date(breakStartTime) >= new Date(breakEndTime)) {
+                    Swal.fire('Lỗi', 'Thời gian bắt đầu nghỉ phải sớm hơn thời gian kết thúc nghỉ.', 'error');
+                    return;
+                }
+
+                // Tạo dữ liệu form
+                const formData = new FormData();
+                formData.append('shiftName', shiftName);
+                formData.append('startTime', startTime);
+                formData.append('endTime', endTime);
+                formData.append('breakStartTime', breakStartTime);
+                formData.append('breakEndTime', breakEndTime);
+                formData.append('isActive', isActive === 'active');
+                formData.append('isOT', isOT === 'OT');
+                formData.append('status', true);
+                formData.append('createAt', new Date().toISOString());
+                formData.append('updateAt', new Date().toISOString());
+
+                // Thêm danh sách nhân viên đã chọn vào formData
+                selectedEmployees.forEach(function(employeeCode, index) {
+                    formData.append(`profileCodes[${index}]`, employeeCode);
+                });
+
+                // Hiển thị dữ liệu để kiểm tra trước khi gửi
+                for (let [key, value] of formData.entries()) {
+                    console.log(`${key}: ${value}`);
+                }
+
+                // Gửi yêu cầu Ajax
+                $.ajax({
+                    url: 'http://localhost:8080/api/Shift/Create', // Đường dẫn API của bạn
+                    type: 'POST',
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    success: function(response) {
+                        if (response.status === 201) {
+                            Swal.fire('Thành công', 'Thêm ca làm thành công!', 'success');
+                            $("#addShiftModal").hide();
+                            // Cập nhật danh sách ca làm nếu cần
+                        } else {
+                            Swal.fire('Lỗi', 'Thêm ca làm thất bại.', 'error');
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error("Lỗi khi gọi API thêm ca làm", xhr.responseJSON);
+                        Swal.fire('Lỗi', 'Có lỗi xảy ra khi thêm ca làm.', 'error');
+                    }
+                });
+            });
+
+
+
+
+
+
+            $("#editNV").click(function() {
+                const selectedRow = $("tr.selected");
+                if (selectedRow.length === 0) {
+                    Swal.fire('Chưa chọn ca làm!', 'Vui lòng chọn một ca làm để sửa.', 'warning');
+                } else {
+                    const shiftCode = selectedRow.find("td").first().text().trim();
+                    openEditModal(shiftCode);
+                }
+            });
+
+            $("#saveEditEmployee").on('click', function() {
+                const selectedRow = $("tr.selected");
+                if (selectedRow.length === 0) {
+                    Swal.fire('Chưa chọn ca làm!', 'Vui lòng chọn một ca làm để sửa.', 'warning');
+                    return;
+                }
+
+                if (!/^\d{10}$/.test($("#editEmployeePhone").val().trim())) {
+                    Swal.fire('Lỗi', 'Số điện thoại phải có đúng 10 chữ số.', 'error');
+                    return;
+                }
+
+                const shiftCode = selectedRow.find("td").first().text().trim();
+                const formData = new FormData();
+
+                formData.append('profileCode', shiftCode);
+                formData.append('fullname', $("#editShiftName").val().trim());
+                formData.append('gender', $("#editEmployeeGender").val());
+                formData.append('birthday', $("#editEmployeeBirthday").val());
+                formData.append('phone', $("#editEmployeePhone").val().trim());
+                formData.append('email', $("#editEmployeeEmail").val().trim());
+                formData.append('status', $("#status").is(":checked"));
+
+
+                $.ajax({
+                    url: `http://localhost:8080/api/Profile/Update`,
+                    type: 'PATCH',
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    success: function(response) {
+                        if (response.status === 200) {
+                            Swal.fire('Thành công', 'Cập nhật thông tin nhân viên thành công!', 'success');
+                            $("#editShiftModal").hide();
+                            refreshEmployeeList();
+                        } else {
+                            Swal.fire('Lỗi', 'Không thể cập nhật thông tin nhân viên.', 'error');
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.responseJSON && xhr.responseJSON.error) {
+                            const errors = Object.values(xhr.responseJSON.error).join(", ");
+                            Swal.fire('Lỗi', `Có lỗi trong quá trình cập nhật: ${errors}`, 'error');
+                        } else {
+                            Swal.fire('Lỗi', 'Không thể cập nhật thông tin nhân viên.', 'error');
+                        }
+                    }
+                });
+            });
+
+
+            function openEditModal(shiftCode) {
+                $.ajax({
+                    url: `http://localhost:8080/api/Shift/Detail?id=${shiftCode}`,
+                    type: 'GET',
+                    dataType: "json",
+                    headers: {
+                        'Authorization': 'Bearer ' + token // Thay thế bằng token của bạn
+                    },
+                    success: function(response) {
+                        if (response.status === 200 && response.data) {
+                            $("#editShiftId").val(response.data.id);
+                            $("#editShiftName").val(response.data.shiftName);
+                            $("#editStartTime").val(response.data.startTime);
+                            $("#editEndTime").val(response.data.endTime);
+                            $("#editBreakStartTime").val(response.data.breakStartTime);
+                            $("#editBreakEndTime").val(response.data.breakEndTime);
+                            $("#editIsActive").val(response.data.isActive ? 'active' : 'inActive');
+                            $("#editIsOT").val(response.data.isOT ? 'OT' : 'nonOT');
+                            $("#editShiftModal").show();
+                        } else {
+                            Swal.fire('Lỗi', 'Không tìm thấy thông tin chi tiết.', 'error');
+                        }
+                    },
+                    error: function() {
+                        console.error("Lỗi khi gọi API chi tiết nhân viên");
+                        Swal.fire('Lỗi', 'Không thể lấy thông tin chi tiết.', 'error');
+                    }
+                });
             }
-        },
-        error: function() {
-            Swal.fire('Lỗi', 'Không thể lấy danh sách nhân viên.', 'error');
-        }
-    });
-}
 
-$("#closeEmployeeModal").click(function() {
-    $("#editEmployeeModal").hide();
-});
+            // Đóng modal
+            $("#closeEditModal").on('click', function() {
+                $("#editShiftModal").hide();
+            });
+        });
 
-
-
-
-$("#saveEditShift").on('click', function() {
-    const selectedRow = $("tr.selected"); 
-    if (selectedRow.length === 0) {
-        Swal.fire('Chưa chọn ca làm!', 'Vui lòng chọn một ca làm để sửa.', 'warning');
-        return; 
-    }
-
-    if (!/^\d{10}$/.test($("#editEmployeePhone").val().trim())) {
-        Swal.fire('Lỗi', 'Số điện thoại phải có đúng 10 chữ số.', 'error');
-        return; 
-    }
-    
-    const shiftCode = selectedRow.find("td").first().text().trim(); 
-    const formData = new FormData(); 
-
-    formData.append('profileCode', shiftCode);
-    formData.append('fullname', $("#editShiftName").val().trim());
-    formData.append('gender', $("#editEmployeeGender").val());
-    formData.append('birthday', $("#editEmployeeBirthday").val());
-    formData.append('phone', $("#editEmployeePhone").val().trim());
-    formData.append('email', $("#editEmployeeEmail").val().trim());
-    formData.append('status', $("#status").is(":checked")); 
-
-
-    $.ajax({
-        url: `http://localhost:8080/api/Profile/Update`, 
-        type: 'PATCH',
-        processData: false, 
-        contentType: false, 
-        data: formData,
-        headers: {
-            'Authorization': 'Bearer ' + token
-        },
-        success: function(response) {
-            if (response.status === 200) {
-                Swal.fire('Thành công', 'Cập nhật thông tin nhân viên thành công!', 'success');
-                $("#editShiftModal").hide(); 
-                refreshEmployeeList(); 
-            } else {
-                Swal.fire('Lỗi', 'Không thể cập nhật thông tin nhân viên.', 'error');
-            }
-        },
-        error: function(xhr) {
-            if (xhr.responseJSON && xhr.responseJSON.error) {
-                const errors = Object.values(xhr.responseJSON.error).join(", ");
-                Swal.fire('Lỗi', `Có lỗi trong quá trình cập nhật: ${errors}`, 'error');
-            } else {
-                Swal.fire('Lỗi', 'Không thể cập nhật thông tin nhân viên.', 'error');
-            }
-        }
-    });
-});
-
-
-// Đóng modal
-$("#closeEditModal").on('click', function() {
-    $("#editShiftModal").hide();
-    });
-});
-
-function getEmployeeDetails(shiftCode) {
+        function getEmployeeDetails(shiftCode) {
             $.ajax({
                 url: `http://localhost:8080/api/Profile/Detail?code=${shiftCode}`,
                 type: 'GET',
@@ -936,9 +887,8 @@ function getEmployeeDetails(shiftCode) {
                 }
             });
         }
-
     </script>
-        
+
 </body>
 
 </html>

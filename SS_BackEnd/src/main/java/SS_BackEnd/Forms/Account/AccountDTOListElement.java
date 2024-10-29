@@ -18,6 +18,8 @@ public class AccountDTOListElement {
 
     private Boolean status;
 
+    private String profileFullname;
+
     private String profilePhone;
 
     private String profileEmail;

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../../AdminUI/Admin.css" />
     <link rel="stylesheet" href="../../AdminUI/oneForAll.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <title>Quản lý nhân viên</title>
+    <title>Quản lý ca làm</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
     table {
@@ -102,13 +102,13 @@ th, td {
                                 <div style="padding-left: 5%; width: 100%; padding-right: 5%">
                                     <div class="wrapper">
                                         <div style="
-                          display: flex;
-                          padding-top: 1rem;
-                          padding-bottom: 1rem;
-                          justify-content: center; 
-                            align-items: center;
-                            text-align: center;
-                        ">
+                                            display: flex;
+                                            padding-top: 1rem;
+                                            padding-bottom: 1rem;
+                                            justify-content: center; 
+                                                align-items: center;
+                                                text-align: center;
+                                            ">
                                             <h2 style="font-size: 7rem; margin: 0; font-family: 'Poppins', sans-serif;">Quản lý ca làm</h2>
                                         </div>
                                         <div class="Admin_boxFeature__ECXnm">
@@ -127,17 +127,12 @@ th, td {
                                                 Thêm ca làm
                                             </button>
 
-                                            <button id="editNV" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #B0C4DE; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">
+                                            <button id="editShift" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #B0C4DE; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">
                                                 <i class="fa-solid fa-edit" style="margin-right: 8px; color: white;"></i>
                                                 Sửa
                                             </button>
 
-                                            <!-- <button id="deleteNV" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #ff4d4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">
-                                                <i class="fa-solid fa-trash" style="margin-right: 8px; color: white;"></i>
-                                                Xóa
-                                            </button> -->
-
-                                            <button id="detailsNV" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #FFA500; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">
+                                            <button id="detailsShift" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #FFA500; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">
                                                 <i class="fa-solid fa-eye" style="margin-right: 8px; color: white;"></i>
                                                 Xem chi tiết
                                             </button>
@@ -271,16 +266,37 @@ th, td {
                                                     </select>
                                                 </div>
 
+                                                <div class="input-group">
+                                                    <label for="employees">
+                                                        <strong>Chọn nhân viên:</strong>
+                                                    </label>
+                                                    <button id="openEditEmployeeModal" class="arrow-button">>>>></button>
+                                                </div>
 
-
-                                                <button id="saveEditEmployee" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Lưu thay đổi</button>
+                                                <button id="saveEditShift" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Lưu thay đổi</button>
                                                 <button id="closeEditModal" style="margin-top: 1rem; background-color: #ff4d4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Đóng</button>
                                             </div>
                                         </div>
-
-
-
-
+                                        
+                                        <div class="modal" id="editEmployeeModal" style="display: none;">
+                                            <div class="modal-content" style="width: 400px;">
+                                                <h3>Chọn nhân viên</h3>
+                                                <table id="employeeTable" border="1" style="width: 100%; text-align: left;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>ID</th>
+                                                            <th>Tên nhân viên</th>
+                                                            <th>Chọn</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="employeeTableBody">
+                                                            <!-- Employee rows will be added here dynamically -->
+                                                    </tbody>
+                                                </table>
+                                                <button id="saveSelectedEmployees" style="margin-top: 1rem; background-color: #007bff; color: white; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Lưu</button>
+                                                <button id="closeEmployeeModal" style="margin-top: 1rem; background-color: #ff4d4d; color: white; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Đóng</button>
+                                            </div>
+                                        </div>
 
                                         <div class="Admin_boxTable__hLXRJ">
                                             <table class="Table_table__BWPy" style="border-radius: 1rem;">
@@ -436,7 +452,7 @@ $(document).ready(function() {
         getAllCaLam(searchValue, statusValue, currentPage);
     });
 
-    $("#detailsNV").click(function() {
+    $("#detailsShift").click(function() {
         const selectedRow = $("tr.selected");
         if (selectedRow.length === 0) {
             Swal.fire('Chưa chọn ca làm!', 'Vui lòng chọn một ca làm để xem chi tiết.', 'warning');
@@ -540,9 +556,6 @@ $("#selectEmployees").click(function() {
     $("#employeeTableBody input[type='checkbox']:checked").each(function() {
         selectedEmployees.push($(this).val());  // Lấy mã nhân viên đã chọn
     });
-
-    console.log("Danh sách nhân viên đã chọn: ", selectedEmployees);  // Hiển thị danh sách nhân viên đã chọn
-
     // Đóng modal và chỉnh lại CSS
     $(".addShiftForm").css({
         "right": "0px"
@@ -661,10 +674,10 @@ $("#saveShift").click(function() {
         formData.append(`profileCodes[${index}]`, employeeCode);
     });
 
-    // Hiển thị dữ liệu để kiểm tra trước khi gửi
-    for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
-    }
+    // // Hiển thị dữ liệu để kiểm tra trước khi gửi
+    // for (let [key, value] of formData.entries()) {
+    //     console.log(`${key}: ${value}`);
+    // }
 
     // Gửi yêu cầu Ajax
     $.ajax({
@@ -697,7 +710,10 @@ $("#saveShift").click(function() {
 
 
 
-$("#editNV").click(function() {
+// Declare currentShiftData globally
+let currentShiftData = null;
+
+$("#editShift").click(function() {
     const selectedRow = $("tr.selected"); 
     if (selectedRow.length === 0) {
         Swal.fire('Chưa chọn ca làm!', 'Vui lòng chọn một ca làm để sửa.', 'warning');
@@ -707,7 +723,100 @@ $("#editNV").click(function() {
     }
 });
 
-$("#saveEditEmployee").on('click', function() {
+
+function openEditModal(shiftCode) {
+    $.ajax({
+        url: `http://localhost:8080/api/Shift/Detail?id=${shiftCode}`,
+        type: 'GET',
+        dataType: "json",
+        headers: {
+            'Authorization': 'Bearer ' + token // Replace with your token
+        },
+        success: function(response) {
+            if (response.status === 200 && response.data) {
+                currentShiftData = response.data; // Assign the fetched shift data to currentShiftData
+                console.log(currentShiftData.signUps);
+                function formatDateTime(dateString) {
+                    const [time, date] = dateString.split(" ");
+                    const [day, month, year] = date.split("/");
+                    return `${year}-${month}-${day}T${time.slice(0, 5)}`;
+                }
+
+                $("#editShiftId").val(currentShiftData.id);
+                $("#editShiftName").val(currentShiftData.shiftName);
+                $("#editStartTime").val(formatDateTime(currentShiftData.startTime));
+                $("#editEndTime").val(formatDateTime(currentShiftData.endTime));
+                $("#editBreakStartTime").val(formatDateTime(currentShiftData.breakStartTime));
+                $("#editBreakEndTime").val(formatDateTime(currentShiftData.breakEndTime));
+                $("#editIsActive").val(currentShiftData.isActive ? 'active' : 'inActive');
+                $("#editIsOT").val(currentShiftData.isOT ? 'OT' : 'nonOT');
+
+                // Show the modal
+                $("#editShiftModal").show();
+            } else {
+                Swal.fire('Lỗi', 'Không tìm thấy thông tin chi tiết.', 'error');
+            }
+        },
+        error: function() {
+            console.error("Lỗi khi gọi API chi tiết ca làm");
+            Swal.fire('Lỗi', 'Không thể lấy thông tin chi tiết.', 'error');
+        }
+    });
+}
+
+// Event listener to open the employee modal
+$("#openEditEmployeeModal").click(function() {
+    const selectedEmployees = currentShiftData ? currentShiftData.signUps || [] : [];
+    openEmployeeModal(selectedEmployees);
+});
+
+function openEmployeeModal(selectedEmployees) {
+    // Clear existing rows
+    $("#employeeTableBody").empty();
+
+    // Fetch the list of all employees
+    $.ajax({
+        url: "http://localhost:8080/api/Profile/List", // Replace with the actual endpoint to get all employees
+        type: 'GET',
+        dataType: 'json',
+        headers: {
+            'Authorization': 'Bearer ' + token // Replace with your actual token
+        },
+        success: function(response) {
+            if (response.status === 200 && response.data) {
+                // Loop through each employee
+                response.data.forEach(employee => {
+                    const isChecked = selectedEmployees.some(e => e.profile.code === employee.code);
+                    const row = `
+                        <tr>
+                            <td>${employee.code}</td>
+                            <td>${employee.fullname}</td>
+                            <td><input type="checkbox" class="employeeCheckbox" data-employee-id="${employee.code}" ${isChecked ? 'checked' : ''}></td>
+                        </tr>
+                    `;
+                    $("#employeeTableBody").append(row);
+                });
+
+                // Show the employee modal
+                $("#editEmployeeModal").show();
+            } else {
+                Swal.fire('Lỗi', 'Không tìm thấy danh sách nhân viên.', 'error');
+            }
+        },
+        error: function() {
+            Swal.fire('Lỗi', 'Không thể lấy danh sách nhân viên.', 'error');
+        }
+    });
+}
+
+$("#closeEmployeeModal").click(function() {
+    $("#editEmployeeModal").hide();
+});
+
+
+
+
+$("#saveEditShift").on('click', function() {
     const selectedRow = $("tr.selected"); 
     if (selectedRow.length === 0) {
         Swal.fire('Chưa chọn ca làm!', 'Vui lòng chọn một ca làm để sửa.', 'warning');
@@ -761,40 +870,10 @@ $("#saveEditEmployee").on('click', function() {
 });
 
 
-function openEditModal(shiftCode) {
-    $.ajax({
-        url: `http://localhost:8080/api/Shift/Detail?id=${shiftCode}`,
-        type: 'GET',
-        dataType: "json",
-        headers: {
-            'Authorization': 'Bearer ' + token // Thay thế bằng token của bạn
-        },
-        success: function(response) {
-            if (response.status === 200 && response.data) {
-                $("#editShiftId").val(response.data.id); 
-                $("#editShiftName").val(response.data.shiftName);
-                $("#editStartTime").val(response.data.startTime);
-                $("#editEndTime").val(response.data.endTime);
-                $("#editBreakStartTime").val(response.data.breakStartTime);
-                $("#editBreakEndTime").val(response.data.breakEndTime);
-                $("#editIsActive").val(response.data.isActive ? 'active' : 'inActive');
-                $("#editIsOT").val(response.data.isOT ? 'OT' : 'nonOT');
-                $("#editShiftModal").show();
-            } else {
-                Swal.fire('Lỗi', 'Không tìm thấy thông tin chi tiết.', 'error');
-            }
-        },
-        error: function() {
-            console.error("Lỗi khi gọi API chi tiết nhân viên");
-            Swal.fire('Lỗi', 'Không thể lấy thông tin chi tiết.', 'error');
-        }
-    });
-}
-
 // Đóng modal
 $("#closeEditModal").on('click', function() {
     $("#editShiftModal").hide();
-});
+    });
 });
 
 function getEmployeeDetails(shiftCode) {

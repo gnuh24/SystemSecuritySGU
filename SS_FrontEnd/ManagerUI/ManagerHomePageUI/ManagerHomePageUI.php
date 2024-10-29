@@ -92,13 +92,7 @@
 
             // Sự kiện khi nhấn nút Statistics
             $('#statistics').click(function () {
-                // Có thể thêm xử lý cho nút này nếu cần
-                Swal.fire({
-                    title: 'Statistics',
-                    text: 'Feature is under construction!',
-                    icon: 'info',
-                    confirmButtonText: 'OK'
-                });
+                window.location.href = "../Statistic/statistic.php";
             });
         });
     </script>

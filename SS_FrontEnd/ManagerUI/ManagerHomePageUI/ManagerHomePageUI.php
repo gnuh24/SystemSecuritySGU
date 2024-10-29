@@ -39,7 +39,11 @@
             });
 
             // Sự kiện khi nhấn nút Statistics
+<<<<<<< HEAD
+            $('#statistics').click(function () {
+=======
             $('#statistics').click(function() {
+>>>>>>> ab03256f03bdda9df7bdf6ab41b369c679094c1f
                 window.location.href = "../Statistic/statistic.php";
             });
         });

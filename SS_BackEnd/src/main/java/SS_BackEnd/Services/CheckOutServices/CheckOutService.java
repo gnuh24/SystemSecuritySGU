@@ -12,12 +12,22 @@ import SS_BackEnd.Repositories.ICheckOutRepository;
 import SS_BackEnd.Services.ProfileServices.IProfileService;
 import SS_BackEnd.Services.ShiftServices.IShiftService;
 import SS_BackEnd.Services.ShiftSignUpServices.IShiftSignUpService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -39,6 +49,10 @@ public class CheckOutService implements ICheckOutService {
 
     @Autowired
     private IShiftSignUpService shiftSignUpService;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
 
     @Override
     public List<CheckOut> getAllCheckOutByShiftId(Pageable pageable, Integer shiftId) {
@@ -76,6 +90,13 @@ public class CheckOutService implements ICheckOutService {
             throw new EntityAlreadyExistsException("Nhân viên " + form.getProfileCode() + " đã checkOut ca làm ");
         }
 
+        String profileCodeReturnedByModel = callAPIRecognition(form.getImage());
+        System.err.println("Model: " + profileCodeReturnedByModel);
+        System.err.println("Nhân viên: " + profile.getCode());
+        if (!profileCodeReturnedByModel.equals(profile.getCode())){
+            throw new EntityNotFoundException("Vân tay không khớp với nhân viên " + profile.getCode());
+        }
+
         CheckOut entity = modelMapper.map(form, CheckOut.class);
 
         // Logic check-out: Kiểm tra thời gian kết thúc ca
@@ -104,5 +125,47 @@ public class CheckOutService implements ICheckOutService {
     public CheckOut getCheckOutById(Integer shiftId, String profileCode) {
         CheckOut.CheckOutId id = new CheckOut.CheckOutId(shiftId, profileCode);
         return checkOutRepository.findById(id).orElse(null);
+    }
+
+    private String callAPIRecognition(MultipartFile file) throws IOException {
+        // Convert MultipartFile to File
+        File convFile = convertMultipartFileToFile(file);
+
+        // Prepare headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        // Create the body with file
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("file", new FileSystemResource(convFile));
+
+        // Wrap the body and headers into an HttpEntity
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+
+        // Make the request to the external API
+        ResponseEntity<String> response = restTemplate.exchange(
+            "http://127.0.0.1:5000/recognize",
+            HttpMethod.POST,
+            requestEntity,
+            String.class
+        );
+
+        // Delete temporary file
+        convFile.delete();
+
+        // Parse JSON response to get "predicted_label"
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(response.getBody());
+
+        return jsonNode.get("predicted_label").asText();
+    }
+
+    // Convert MultipartFile to File
+    private File convertMultipartFileToFile(MultipartFile file) throws IOException {
+        File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + file.getOriginalFilename());
+        try (FileOutputStream fos = new FileOutputStream(convFile)) {
+            fos.write(file.getBytes());
+        }
+        return convFile;
     }
 }

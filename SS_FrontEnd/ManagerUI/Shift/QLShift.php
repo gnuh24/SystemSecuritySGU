@@ -290,7 +290,7 @@
                                                 <button id="closeEditModal" style="margin-top: 1rem; background-color: #ff4d4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Đóng</button>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="modal" id="editEmployeeModal" style="display: none;">
                                             <div class="modal-content" style="position: relative; left: 940px; top: 220px">
                                                 <h3>Chọn nhân viên</h3>
@@ -303,7 +303,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody class="editEmployeeTableBody">
-                                                            <!-- Employee rows will be added here dynamically -->
+                                                        <!-- Employee rows will be added here dynamically -->
                                                     </tbody>
                                                 </table>
                                                 <button id="saveSelectedEmployeesForEdit" style="margin-top: 1rem; background-color: #007bff; color: white; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Lưu</button>
@@ -380,14 +380,18 @@
                     if (response.status === 200 && response.data) {
                         if (response.data.content.length > 0) {
                             response.data.content.forEach(function(account) {
+                                let breakStartTime = account.breakStartTime != null ? account.breakStartTime : "Không có";
+                                let breakEndTime = account.breakEndTime != null ? account.breakEndTime : "Không có";
+
                                 var row = `
+
                             <tr>
                                 <td>${account.id}</td>
                                 <td>${account.shiftName}</td>
                                 <td>${account.startTime}</td>
                                 <td>${account.endTime}</td>
-                                <td>${account.breakStartTime}</td>
-                                <td>${account.breakEndTime}</td>
+                                <td>${breakStartTime}</td>
+                                <td>${breakEndTime}</td>
                                 <td>${account.isOT === true ? 'Có' : 'Không'}</td>
                                 <td>${account.isActive === true ? 'Active' : 'Inactive'}</td>
                             </tr>
@@ -566,7 +570,7 @@
                     "position": "relative",
                     "right": "200px"
                 });
-            }); 
+            });
 
             $("#saveSelectedEmployeesForAdd").click(function() {
                 const selectedEmployees = [];
@@ -861,7 +865,7 @@
                             $("#editIsOT").val(data.isOT ? 'OT' : 'nonOT');
                             $("#editShiftModal").show();
 
-                            loadEmployeesForEditShift('', '', 1, selectedEmployees); 
+                            loadEmployeesForEditShift('', '', 1, selectedEmployees);
                         } else {
                             Swal.fire('Lỗi', 'Không tìm thấy thông tin chi tiết.', 'error');
                         }
@@ -882,7 +886,7 @@
                         const seconds = ('0' + date.getSeconds()).slice(-2);
                         return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
                     }
-                    
+
                     const formData = new FormData();
                     const startTime = new Date($("#editStartTime").val());
                     const endTime = new Date($("#editEndTime").val());
@@ -899,7 +903,7 @@
                     formData.append('endTime', formatDateTime(endTime));
                     formData.append('breakStartTime', formatDateTime(breakStartTime));
                     formData.append('breakEndTime', formatDateTime(breakEndTime));
-                    
+
                     $.ajax({
                         url: `http://localhost:8080/api/Shift/Update`,
                         type: 'PATCH',
@@ -918,9 +922,9 @@
                             }
                         },
                         error: function(xhr) {
-                            const errorMsg = xhr.responseJSON?.error 
-                                ? Object.values(xhr.responseJSON.error).join(", ") 
-                                : 'Không thể cập nhật thông tin ca làm.';
+                            const errorMsg = xhr.responseJSON?.error ?
+                                Object.values(xhr.responseJSON.error).join(", ") :
+                                'Không thể cập nhật thông tin ca làm.';
                             Swal.fire('Lỗi', errorMsg, 'error');
                         }
                     });
@@ -941,43 +945,43 @@
                             console.error(error);
                             Swal.fire('Lỗi', 'Có lỗi khi xóa hoặc thêm nhân viên.', 'error');
                         });
-                        getAllCaLam('', '', 1);
+                    getAllCaLam('', '', 1);
                 });
             }
 
-            
+
             $("#closeEditModal").on('click', function() {
                 $("#editShiftModal").hide();
-                });
             });
+        });
 
-            $("#openEditEmployeeModal").click(function() {
-                $("#editEmployeeModal").show();
-                $(".editShiftForm").css({
-                    "position": "relative",
-                    "right": "200px"
-                });
+        $("#openEditEmployeeModal").click(function() {
+            $("#editEmployeeModal").show();
+            $(".editShiftForm").css({
+                "position": "relative",
+                "right": "200px"
             });
+        });
 
-            $("#closeEditEmployeeModal").click(function() {
-                $("#editEmployeeModal").hide();
-                $(".editShiftForm").css({
-                    "right": "0px"
-                });
+        $("#closeEditEmployeeModal").click(function() {
+            $("#editEmployeeModal").hide();
+            $(".editShiftForm").css({
+                "right": "0px"
             });
+        });
 
-            $("#saveSelectedEmployeesForEdit").click(function() {
-                const selectedEmployees = [];
-                $(".editEmployeeTableBody input[type='checkbox']:checked").each(function() {
-                    selectedEmployees.push($(this).val()); // Lấy mã nhân viên đã chọn
-                });
-                $(".editShiftForm").css({
-                    "right": "0px"
-                });
-                $("#editEmployeeModal").hide();
+        $("#saveSelectedEmployeesForEdit").click(function() {
+            const selectedEmployees = [];
+            $(".editEmployeeTableBody input[type='checkbox']:checked").each(function() {
+                selectedEmployees.push($(this).val()); // Lấy mã nhân viên đã chọn
             });
+            $(".editShiftForm").css({
+                "right": "0px"
+            });
+            $("#editEmployeeModal").hide();
+        });
 
-            
+
 
         function getEmployeeDetails(shiftCode) {
             $.ajax({

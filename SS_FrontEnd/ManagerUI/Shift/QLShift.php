@@ -763,6 +763,78 @@
                 });
             }
 
+            // Function to delete all employees from a shift
+            function deleteAllEmployeesFromShift(shiftId) {
+                $.ajax({
+                    url: `http://localhost:8080/api/Shift/Detail?id=${shiftId}`,
+                    type: 'GET',
+                    dataType: "json",
+                    headers: {
+                        'Authorization': 'Bearer ' + token // Replace with your token
+                    },
+                    success: function(response) {
+                        if (response.status === 200 && response.data) {
+                            const employees = response.data.signUps.map(signUp => signUp.profile.code);
+
+                            // Loop through each employee and send DELETE request
+                            employees.forEach(function(profileCode) {
+                                const formData = new FormData();
+                                formData.append('shiftId', shiftId);
+                                formData.append('profileCode', profileCode);
+
+                                $.ajax({
+                                    url: `http://localhost:8080/api/ShiftSignUp/Delete`,
+                                    type: 'DELETE',
+                                    processData: false,
+                                    contentType: false,
+                                    data: formData,
+                                    headers: {
+                                        'Authorization': 'Bearer ' + token
+                                    },
+                                    success: function() {
+                                        console.log(`Successfully removed employee ${profileCode} from shift ${shiftId}`);
+                                    },
+                                    error: function() {
+                                        console.error(`Failed to remove employee ${profileCode} from shift ${shiftId}`);
+                                    }
+                                });
+                            });
+                        } else {
+                            console.error("Failed to fetch shift details or no employees found.");
+                        }
+                    },
+                    error: function() {
+                        console.error("Error fetching shift details.");
+                    }
+                });
+            }
+
+            function addEmployeesToShift(shiftId, profileCodes) {
+                profileCodes.forEach(function(profileCode) {
+                    const formData = new FormData();
+                    formData.append('shiftId', shiftId);
+                    formData.append('profileCodes', profileCode);
+
+                    $.ajax({
+                        url: `http://localhost:8080/api/ShiftSignUp/Create`,
+                        type: 'POST',
+                        processData: false,
+                        contentType: false,
+                        data: formData,
+                        headers: {
+                            'Authorization': 'Bearer ' + token // Replace with your token
+                        },
+                        success: function(response) {
+                            console.log(`Successfully added employee ${profileCode} to shift ${shiftId}`);
+                        },
+                        error: function() {
+                            console.error(`Failed to add employee ${profileCode} to shift ${shiftId}`);
+                        }
+                    });
+                });
+            }
+
+
             function openEditModal(shiftCode) {
                 $.ajax({
                     url: `http://localhost:8080/api/Shift/Detail?id=${shiftCode}`,
@@ -830,9 +902,6 @@
                 const isOT = $("#editIsOT").val();
 
                 const selectedEmployees = [];
-                $(".editEmployeeTableBody input[type='checkbox']:checked").each(function() {
-                    selectedEmployees.push($(this).val()); // Lấy giá trị của checkbox
-                });
                 formData.append('id', shiftCode);
                 formData.append('shiftName', $("#editShiftName").val().trim());
                 formData.append('isActive', isActive === 'active');
@@ -841,13 +910,7 @@
                 formData.append('endTime', formatDateTime(endTime));
                 formData.append('breakStartTime', formatDateTime(breakStartTime));
                 formData.append('breakEndTime', formatDateTime(breakEndTime));
-
-                selectedEmployees.forEach(function(employeeCode, index) {
-                    formData.append(`profileCodes[${index}]`, employeeCode);
-                });
-                for (let [key, value] of formData.entries()) {
-                    console.log(`${key}: ${value}`);
-                }
+                
                 $.ajax({
                     url: `http://localhost:8080/api/Shift/Update`,
                     type: 'PATCH',
@@ -874,8 +937,16 @@
                         }
                     }
                 });
+                //xóa hết các nhân viên trong ca làm
+                deleteAllEmployeesFromShift(shiftCode);
+                //thêm lại nhân viên vào ca làm
+                $(".editEmployeeTableBody input[type='checkbox']:checked").each(function() {
+                    selectedEmployees.push($(this).val()); // Lấy mã nhân viên đã chọn
+                });
+                console.log(selectedEmployees);
+                addEmployeesToShift(shiftCode, selectedEmployees);
+                });
                 getAllCaLam('', '', 1);
-            });
             }
 
             

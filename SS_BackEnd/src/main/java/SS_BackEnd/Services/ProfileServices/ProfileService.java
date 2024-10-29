@@ -1,11 +1,14 @@
 package SS_BackEnd.Services.ProfileServices;
 
 
+import SS_BackEnd.Entities.FingerPrint;
 import SS_BackEnd.Entities.Profile;
 import SS_BackEnd.Forms.ProfileForms.ProfileCreateForm;
 import SS_BackEnd.Forms.ProfileForms.ProfileFilterForm;
 import SS_BackEnd.Forms.ProfileForms.ProfileUpdateForm;
+import SS_BackEnd.Other.ImageService;
 import SS_BackEnd.Repositories.IProfileRepository;
+import SS_BackEnd.Services.APIModelService.IModelService;
 import SS_BackEnd.Services.AccountServices.IAccountService;
 import SS_BackEnd.Services.FingerPrintServices.IFingerPrintService;
 import SS_BackEnd.Services.ProfileServices.IProfileService;
@@ -18,9 +21,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ProfileService implements IProfileService {
@@ -37,6 +43,9 @@ public class ProfileService implements IProfileService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private IModelService modelService;
 
     @Override
     public Boolean isProfileExistsByCode(String code) {
@@ -65,10 +74,19 @@ public class ProfileService implements IProfileService {
             accountService.createAccount(profile);
         }
 
-
+        List<MultipartFile> list = new ArrayList<>();
         for (int i=1; i <= profileCreateForm.getImages().size(); i++){
-            fingerPrintService.createFingerPrint(i, profile, profileCreateForm.getImages().get(i-1));
+            FingerPrint fingerPrint = fingerPrintService.createFingerPrint(i, profile, profileCreateForm.getImages().get(i-1));
+            MultipartFile multipartFile = ImageService.createMultipartFileFromPath(fingerPrint.getPath());
+            list.add(multipartFile);
         }
+
+        for (MultipartFile file: list){
+            System.err.println(file.getOriginalFilename());
+        }
+
+        String bodyResponse = modelService.callAPITraining(profileCreateForm.getImages());
+        System.err.println(bodyResponse);
 
         return profile;
     }

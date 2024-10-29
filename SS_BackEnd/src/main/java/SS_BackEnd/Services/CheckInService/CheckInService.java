@@ -8,6 +8,8 @@ import SS_BackEnd.Entities.Shift;
 import SS_BackEnd.Forms.CheckIn.CheckInCreateForm;
 import SS_BackEnd.Other.ImageService;
 import SS_BackEnd.Repositories.ICheckInRepository;
+import SS_BackEnd.Services.APIModelService.IModelService;
+import SS_BackEnd.Services.APIModelService.ModelService;
 import SS_BackEnd.Services.EmailServices.IEmailService;
 import SS_BackEnd.Services.ProfileServices.IProfileService;
 import SS_BackEnd.Services.ShiftServices.IShiftService;
@@ -54,7 +56,7 @@ public class CheckInService implements ICheckInService{
     private IShiftSignUpService shiftSignUpService;
 
     @Autowired
-    private RestTemplate restTemplate;
+    private IModelService modelService;
 
     @Override
     public List<CheckIn> getAllCheckInByShiftId(Pageable pageable, Integer shiftId) {
@@ -93,7 +95,7 @@ public class CheckInService implements ICheckInService{
             throw new EntityAlreadyExistsException("Nhân viên " + form.getProfileCode() + " đã checkIn ca làm ");
         }
 
-        String profileCodeReturnedByModel = callAPIRecognition(form.getImage());
+        String profileCodeReturnedByModel = modelService.callAPIRecognition(form.getImage());
         System.err.println("Model: " + profileCodeReturnedByModel);
         System.err.println("Nhân viên: " + profile.getCode());
         if (!profileCodeReturnedByModel.equals(profile.getCode())){
@@ -136,45 +138,5 @@ public class CheckInService implements ICheckInService{
         return checkInRepository.findById(id).orElse(null);
     }
 
-    private String callAPIRecognition(MultipartFile file) throws IOException {
-        // Convert MultipartFile to File
-        File convFile = convertMultipartFileToFile(file);
 
-        // Prepare headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-        // Create the body with file
-        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("file", new FileSystemResource(convFile));
-
-        // Wrap the body and headers into an HttpEntity
-        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-
-        // Make the request to the external API
-        ResponseEntity<String> response = restTemplate.exchange(
-            "http://127.0.0.1:5000/recognize",
-            HttpMethod.POST,
-            requestEntity,
-            String.class
-        );
-
-        // Delete temporary file
-        convFile.delete();
-
-        // Parse JSON response to get "predicted_label"
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(response.getBody());
-
-        return jsonNode.get("predicted_label").asText();
-    }
-
-    // Convert MultipartFile to File
-    private File convertMultipartFileToFile(MultipartFile file) throws IOException {
-        File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + file.getOriginalFilename());
-        try (FileOutputStream fos = new FileOutputStream(convFile)) {
-            fos.write(file.getBytes());
-        }
-        return convFile;
-    }
 }

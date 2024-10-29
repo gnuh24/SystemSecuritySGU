@@ -2,8 +2,7 @@ package SS_BackEnd.Other;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,6 +40,59 @@ public class ImageService {
             }
         }
         return null;
+    }
+
+    public static MultipartFile createMultipartFileFromPath(String filePath) throws IOException {
+        filePath = fingerPrintImage + "\\" + filePath;
+
+        File file = new File(filePath);
+        byte[] content = Files.readAllBytes(file.toPath());
+
+        return new MultipartFile() {
+            @Override
+            public String getName() {
+                return "file";
+            }
+
+            @Override
+            public String getOriginalFilename() {
+                return file.getName();
+            }
+
+            @Override
+            public String getContentType() {
+                try {
+                    return Files.probeContentType(file.toPath());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return content.length == 0;
+            }
+
+            @Override
+            public long getSize() {
+                return content.length;
+            }
+
+            @Override
+            public byte[] getBytes() {
+                return content;
+            }
+
+            @Override
+            public InputStream getInputStream() {
+                return new ByteArrayInputStream(content);
+            }
+
+            @Override
+            public void transferTo(File dest) throws IOException {
+                Files.write(dest.toPath(), content);
+            }
+        };
     }
 
     public static String saveImage(String folderPath, String imageName, MultipartFile image) throws IOException {

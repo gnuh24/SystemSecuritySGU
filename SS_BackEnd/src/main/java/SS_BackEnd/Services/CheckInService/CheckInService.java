@@ -1,6 +1,5 @@
 package SS_BackEnd.Services.CheckInService;
 
-import SS_BackEnd.Configuration.Exception.AuthException.AccountBannedException;
 import SS_BackEnd.Configuration.Exception.AuthException.EmployeeTerminatedException;
 import SS_BackEnd.Configuration.Exception.EntityAlreadyExistsException;
 import SS_BackEnd.Entities.CheckIn;
@@ -13,10 +12,11 @@ import SS_BackEnd.Services.EmailServices.IEmailService;
 import SS_BackEnd.Services.ProfileServices.IProfileService;
 import SS_BackEnd.Services.ShiftServices.IShiftService;
 import SS_BackEnd.Services.ShiftSignUpServices.IShiftSignUpService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
@@ -93,7 +93,12 @@ public class CheckInService implements ICheckInService{
             throw new EntityAlreadyExistsException("Nhân viên " + form.getProfileCode() + " đã checkIn ca làm ");
         }
 
-        System.err.println(sendFileForRecognition(form.getImage()));
+        String profileCodeReturnedByModel = callAPIRecognition(form.getImage());
+        System.err.println("Model: " + profileCodeReturnedByModel);
+        System.err.println("Nhân viên: " + profile.getCode());
+        if (!profileCodeReturnedByModel.equals(profile.getCode())){
+            throw new EntityNotFoundException("Vân tay không khớp với nhân viên " + profile.getCode());
+        }
 
 
         CheckIn entity = modelMapper.map(form, CheckIn.class);
@@ -131,7 +136,7 @@ public class CheckInService implements ICheckInService{
         return checkInRepository.findById(id).orElse(null);
     }
 
-    private String sendFileForRecognition(MultipartFile file) throws IOException {
+    private String callAPIRecognition(MultipartFile file) throws IOException {
         // Convert MultipartFile to File
         File convFile = convertMultipartFileToFile(file);
 
@@ -157,7 +162,11 @@ public class CheckInService implements ICheckInService{
         // Delete temporary file
         convFile.delete();
 
-        return response.getBody();
+        // Parse JSON response to get "predicted_label"
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(response.getBody());
+
+        return jsonNode.get("predicted_label").asText();
     }
 
     // Convert MultipartFile to File

@@ -38,6 +38,8 @@ def preprocess_image(image_path):
 
 @app.route('/recognize', methods=['POST'])
 def recognize():
+    label_mapping = load_label_mapping('label_mapping.txt')
+
     global loaded_model  # Sử dụng biến toàn cục loaded_model
     # Nhận file từ yêu cầu
     if 'file' not in request.files:

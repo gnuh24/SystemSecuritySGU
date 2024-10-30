@@ -357,6 +357,9 @@
         var pageSize = 5;
         var totalPages = 1;
         const token = localStorage.getItem('token');
+        var search_state = "";
+        var filter_isActive_state = "";
+
 
         // Hàm gọi API để lấy dữ liệu và hiển thị trên bảng
         function getAllCaLam(search, status, pageNumber) {
@@ -370,7 +373,7 @@
                     search: searchConverted,
                     status: status,
                     pageNumber: pageNumber,
-                    size: pageSize
+                    pageSize: pageSize
                 },
                 headers: {
                     'Authorization': 'Bearer ' + token
@@ -510,7 +513,7 @@
                         search: search,
                         status: status,
                         pageNumber: pageNumber,
-                        size: pageSize
+                        pageSize: 1
                     },
                     headers: {
                         'Authorization': 'Bearer ' + token // Thay bằng token của bạn
@@ -724,7 +727,7 @@
                         search: search,
                         status: status,
                         pageNumber: pageNumber,
-                        size: pageSize
+                        pageSize: pageSize
                     },
                     headers: {
                         'Authorization': 'Bearer ' + token // Replace with your actual token

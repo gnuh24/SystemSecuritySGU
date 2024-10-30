@@ -796,31 +796,31 @@
             }
 
             // Function to delete all employees from a shift
-            function deleteAllEmployeesFromShift(shiftId, employees) {
+            function deleteEmployeeFromShift(shiftId, profileCode) {
                 return new Promise((resolve, reject) => {
-                    const deletePromises = employees.map(profileCode => {
-                        const formData = new FormData();
-                        formData.append('shiftId', shiftId);
-                        formData.append('profileCode', profileCode);
+                    const formData = new FormData();
+                    formData.append('shiftId', shiftId);
+                    formData.append('profileCode', profileCode);
 
-                        return $.ajax({
-                            url: `http://localhost:8080/api/ShiftSignUp/Delete`,
-                            type: 'DELETE',
-                            processData: false,
-                            contentType: false,
-                            data: formData,
-                            headers: {
-                                'Authorization': 'Bearer ' + token
-                            }
-                        });
+                    $.ajax({
+                        url: `http://localhost:8080/api/ShiftSignUp/Delete`,
+                        type: 'DELETE',
+                        processData: false,
+                        contentType: false,
+                        data: formData,
+                        headers: {
+                            'Authorization': 'Bearer ' + token
+                        },
+                        success: function() {
+                            resolve();
+                        },
+                        error: function() {
+                            reject("Failed to delete the employee from shift.");
+                        }
                     });
-
-                    // Wait for all delete requests to complete
-                    Promise.all(deletePromises)
-                        .then(() => resolve())
-                        .catch(() => reject("Failed to delete one or more employees from shift."));
                 });
             }
+
 
             // Function to add employees to a shift
             function addEmployeesToShift(shiftId, profileCodes) {
@@ -840,7 +840,6 @@
                 });
             }
 
-            // Open edit modal and load data
             function openEditModal(shiftCode) {
                 $.ajax({
                     url: `http://localhost:8080/api/Shift/Detail?id=${shiftCode}`,
@@ -854,7 +853,6 @@
                             const data = response.data;
                             const selectedEmployees = data.signUps.map(signUp => signUp.profile.code);
 
-
                             $("#editShiftId").val(data.id);
                             $("#editShiftName").val(data.shiftName);
                             $("#editStartTime").val(formatDateTime(data.startTime));
@@ -865,7 +863,29 @@
                             $("#editIsOT").val(data.isOT ? 'OT' : 'nonOT');
                             $("#editShiftModal").show();
 
+                            // Load employees and check relevant boxes
                             loadEmployeesForEditShift('', '', 1, selectedEmployees);
+
+                            // Set the initial checkbox state
+                            selectedEmployees.forEach(code => {
+                                $(`#employee_${code}`).prop('checked', true);
+                            });
+
+                            // Use event delegation to handle checkbox state change
+                            $(".editEmployeeTableBody").off('change', 'input[type="checkbox"]').on('change', 'input[type="checkbox"]', function() {
+                                const profileCode = $(this).val();
+                                console.log("Checkbox changed:", profileCode, "Checked:", $(this).is(':checked'));
+                                
+                                if ($(this).is(':checked')) {
+                                    addEmployeesToShift(shiftCode, [profileCode])
+                                        .then(() => console.log(`Employee ${profileCode} added to shift successfully.`))
+                                        .catch(error => console.error(`Failed to add employee ${profileCode} to shift:`, error));
+                                } else {
+                                    deleteEmployeeFromShift(shiftCode, profileCode)
+                                        .then(() => console.log(`Employee ${profileCode} removed from shift successfully.`))
+                                        .catch(error => console.error(`Failed to remove employee ${profileCode} from shift:`, error));
+                                }
+                            });
                         } else {
                             Swal.fire('Lỗi', 'Không tìm thấy thông tin chi tiết.', 'error');
                         }
@@ -907,21 +927,7 @@
                             if (response.status === 200) {
                                 Swal.fire('Thành công', 'Cập nhật thông tin ca làm thành công!', 'success');
                                 $("#editShiftModal").hide();
-                                const selectedEmployees = [];
-                                $(".editEmployeeTableBody input[type='checkbox']:checked").each(function() {
-                                    selectedEmployees.push($(this).val());
-                                });
-
-                                deleteAllEmployeesFromShift(shiftCode, selectedEmployees)
-                                    .then(() => addEmployeesToShift(shiftCode, selectedEmployees))
-                                    .then(() => {
-                                        console.log("All employees added to shift successfully.");
-                                        getAllCaLam('', '', 1);
-                                    })
-                                    .catch(error => {
-                                        console.error(error);
-                                        Swal.fire('Lỗi', 'Có lỗi khi xóa hoặc thêm nhân viên.', 'error');
-                                    });
+                                getAllCaLam('', '', 1);
                             } else {
                                 Swal.fire('Lỗi', 'Không thể cập nhật thông tin ca làm.', 'error');
                             }
@@ -935,6 +941,9 @@
                     });
                 });
             }});
+
+    
+        
 
         $("#closeEditModal").on('click', function() {
             $("#editShiftModal").hide();

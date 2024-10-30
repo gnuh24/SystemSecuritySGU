@@ -102,6 +102,11 @@
             display: flex;
             align-items: center;
         }
+        /* CSS to darken the selected shift row */
+        .selected-row {
+            background-color: #d3d3d3; /* Light gray background */
+            color: #333333; /* Dark text color for contrast */
+        }
     </style>
 
 </head>
@@ -360,12 +365,11 @@
         const token = localStorage.getItem('token');
         var search_state = "";
         var filter_isActive_state = "";
-
+        
 
         // Hàm gọi API để lấy dữ liệu và hiển thị trên bảng
         function getAllCaLam(search, status, pageNumber) {
             var searchConverted = removeAccentsAndToLowerCase(search);
-
             $.ajax({
                 url: 'http://localhost:8080/api/Shift/List',
                 type: 'GET',
@@ -388,18 +392,17 @@
                                 let breakEndTime = account.breakEndTime != null ? account.breakEndTime : "Không có";
 
                                 var row = `
-
-                            <tr>
-                                <td>${account.id}</td>
-                                <td>${account.shiftName}</td>
-                                <td>${account.startTime}</td>
-                                <td>${account.endTime}</td>
-                                <td>${breakStartTime}</td>
-                                <td>${breakEndTime}</td>
-                                <td>${account.isOT === true ? 'Có' : 'Không'}</td>
-                                <td>${account.isActive === true ? 'Active' : 'Inactive'}</td>
-                            </tr>
-                        `;
+                                    <tr class="row"> 
+                                        <td>${account.id}</td>
+                                        <td>${account.shiftName}</td>
+                                        <td>${account.startTime}</td>
+                                        <td>${account.endTime}</td>
+                                        <td>${breakStartTime}</td>
+                                        <td>${breakEndTime}</td>
+                                        <td>${account.isOT === true ? 'Có' : 'Không'}</td>
+                                        <td>${account.isActive === true ? 'Active' : 'Inactive'}</td>
+                                    </tr>
+                                `;
                                 $("#tableBody").append(row);
                             });
 
@@ -420,6 +423,7 @@
                 }
             });
         }
+
 
         function adjustTableHeight(rowCount) {
             var rowHeight = 50;
@@ -460,7 +464,14 @@
 
         $(document).ready(function() {
             getAllCaLam('', '', currentPage);
-
+            $(document).on("click", "#tableBody .row", function() {
+                console.log("click");
+                // Xóa lớp 'selected-row' khỏi tất cả các hàng
+                $("#tableBody .row").removeClass("selected-row");
+                
+                // Thêm lớp 'selected-row' vào hàng được chọn
+                $(this).addClass("selected-row");
+            });
             $("#searchInput").on("input", function() {
                 var searchValue = $(this).val();
                 var statusValue = $("#shiftFilter").val();
@@ -711,13 +722,21 @@
 
             $("#editShift").click(function() {
                 const selectedRow = $("tr.selected");
+
                 if (selectedRow.length === 0) {
                     Swal.fire('Chưa chọn ca làm!', 'Vui lòng chọn một ca làm để sửa.', 'warning');
                 } else {
                     const shiftCode = selectedRow.find("td").first().text().trim();
+
+                    // Open edit modal for the selected shift
                     openEditModal(shiftCode);
+                    
+                    // Highlight the selected row
+                    $("tr").removeClass("selected-row"); // Remove highlight from any other rows
+                    selectedRow.addClass("selected-row"); // Highlight the current selected row
                 }
             });
+
 
             
             function formatDateTime(dateInput) {
@@ -939,6 +958,7 @@
                             Swal.fire('Lỗi', errorMsg, 'error');
                         }
                     });
+                    $("tr").removeClass("selected-row");
                 });
             }});
 
@@ -947,6 +967,7 @@
 
         $("#closeEditModal").on('click', function() {
             $("#editShiftModal").hide();
+            $("tr").removeClass("selected-row");
         });
 
 

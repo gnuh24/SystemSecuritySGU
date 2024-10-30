@@ -719,6 +719,30 @@
                 }
             });
 
+            
+            function formatDateTime(dateInput) {
+                // Check if the input is a Date object
+                let dateString;
+                if (dateInput instanceof Date) {
+                    // Format Date object to "YYYY-MM-DDTHH:MM" format
+                    const year = dateInput.getFullYear();
+                    const month = String(dateInput.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+                    const day = String(dateInput.getDate()).padStart(2, '0');
+                    const hours = String(dateInput.getHours()).padStart(2, '0');
+                    const minutes = String(dateInput.getMinutes()).padStart(2, '0');
+                    dateString = `${year}-${month}-${day}T${hours}:${minutes}`;
+                } else if (typeof dateInput === "string") {
+                    // Assume string is in "HH:MM DD/MM/YYYY" format and split as before
+                    const [time, date] = dateInput.split(" ");
+                    const [day, month, year] = date.split("/");
+                    dateString = `${year}-${month}-${day}T${time.slice(0, 5)}`;
+                } else {
+                    throw new Error("Invalid date format");
+                }
+                return dateString;
+            }
+
+
             function loadEmployeesForEditShift(search, status, pageNumber, selectedEmployees = []) {
                 $.ajax({
                     url: 'http://localhost:8080/api/Profile/List',
@@ -772,92 +796,64 @@
             }
 
             // Function to delete all employees from a shift
-            function deleteAllEmployeesFromShift(shiftId) {
+            function deleteAllEmployeesFromShift(shiftId, employees) {
                 return new Promise((resolve, reject) => {
-                    $.ajax({
-                        url: `http://localhost:8080/api/Shift/Detail?id=${shiftId}`,
-                        type: 'GET',
-                        dataType: "json",
-                        headers: {
-                            'Authorization': 'Bearer ' + token // Replace with your token
-                        },
-                        success: function(response) {
-                            if (response.status === 200 && response.data) {
-                                const employees = response.data.signUps.map(signUp => signUp.profile.code);
-                                const deletePromises = employees.map(profileCode => {
-                                    const formData = new FormData();
-                                    formData.append('shiftId', shiftId);
-                                    formData.append('profileCode', profileCode);
+                    const deletePromises = employees.map(profileCode => {
+                        const formData = new FormData();
+                        formData.append('shiftId', shiftId);
+                        formData.append('profileCode', profileCode);
 
-                                    return $.ajax({
-                                        url: `http://localhost:8080/api/ShiftSignUp/Delete`,
-                                        type: 'DELETE',
-                                        processData: false,
-                                        contentType: false,
-                                        data: formData,
-                                        headers: {
-                                            'Authorization': 'Bearer ' + token
-                                        }
-                                    });
-                                });
-
-                                // Wait for all delete requests to complete
-                                Promise.all(deletePromises)
-                                    .then(() => resolve())
-                                    .catch(() => reject("Failed to delete one or more employees from shift."));
-                            } else {
-                                reject("Failed to fetch shift details or no employees found.");
+                        return $.ajax({
+                            url: `http://localhost:8080/api/ShiftSignUp/Delete`,
+                            type: 'DELETE',
+                            processData: false,
+                            contentType: false,
+                            data: formData,
+                            headers: {
+                                'Authorization': 'Bearer ' + token
                             }
-                        },
-                        error: function() {
-                            reject("Error fetching shift details.");
-                        }
+                        });
                     });
+
+                    // Wait for all delete requests to complete
+                    Promise.all(deletePromises)
+                        .then(() => resolve())
+                        .catch(() => reject("Failed to delete one or more employees from shift."));
                 });
             }
 
+            // Function to add employees to a shift
             function addEmployeesToShift(shiftId, profileCodes) {
-                const addPromises = profileCodes.map(profileCode => {
-                    const formData = new FormData();
-                    formData.append('shiftId', shiftId);
-                    formData.append('profileCodes', profileCode);
+                const formData = new FormData();
+                formData.append('shiftId', shiftId);
+                formData.append('profileCodes', profileCodes.join(',')); // Send all profileCodes in a single request if API allows
 
-                    return $.ajax({
-                        url: `http://localhost:8080/api/ShiftSignUp/Create`,
-                        type: 'POST',
-                        processData: false,
-                        contentType: false,
-                        data: formData,
-                        headers: {
-                            'Authorization': 'Bearer ' + token // Replace with your token
-                        }
-                    });
+                return $.ajax({
+                    url: `http://localhost:8080/api/ShiftSignUp/Create`,
+                    type: 'POST',
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
                 });
-
-                // Wait for all add requests to complete
-                return Promise.all(addPromises);
             }
 
-
-
+            // Open edit modal and load data
             function openEditModal(shiftCode) {
                 $.ajax({
                     url: `http://localhost:8080/api/Shift/Detail?id=${shiftCode}`,
                     type: 'GET',
                     dataType: "json",
                     headers: {
-                        'Authorization': 'Bearer ' + token // Replace with your token
+                        'Authorization': 'Bearer ' + token
                     },
                     success: function(response) {
                         if (response.status === 200 && response.data) {
                             const data = response.data;
                             const selectedEmployees = data.signUps.map(signUp => signUp.profile.code);
 
-                            function formatDateTime(dateString) {
-                                const [time, date] = dateString.split(" ");
-                                const [day, month, year] = date.split("/");
-                                return `${year}-${month}-${day}T${time.slice(0, 5)}`;
-                            }
 
                             $("#editShiftId").val(data.id);
                             $("#editShiftName").val(data.shiftName);
@@ -880,18 +876,7 @@
                     }
                 });
 
-                $("#saveEditShift").on('click', function() {
-                    function formatDateTime(date) {
-                        const year = date.getFullYear();
-                        const month = ('0' + (date.getMonth() + 1)).slice(-2);
-                        const day = ('0' + date.getDate()).slice(-2);
-                        const hours = ('0' + date.getHours()).slice(-2);
-                        const minutes = ('0' + date.getMinutes()).slice(-2);
-                        const seconds = ('0' + date.getSeconds()).slice(-2);
-                        return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
-                    }
-
-                    const formData = new FormData();
+                $("#saveEditShift").off('click').on('click', function() {
                     const startTime = new Date($("#editStartTime").val());
                     const endTime = new Date($("#editEndTime").val());
                     const breakStartTime = new Date($("#editBreakStartTime").val());
@@ -899,6 +884,7 @@
                     const isActive = $("#editIsActive").val();
                     const isOT = $("#editIsOT").val();
 
+                    const formData = new FormData();
                     formData.append('id', shiftCode);
                     formData.append('shiftName', $("#editShiftName").val().trim());
                     formData.append('isActive', isActive === 'active');
@@ -921,6 +907,21 @@
                             if (response.status === 200) {
                                 Swal.fire('Thành công', 'Cập nhật thông tin ca làm thành công!', 'success');
                                 $("#editShiftModal").hide();
+                                const selectedEmployees = [];
+                                $(".editEmployeeTableBody input[type='checkbox']:checked").each(function() {
+                                    selectedEmployees.push($(this).val());
+                                });
+
+                                deleteAllEmployeesFromShift(shiftCode, selectedEmployees)
+                                    .then(() => addEmployeesToShift(shiftCode, selectedEmployees))
+                                    .then(() => {
+                                        console.log("All employees added to shift successfully.");
+                                        getAllCaLam('', '', 1);
+                                    })
+                                    .catch(error => {
+                                        console.error(error);
+                                        Swal.fire('Lỗi', 'Có lỗi khi xóa hoặc thêm nhân viên.', 'error');
+                                    });
                             } else {
                                 Swal.fire('Lỗi', 'Không thể cập nhật thông tin ca làm.', 'error');
                             }
@@ -932,32 +933,13 @@
                             Swal.fire('Lỗi', errorMsg, 'error');
                         }
                     });
-
-                    // Xóa tất cả nhân viên trong ca trước khi thêm lại
-                    deleteAllEmployeesFromShift(shiftCode)
-                        .then(() => {
-                            const selectedEmployees = [];
-                            $(".editEmployeeTableBody input[type='checkbox']:checked").each(function() {
-                                selectedEmployees.push($(this).val());
-                            });
-                            return addEmployeesToShift(shiftCode, selectedEmployees);
-                        })
-                        .then(() => {
-                            console.log("All employees added to shift successfully.");
-                        })
-                        .catch(error => {
-                            console.error(error);
-                            Swal.fire('Lỗi', 'Có lỗi khi xóa hoặc thêm nhân viên.', 'error');
-                        });
-                    getAllCaLam('', '', 1);
                 });
-            }
+            }});
 
-
-            $("#closeEditModal").on('click', function() {
-                $("#editShiftModal").hide();
-            });
+        $("#closeEditModal").on('click', function() {
+            $("#editShiftModal").hide();
         });
+
 
         $("#openEditEmployeeModal").click(function() {
             $("#editEmployeeModal").show();
@@ -985,68 +967,6 @@
             $("#editEmployeeModal").hide();
         });
 
-
-
-        function getEmployeeDetails(shiftCode) {
-            $.ajax({
-                url: `http://localhost:8080/api/Profile/Detail?code=${shiftCode}`,
-                type: 'GET',
-                dataType: "json",
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                },
-                success: function(response) {
-                    if (response.status === 200 && response.data) {
-                        const details = `
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-id-badge" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Mã nhân viên: </strong> ${response.data.code}
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-user" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Tên nhân viên: </strong> ${response.data.fullname}
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-venus-mars" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Giới tính: </strong> ${response.data.gender}
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-calendar-alt" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Ngày sinh: </strong> ${response.data.birthday}
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-phone" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Số điện thoại: </strong> ${response.data.phone}
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-envelope" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Email: </strong> ${response.data.email}
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-check-circle" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Trạng thái: </strong> ${response.data.status ? 'Active' : 'Inactive'}
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-clock" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Ngày tạo: </strong> ${response.data.createAt}
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-clock" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Ngày cập nhật: </strong> ${response.data.updateAt}
-                    </div>
-                `;
-                        $("#detailsContent").html(details);
-                        $("#detailsModal").css("display", "flex");
-                    } else {
-                        Swal.fire('Lỗi', 'Không tìm thấy thông tin chi tiết.', 'error');
-                    }
-                },
-                error: function() {
-                    console.error("Lỗi khi gọi API chi tiết nhân viên");
-                    Swal.fire('Lỗi', 'Không thể lấy thông tin chi tiết.', 'error');
-                }
-            });
-        }
     </script>
 
 </body>

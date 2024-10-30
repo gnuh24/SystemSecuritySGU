@@ -90,6 +90,12 @@
                                                     <tr>
                                                         <th class="Table_th__hCkcg col-small">Mã tài khoản</th>
                                                         <th class="Table_th__hCkcg col-large">Tên tài khoản</th>
+                                                        <th class="Table_th__hCkcg col-large">Tên nhân viên</th>
+
+                                                        <th class="Table_th__hCkcg col-large">Email</th>
+
+                                                        <th class="Table_th__hCkcg col-large">Số điện thoại</th>
+
                                                         <th class="Table_th__hCkcg col-normal">Role</th>
                                                         <th class="Table_th__hCkcg col-normal">Status</th>
                                                     </tr>
@@ -140,6 +146,9 @@
                                     <tr>
                                         <td>${account.id}</td>
                                         <td>${account.username}</td>
+                                        <td>${account.profileFullname}</td>
+                                        <td>${account.profileEmail}</td>
+                                        <td>${account.profilePhone}</td>
                                         <td>${account.role}</td>
                                         <td class="status" data-id="${account.id}" style="cursor: pointer;">${account.status === true ? 'Active' : 'Inactive'}</td>
                                     </tr>

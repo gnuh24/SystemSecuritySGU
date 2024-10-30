@@ -1,17 +1,18 @@
 <?php
 // Hàm gọi API và trả về dữ liệu JSON
-function getApiData($url, $token, $startDate, $endDate) {
+function getApiData($url, $token, $startDate, $endDate)
+{
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, "$url?startDate=$startDate&endDate=$endDate");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    
+
     // Thêm token vào tiêu đề
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . $token,
+        'Authorization: Bearer ' . 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMDAxIiwiaWF0IjoxNzMwMTQ2MjkwLCJleHAiOjE3MzI3MzgyOTB9.LnNNSXBVWZfgCYDAtNKTGQ30zS8M_-7KZbMRr83-mN0',
     ]);
 
     $output = curl_exec($ch);
-    
+
     // Kiểm tra lỗi cURL
     if (curl_errno($ch)) {
         die('CURL error: ' . curl_error($ch));
@@ -22,18 +23,19 @@ function getApiData($url, $token, $startDate, $endDate) {
 }
 
 // Hàm gọi API chi tiết ca làm việc
-function getShiftDetail($profileCode, $token) {
+function getShiftDetail($profileCode, $token)
+{
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, "http://localhost:8080/api/Statistic/ShiftDetail?profileCode=$profileCode");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    
+
     // Thêm token vào tiêu đề
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . $token,
+        'Authorization: Bearer ' . 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMDAxIiwiaWF0IjoxNzMwMTQ2MjkwLCJleHAiOjE3MzI3MzgyOTB9.LnNNSXBVWZfgCYDAtNKTGQ30zS8M_-7KZbMRr83-mN0',
     ]);
 
     $output = curl_exec($ch);
-    
+
     // Kiểm tra lỗi cURL
     if (curl_errno($ch)) {
         die('CURL error: ' . curl_error($ch));
@@ -68,7 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($data['status'] !== 200) {
             die('Có lỗi khi lấy dữ liệu từ API.');
         }
-    } if (isset($_POST['view_detail'])) {
+    }
+    if (isset($_POST['view_detail'])) {
         $profileCode = $_POST['profile_code'];
         $token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMDAxIiwiaWF0IjoxNzI3MDk3MTUwLCJleHAiOjE3Mjk2ODkxNTB9.7rMknTboogqhKHDgy4urBUzlFpGu7BkSOYrEzt8PAjA'; // Thay thế bằng token thật của bạn
 
@@ -107,6 +110,7 @@ if (!empty($data['data'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -122,6 +126,7 @@ if (!empty($data['data'])) {
             margin: 0;
             padding: 20px;
         }
+
         .header {
             background-color: #007bff;
             color: white;
@@ -131,31 +136,38 @@ if (!empty($data['data'])) {
             margin-bottom: 30px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
+
         h1 {
             margin: 0;
         }
+
         .form-container {
             margin-bottom: 40px;
             text-align: center;
         }
+
         .btn-primary {
             background-color: #0056b3;
             border: none;
             transition: background-color 0.3s, transform 0.3s;
         }
+
         .btn-primary:hover {
             background-color: #004494;
             transform: scale(1.05);
         }
+
         .card {
             border: none;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s;
         }
+
         .card:hover {
             transform: translateY(-5px);
         }
+
         canvas {
             max-width: 100%;
             height: 400px;
@@ -163,6 +175,7 @@ if (!empty($data['data'])) {
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
+
         footer {
             text-align: center;
             margin-top: 50px;
@@ -180,6 +193,7 @@ if (!empty($data['data'])) {
         }
     </style>
 </head>
+
 <body>
     <div class="header">
         <h1><i class="fas fa-chart-line"></i> Thống kê</h1>
@@ -330,8 +344,7 @@ if (!empty($data['data'])) {
                     type: 'bar',
                     data: {
                         labels: employeeNames,
-                        datasets: [
-                            {
+                        datasets: [{
                                 label: 'Phút về sớm',
                                 data: totalMinutesLeavingEarly,
                                 backgroundColor: 'rgba(255, 99, 132, 0.6)',
@@ -372,8 +385,7 @@ if (!empty($data['data'])) {
                     type: 'bar',
                     data: {
                         labels: employeeNames,
-                        datasets: [
-                            {
+                        datasets: [{
                                 label: 'Số ca đăng ký',
                                 data: totalShiftSignUp,
                                 backgroundColor: 'rgba(153, 102, 255, 0.6)',
@@ -442,7 +454,7 @@ if (!empty($data['data'])) {
                 });
             </script>
         <?php endif; ?>
-        
+
         <div class="form-container">
             <form method="POST" class="form-inline justify-content-center mt-4">
                 <div class="form-group mx-2">
@@ -487,8 +499,9 @@ if (!empty($data['data'])) {
     <footer>
         <p>&copy; <?php echo date("Y"); ?> Công ty XYZ</p>
     </footer>
-    
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

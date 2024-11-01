@@ -24,9 +24,6 @@ public class CheckOut {
     @Column(nullable = false)
     private Status status;
 
-//    @Column(nullable = false)
-//    private Boolean isValid = false;
-
     @Column(nullable = false)
     private String image;
 

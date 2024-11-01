@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -96,8 +97,10 @@
 
         /* Hover effect for Select Fingerprint Image button */
         .file-input:hover::before {
-            background-color: #b58ce6; /* Màu nền khi hover */
-            color: #fff; /* Màu chữ khi hover */
+            background-color: #b58ce6;
+            /* Màu nền khi hover */
+            color: #fff;
+            /* Màu chữ khi hover */
         }
 
         /* Hide default file input appearance */
@@ -164,6 +167,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h2>Employee</h2>
@@ -197,4 +201,5 @@
         }
     </script>
 </body>
+
 </html>

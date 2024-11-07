@@ -902,6 +902,17 @@
             $("#editEmployeeModal").hide();
         });
 
+        //detailsShift
+        $("#detailsShift").click(function() {
+            const selectedRow = $("tr.selected-row");
+            if (selectedRow.length === 0) {
+                Swal.fire('Chưa chọn ca làm!', 'Vui lòng chọn một ca làm để xem chi tiết.', 'warning');
+            } else {
+                const shiftCode = selectedRow.find("td").eq(0).text();
+                window.location.href = `./ShiftInDetail.php?shiftId=` + shiftCode;
+            }
+        });
+
     </script>
 
 </body>

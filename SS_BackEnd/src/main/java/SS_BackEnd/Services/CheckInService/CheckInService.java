@@ -116,14 +116,8 @@ public class CheckInService implements ICheckInService{
 
         String path = ImageService.saveImage(ImageService.checkInImage, form.getImage());
         entity.setImage(path);
-        CheckIn newCheckIn = checkInRepository.save(entity);
 
-
-//        if (entity.getStatus().equals(CheckIn.Status.Late)){
-//            emailService.sendWarningEmail(newCheckIn);
-//        }
-
-        return newCheckIn;
+        return checkInRepository.save(entity);
     }
 
     @Override

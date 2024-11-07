@@ -20,7 +20,7 @@
 
         /* Container styling */
         .container {
-            height: 370px;
+            height: 360px;
             background-color: #edf3ff;
             padding: 30px;
             border-radius: 20px;
@@ -78,12 +78,14 @@
 
         .choose-img {
             position: relative;
-            top: 40px;
+            top: 0px;
         }
 
         .file-input::before {
             content: 'Select Fingerprint Image';
-            display: inline-block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 100%;
             height: 100%;
             padding: 10px 0;
@@ -93,15 +95,9 @@
             font-weight: bold;
             text-align: center;
             cursor: pointer;
+            box-sizing: border-box;
         }
 
-        /* Hover effect for Select Fingerprint Image button */
-        .file-input:hover::before {
-            background-color: #b58ce6;
-            /* Màu nền khi hover */
-            color: #fff;
-            /* Màu chữ khi hover */
-        }
 
         /* Hide default file input appearance */
         .file-input::-webkit-file-upload-button {
@@ -110,10 +106,8 @@
 
         /* Styling for dropdown */
         .dropdown {
-            position: absolute;
-            top: 100px;
             width: 44%;
-            height: 28%;
+            height: 24%;
             padding: 10px;
             font-size: 14px;
             color: #6d5a8d;
@@ -124,6 +118,15 @@
             outline: none;
             box-sizing: border-box;
             margin-top: 10px;
+        }
+
+        #dropdown-shifts{
+            position: absolute;
+            top: 68px;
+        }
+        #dropdown-employees{
+            position: absolute;
+            top: 140px;
         }
 
         /* Button styling */
@@ -166,7 +169,9 @@
             height: 200px;
         }
     </style>
-</head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
 
 <body>
     <div class="container">
@@ -176,13 +181,14 @@
             <div class="input-box name">Employee's name</div>
         </div>
         <div class="input-group">
-            <label class="input-box choose-img">
-                <input type="file" class="file-input" accept="image/*" onchange="displayImage(event)">
+            <label class="input-box choose-img" for="file-input">
+                <input type="file" class="file-input" id="file-input" accept="image/*" aria-label="Select Fingerprint Image" onchange="displayImage(event)">
             </label>
-            <!-- Dropdown menu for shift selection -->
-            <select class="dropdown">
+            <select class="dropdown" id="dropdown-shifts" aria-label="Select shift">
                 <option value="">Select shift</option>
-                <!-- load các ca là của nhân viên x -->
+            </select>
+            <select class="dropdown" id="dropdown-employees" aria-label="Select Employee">
+                <option value="">Select Employee</option>
             </select>
             <div class="input-box image">
                 <img id="selectedImage" alt="Selected Image" src="" style="display: none; max-width: 100%; max-height: 100px;">
@@ -193,13 +199,122 @@
             <button class="btn btn-checkout">Check out</button>
         </div>
     </div>
+
     <script>
+        const token = localStorage.getItem('token');
         function displayImage(event) {
             const image = document.getElementById('selectedImage');
             image.src = URL.createObjectURL(event.target.files[0]);
-            image.style.display = 'block'; // Show the image
+            image.style.display = 'block';
         }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadShiftsForToday();
+        });
+
+        function loadShiftsForToday(search = '', status = '', pageNumber = 1) {
+            const today = new Date();
+            const todayDate = today.toISOString().split('T')[0]; // Định dạng YYYY-MM-DD cho ngày hôm nay
+
+            $.ajax({
+                url: 'http://localhost:8080/api/Shift/List',
+                type: 'GET',
+                dataType: "json",
+                data: {
+                    search: search,
+                    status: status,
+                    pageNumber: pageNumber,
+                    pageSize: 10 // hoặc giá trị phù hợp
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + token // Đảm bảo token được định nghĩa
+                },
+                success: function(response) {
+
+                    const dropdown = $("#dropdown-shifts");
+                    dropdown.empty();
+                    dropdown.append('<option value="">Select shift</option>');
+
+                    if (response.status === 200 && response.data && response.data.content) {
+                        const todayShifts = response.data.content.filter(shift => {
+                            if (shift.startTime) {
+                                // Trích xuất ngày từ startTime (định dạng hh:mm:ss dd/MM/yyyy)
+                                const [timePart, datePart] = shift.startTime.split(' ');
+                                const [day, month, year] = datePart.split('/');
+                                const formattedShiftDate = `${year}-${month}-${day}`; // Tạo định dạng YYYY-MM-DD
+
+                                return formattedShiftDate === todayDate;
+                            }
+                            return false;
+                        });
+
+                        if (todayShifts.length > 0) {
+                            todayShifts.forEach(shift => {
+                                dropdown.append(`<option value="${shift.id}">${shift.shiftName}</option>`);
+                            });
+                        } else {
+                            dropdown.append('<option value="">Không có dữ liệu cho hôm nay</option>');
+                        }
+                    } else {
+                        Swal.fire('Lỗi', 'Dữ liệu trả về không đúng định dạng.', 'error');
+                    }
+                },
+                error: function(xhr) {
+                    const errorMsg = xhr.responseJSON?.error ?
+                        Object.values(xhr.responseJSON.error).join(", ") :
+                        'Không thể tải danh sách ca làm.';
+                    Swal.fire('Lỗi', errorMsg, 'error');
+                }
+            });
+        }
+
+        // Hàm để tải danh sách nhân viên trong ca làm đã chọn
+        function loadEmployeesForShift(shiftCode) {
+            $.ajax({
+                url: `http://localhost:8080/api/Shift/Detail?id=${shiftCode}`,
+                type: 'GET',
+                dataType: "json",
+                headers: {
+                    'Authorization': 'Bearer ' + token // Đảm bảo token được định nghĩa
+                },
+                success: function(response) {
+                    if (response.status === 200 && response.data) {
+                        const data = response.data;
+                        const employees = data.signUps.map(signUp => signUp.profile);
+                        console.log(employees);
+                        const dropdown = $("#dropdown-employees");
+                        dropdown.empty();
+                        dropdown.append('<option value="">Select Employee</option>');
+
+                        // Thêm các tùy chọn nhân viên vào dropdown
+                        employees.forEach(employee => {
+                            dropdown.append(`<option value="${employee.code}">${employee.fullname}</option>`);
+                        });
+                    } else {
+                        Swal.fire('Lỗi', 'Không thể tải danh sách nhân viên cho ca làm này.', 'error');
+                    }
+                },
+                error: function() {
+                    Swal.fire('Lỗi', 'Có lỗi xảy ra khi tải danh sách nhân viên.', 'error');
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            // Load danh sách ca làm cho hôm nay
+            loadShiftsForToday();
+
+            // Sự kiện khi chọn một ca làm
+            $("#dropdown-shifts").on("change", function() {
+                const selectedShiftId = $(this).val(); // Lấy ID của ca làm đã chọn
+                if (selectedShiftId) {
+                    loadEmployeesForShift(selectedShiftId); // Tải danh sách nhân viên cho ca làm đã chọn
+                } else {
+                    $("#dropdown-employees").empty().append('<option value="">Select Employee</option>'); // Xóa danh sách nhân viên nếu không chọn ca nào
+                }
+            });
+        });
+
     </script>
 </body>
-
 </html>

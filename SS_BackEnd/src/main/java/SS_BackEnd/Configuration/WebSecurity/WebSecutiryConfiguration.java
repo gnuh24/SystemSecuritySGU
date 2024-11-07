@@ -66,8 +66,8 @@ public class WebSecutiryConfiguration {
                 .requestMatchers(HttpMethod.POST, "/api/Profile/Create").hasAnyAuthority("Manager")
                 .requestMatchers(HttpMethod.PATCH, "/api/Profile/Update").hasAnyAuthority("Manager")
 
-                .requestMatchers(HttpMethod.GET, "/api/Shift/List").hasAnyAuthority("Manager")
-                .requestMatchers(HttpMethod.GET, "/api/Shift/Detail").hasAnyAuthority("Manager")
+                .requestMatchers(HttpMethod.GET, "/api/Shift/List").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/Shift/Detail").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/Shift/Create").hasAnyAuthority("Manager")
                 .requestMatchers(HttpMethod.PATCH, "/api/Shift/Update").hasAnyAuthority("Manager")
 

@@ -8,11 +8,11 @@
     </div>
 
     <div class="flex h-full">
-        <div class="menu-item" onclick="window.location.href='/SystemSecuritySGU/SS_FrontEnd/HomePage.php';">Trang chủ</div>
-        <div id="taikhoan" onclick="window.location.href='/SystemSecuritySGU/SS_FrontEnd/AdminUI/Account.php';" style="display: none;" class="menu-item">Tài khoản</div>
-        <div id="nhansu" onclick="window.location.href='/SystemSecuritySGU/SS_FrontEnd/ManagerUI/Profile/QLProfile.php';" style="display: none;" class="menu-item">Nhân sự</div>
-        <div id="calam" onclick="window.location.href='/SystemSecuritySGU/SS_FrontEnd/ManagerUI/Shift/QLShift.php';" style="display: none;" class="menu-item">Ca làm</div>
-        <div id="baocao" onclick="window.location.href='/SystemSecuritySGU/SS_FrontEnd/ManagerUI/Statistic/statistic.php';" style="display: none;" class="menu-item">Báo cáo</div>
+        <div class="menu-item"  onclick="window.location.href='/SystemSecuritySGU/SS_FrontEnd/HomePage.php';">Trang chủ</div>
+        <div id="taikhoan"      onclick="window.location.href='/SystemSecuritySGU/SS_FrontEnd/AdminUI/Account.php';"                style="display: none;" class="menu-item">Tài khoản</div>
+        <div id="nhansu"        onclick="window.location.href='/SystemSecuritySGU/SS_FrontEnd/ManagerUI/Profile/QLProfile.php';"    style="display: none;" class="menu-item">Nhân sự</div>
+        <div id="calam"         onclick="window.location.href='/SystemSecuritySGU/SS_FrontEnd/ManagerUI/Shift/QLShift.php';"        style="display: none;" class="menu-item">Ca làm</div>
+        <div id="baocao"        onclick="window.location.href='/SystemSecuritySGU/SS_FrontEnd/ManagerUI/Statistic/statistic.php';"  style="display: none;" class="menu-item">Báo cáo</div>
     </div>
 
     <!-- Thêm icon login và logout -->
@@ -42,7 +42,7 @@
 
     /* Khi ở các trang khác (có class header-alt) */
     .header-alt .menu-item:hover {
-        color: linear-gradient(135deg, #67a5e5, #9b59b6);
+        color: #8093d1;
         background: white;
         cursor: pointer; /* Thay đổi con trỏ chuột khi hover */
     }

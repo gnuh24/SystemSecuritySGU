@@ -17,168 +17,163 @@
 <body>
     <?php include_once '../../Header.php'; ?>
     <div class="StaffLayout_wrapper__CegPk">
-        <div class="Manager_wrapper__vOYy">
-            <div style="padding-left: 5%; width: 100%; padding-right: 5%">
-                <div class="wrapper">
-                    <div style="
-                        display: flex;
-                        padding-top: 1rem;
-                        padding-bottom: 1rem;
-                        justify-content: center; 
-                        align-items: center;
-                        text-align: center;
-                    ">
-                        <h2 style="font-size: 7rem; margin: 0; font-family: 'Poppins', sans-serif;">Quản lý nhân viên</h2>
+        <div style="padding-left: 4%; width: 100%; padding-right: 5%">
+            <div class="wrapper">
+                <div style="
+                    display: flex;
+                    padding-top: 1rem;
+                    padding-bottom: 1rem;
+                    justify-content: center; 
+                    align-items: center;
+                    text-align: center;
+                ">
+                    <h2 style="font-size: 4rem; margin: 0; font-family: 'Poppins', sans-serif;">Quản lý nhân sự</h2>
+                </div>
+                <div class="Admin_boxFeature__ECXnm">
+                    <div style="position: relative; width: 50%;">
+                        <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #007bff;"></i>
+                        <input id="searchInput" class="Admin_input__LtEE-" style="width: 100%; font-family: 'Poppins', sans-serif; padding-left: 35px; padding-right: 10px; border-radius: 1rem;" placeholder="Bạn cần tìm kiếm nhân viên nào?">
                     </div>
-                    <div class="Admin_boxFeature__ECXnm">
-                        <div style="position: relative;">
-                            <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #007bff;"></i>
-                            <input id="searchInput" class="Admin_input__LtEE-" style="font-family: 'Poppins', sans-serif; padding-left: 35px; padding-right: 10px; border-radius: 1rem;" placeholder="Bạn cần tìm kiếm nhân viên nào?">
+                    
+                    <select id="selectQuyen" style="height: 3rem; padding: 0.3rem; font-family: 'Poppins', sans-serif; border-radius: 1rem;">
+                        <option value="">Trạng thái: tất cả</option>
+                        <option value="true">Active</option>
+                        <option value="false">InActive</option>
+                    </select>
+
+                    <button id="addNV" style="height: 100%; font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #7FFF00; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer; width">
+                        <i class="fa-solid fa-plus" style="margin-right: 5px; color: white;"></i>
+                        Thêm nhân viên
+                    </button>
+
+                    <button id="editNV" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #B0C4DE; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">
+                        <i class="fa-solid fa-edit" style="margin-right: 8px; color: white;"></i>
+                        Sửa
+                    </button>
+
+                    <button id="detailsNV" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #FFA500; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">
+                        <i class="fa-solid fa-eye" style="margin-right: 8px; color: white;"></i>
+                        Xem chi tiết
+                    </button>
+                </div>
+                
+                <div class="modal1" id="addEmployeeModal">
+                    <div class="modal-content">
+                        <h3>Thêm Nhân Viên</h3>
+
+                        <div class="input-group">
+                            <label for="employeeName"><strong>Tên nhân viên:</strong></label>
+                            <input type="text" id="employeeName" required placeholder="Nhập tên nhân viên">
                         </div>
-                        <select id="selectQuyen" style="height: 3rem; padding: 0.3rem; font-family: 'Poppins', sans-serif; border-radius: 1rem;">
-                            <option value="">Trạng thái: tất cả</option>
-                            <option value="true">Active</option>
-                            <option value="false">InActive</option>
-                        </select>
 
-                        <button id="addNV" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #7FFF00; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer; width">
-                            <i class="fa-solid fa-plus" style="margin-right: 8px; color: white;"></i>
-                            Thêm nhân viên
-                        </button>
-
-                        <button id="editNV" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #B0C4DE; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">
-                            <i class="fa-solid fa-edit" style="margin-right: 8px; color: white;"></i>
-                            Sửa
-                        </button>
-
-                        <!-- <button id="deleteNV" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #ff4d4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">
-                            <i class="fa-solid fa-trash" style="margin-right: 8px; color: white;"></i>
-                            Xóa
-                        </button> -->
-
-                        <button id="detailsNV" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #FFA500; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">
-                            <i class="fa-solid fa-eye" style="margin-right: 8px; color: white;"></i>
-                            Xem chi tiết
-                        </button>
-                    </div>
-                    <div class="modal1" id="addEmployeeModal">
-                        <div class="modal-content">
-                            <h3>Thêm Nhân Viên</h3>
-
-                            <div class="input-group">
-                                <label for="employeeName"><strong>Tên nhân viên:</strong></label>
-                                <input type="text" id="employeeName" required placeholder="Nhập tên nhân viên">
-                            </div>
-
-                            <div class="input-group">
-                                <label for="employeeGender"><strong>Giới tính:</strong></label>
-                                <select id="employeeGender" required>
-                                    <option value="Male">Nam</option>
-                                    <option value="Female">Nữ</option>
-                                </select>
-                            </div>
-
-                            <div class="input-group">
-                                <label for="employeeBirthday"><strong>Ngày sinh:</strong></label>
-                                <input type="date" id="employeeBirthday" required>
-                            </div>
-
-                            <div class="input-group">
-                                <label for="employeePhone"><strong>Số điện thoại:</strong></label>
-                                <input type="text" id="employeePhone" required placeholder="Nhập số điện thoại">
-                            </div>
-
-                            <div class="input-group">   
-                                <label for="employeeEmail"><strong>Email:</strong></label>
-                                <input type="email" id="employeeEmail" required placeholder="Nhập email">
-                            </div>
-
-                            <div class="input-group">
-                                <label for="employeePosition"><strong>Vị trí:</strong></label>
-                                <select id="employeePosition" required>
-                                    <option value="Employee">Nhân viên</option>
-                                    <option value="Manager">Quản lý</option>
-                                </select>
-                            </div>
-
-                            <div class="input-group">
-                                <label for="employeeImages"><strong>Ảnh vân tay:</strong></label>
-                                <input type="file" id="employeeImages" multiple accept="image/*">   
-                            </div>
-
-                            <input type="hidden" id="employeeStatus" value="true">
-                            <input type="hidden" id="createAt">
-                            <input type="hidden" id="updateAt">
-
-                            <button id="saveEmployee" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Lưu</button>
-                            <button id="closeAddModal" style="margin-top: 1rem; background-color: #ff4d4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Đóng</button>
+                        <div class="input-group">
+                            <label for="employeeGender"><strong>Giới tính:</strong></label>
+                            <select id="employeeGender" required>
+                                <option value="Male">Nam</option>
+                                <option value="Female">Nữ</option>
+                            </select>
                         </div>
-                    </div>
 
-
-                    <!-- Modal Sửa Nhân Viên -->
-                    <div class="modal" id="editEmployeeModal" style="display: none;"> <!-- Thêm style display: none; để ẩn modal ban đầu -->
-                        <div class="modal-content">
-                            <h3>Sửa Nhân Viên</h3>
-
-                            <div class="input-group">
-                                <label for="editEmployeeName"><strong>Tên nhân viên:</strong></label>
-                                <input type="text" id="editEmployeeName" required placeholder="Nhập tên nhân viên">
-                            </div>
-
-                            <div class="input-group">
-                                <label for="editEmployeeGender"><strong>Giới tính:</strong></label>
-                                <select id="editEmployeeGender" required>
-                                    <option value="Male">Nam</option>
-                                    <option value="Female">Nữ</option>
-                                </select>
-                            </div>
-
-                            <div class="input-group">
-                                <label for="editEmployeeBirthday"><strong>Ngày sinh:</strong></label>
-                                <input type="date" id="editEmployeeBirthday" required>
-                            </div>
-
-                            <div class="input-group">
-                                <label for="editEmployeePhone"><strong>Số điện thoại:</strong></label>
-                                <input type="text" id="editEmployeePhone" required placeholder="Nhập số điện thoại">
-                            </div>
-
-                            <div class="input-group">
-                                <label for="editEmployeeEmail"><strong>Email:</strong></label>
-                                <input type="email" id="editEmployeeEmail" required placeholder="Nhập email">
-                            </div>
-
-                            <button id="saveEditEmployee" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Lưu thay đổi</button>
-                            <button id="closeEditModal" style="margin-top: 1rem; background-color: #ff4d4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Đóng</button>
+                        <div class="input-group">
+                            <label for="employeeBirthday"><strong>Ngày sinh:</strong></label>
+                            <input type="date" id="employeeBirthday" required>
                         </div>
-                    </div>
-                    <div class="Admin_boxTable__hLXRJ">
-                        <table class="Table_table__BWPy" style="border-radius: 1rem;">
-                            <thead class="Table_head__FTUog">
-                                <tr>
-                                    <th class="Table_th__hCkcg col-small">Mã nhân viên</th>
-                                    <th class="Table_th__hCkcg col-large">Tên nhân viên</th>
-                                    <th class="Table_th__hCkcg col-normal">Email</th>
-                                    <th class="Table_th__hCkcg col-normal">Số điện thoại</th>
-                                    <th class="Table_th__hCkcg col-normal">Trạng thái</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tableBody">
-                            </tbody>
 
-
-                        </table>
-                        <div class="pagination" id="pagination"></div>
-                    </div>
-                    <div class="modal" id="detailsModal">
-                        <div class="modal-content" style="width: 400px; height: auto; border-radius: 10px;">
-                            <h3 style="text-align: center;">Thông tin chi tiết</h3>
-                            <div id="detailsContent" style="text-align: left; padding: 20px;">
-
-                            </div>
-                            <button id="closeModal" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer; display: block; margin-left: auto; margin-right: auto;">Đóng</button>
+                        <div class="input-group">
+                            <label for="employeePhone"><strong>Số điện thoại:</strong></label>
+                            <input type="text" id="employeePhone" required placeholder="Nhập số điện thoại">
                         </div>
+
+                        <div class="input-group">   
+                            <label for="employeeEmail"><strong>Email:</strong></label>
+                            <input type="email" id="employeeEmail" required placeholder="Nhập email">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="employeePosition"><strong>Vị trí:</strong></label>
+                            <select id="employeePosition" required>
+                                <option value="Employee">Nhân viên</option>
+                                <option value="Manager">Quản lý</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="employeeImages"><strong>Ảnh vân tay:</strong></label>
+                            <input type="file" id="employeeImages" multiple accept="image/*">   
+                        </div>
+
+                        <input type="hidden" id="employeeStatus" value="true">
+                        <input type="hidden" id="createAt">
+                        <input type="hidden" id="updateAt">
+
+                        <button id="saveEmployee" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Lưu</button>
+                        <button id="closeAddModal" style="margin-top: 1rem; background-color: #ff4d4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Đóng</button>
+                    </div>
+                </div>
+
+
+                <!-- Modal Sửa Nhân Viên -->
+                <div class="modal" id="editEmployeeModal" style="display: none;"> <!-- Thêm style display: none; để ẩn modal ban đầu -->
+                    <div class="modal-content">
+                        <h3>Sửa Nhân Viên</h3>
+
+                        <div class="input-group">
+                            <label for="editEmployeeName"><strong>Tên nhân viên:</strong></label>
+                            <input type="text" id="editEmployeeName" required placeholder="Nhập tên nhân viên">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="editEmployeeGender"><strong>Giới tính:</strong></label>
+                            <select id="editEmployeeGender" required>
+                                <option value="Male">Nam</option>
+                                <option value="Female">Nữ</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="editEmployeeBirthday"><strong>Ngày sinh:</strong></label>
+                            <input type="date" id="editEmployeeBirthday" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="editEmployeePhone"><strong>Số điện thoại:</strong></label>
+                            <input type="text" id="editEmployeePhone" required placeholder="Nhập số điện thoại">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="editEmployeeEmail"><strong>Email:</strong></label>
+                            <input type="email" id="editEmployeeEmail" required placeholder="Nhập email">
+                        </div>
+
+                        <button id="saveEditEmployee" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Lưu thay đổi</button>
+                        <button id="closeEditModal" style="margin-top: 1rem; background-color: #ff4d4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Đóng</button>
+                    </div>
+                </div>
+                <div class="Admin_boxTable__hLXRJ">
+                    <table class="Table_table__BWPy" style="border-radius: 1rem;">
+                        <thead class="Table_head__FTUog">
+                            <tr>
+                                <th class="Table_th__hCkcg col-small">Mã nhân viên</th>
+                                <th class="Table_th__hCkcg col-large">Tên nhân viên</th>
+                                <th class="Table_th__hCkcg col-normal">Email</th>
+                                <th class="Table_th__hCkcg col-normal">Số điện thoại</th>
+                                <th class="Table_th__hCkcg col-normal">Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                        </tbody>
+
+
+                    </table>
+                    <div class="pagination" id="pagination"></div>
+                </div>
+                <div class="modal" id="detailsModal">
+                    <div class="modal-content" style="width: 400px; height: auto; border-radius: 10px;">
+                        <h3 style="text-align: center;">Thông tin chi tiết</h3>
+                        <div id="detailsContent" style="text-align: left; padding: 20px;">
+
+                        </div>
+                        <button id="closeModal" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer; display: block; margin-left: auto; margin-right: auto;">Đóng</button>
                     </div>
                 </div>
             </div>

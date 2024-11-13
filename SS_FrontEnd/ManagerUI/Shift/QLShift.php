@@ -17,251 +17,245 @@
 </head>
 
 <body>
-    <div id="root">
-        <div>
-            <div class="App">
-                <div class="StaffLayout_wrapper__CegPk">
-                    <div>
-                        <div>
-                            <div class="Manager_wrapper__vOYy">
-                                <div style="padding-left: 5%; width: 100%; padding-right: 5%">
-                                    <div class="wrapper">
-                                        <div style="
-                                            display: flex;
-                                            padding-top: 1rem;
-                                            padding-bottom: 1rem;
-                                            justify-content: center; 
-                                                align-items: center;
-                                                text-align: center;
-                                            ">
-                                            <h2 style="font-size: 7rem; margin: 0; font-family: 'Poppins', sans-serif;">Quản lý ca làm</h2>
-                                        </div>
-                                        <div class="Admin_boxFeature__ECXnm">
-                                            <div style="position: relative;">
-                                                <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #007bff;"></i>
-                                                <input id="searchInput" class="Admin_input__LtEE-" style="font-family: 'Poppins', sans-serif; padding-left: 35px; padding-right: 10px; border-radius: 1rem;" placeholder="Bạn cần tìm kiếm ca làm nào?">
-                                            </div>
-                                            <select id="shiftFilter" style="height: 3rem; padding: 0.3rem; font-family: 'Poppins', sans-serif; border-radius: 1rem;">
-                                                <option value="">Trạng thái: tất cả</option>
-                                                <option value="true">Active</option>
-                                                <option value="false">InActive</option>
-                                            </select>
 
-                                            <button id="addShift" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #7FFF00; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer; width">
-                                                <i class="fa-solid fa-plus" style="margin-right: 8px; color: white;"></i>
-                                                Thêm ca làm
-                                            </button>
+    <?php include_once '../../Header.php'; ?>
 
-                                            <button id="editShift" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #B0C4DE; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">
-                                                <i class="fa-solid fa-edit" style="margin-right: 8px; color: white;"></i>
-                                                Sửa
-                                            </button>
+    <div class="StaffLayout_wrapper__CegPk">
+        <div class="Manager_wrapper__vOYy">
+            <div style="padding-left: 5%; width: 100%; padding-right: 5%">
+                <div class="wrapper">
+                    <div style="
+                        display: flex;
+                        padding-top: 1rem;
+                        padding-bottom: 1rem;
+                        justify-content: center; 
+                            align-items: center;
+                            text-align: center;
+                        ">
+                        <h2 style="font-size: 7rem; margin: 0; font-family: 'Poppins', sans-serif;">Quản lý ca làm</h2>
+                    </div>
+                    <div class="Admin_boxFeature__ECXnm">
+                        <div style="position: relative;">
+                            <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #007bff;"></i>
+                            <input id="searchInput" class="Admin_input__LtEE-" style="font-family: 'Poppins', sans-serif; padding-left: 35px; padding-right: 10px; border-radius: 1rem;" placeholder="Bạn cần tìm kiếm ca làm nào?">
+                        </div>
+                        <select id="shiftFilter" style="height: 3rem; padding: 0.3rem; font-family: 'Poppins', sans-serif; border-radius: 1rem;">
+                            <option value="">Trạng thái: tất cả</option>
+                            <option value="true">Active</option>
+                            <option value="false">InActive</option>
+                        </select>
 
-                                            <button id="detailsShift" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #FFA500; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">
-                                                <i class="fa-solid fa-eye" style="margin-right: 8px; color: white;"></i>
-                                                Xem chi tiết
-                                            </button>
-                                        </div>
-                                        <div class="modal1" id="addShiftModal">
-                                            <div class="modal-content addShiftForm">
-                                                <h3>Thêm Ca Làm</h3>
+                        <button id="addShift" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #7FFF00; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer; width">
+                            <i class="fa-solid fa-plus" style="margin-right: 8px; color: white;"></i>
+                            Thêm ca làm
+                        </button>
 
-                                                <div class="input-group">
-                                                    <label for="shiftName"><strong>Tên ca làm:</strong></label>
-                                                    <input type="text" id="shiftName" required placeholder="Nhập tên ca làm">
-                                                </div>
+                        <button id="editShift" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #B0C4DE; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">
+                            <i class="fa-solid fa-edit" style="margin-right: 8px; color: white;"></i>
+                            Sửa
+                        </button>
 
-                                                <div class="input-group">
-                                                    <label for="startTime"><strong>Thời gian bắt đầu:</strong></label>
-                                                    <input type="datetime-local" id="startTime" required>
-                                                </div>
+                        <button id="detailsShift" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #FFA500; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">
+                            <i class="fa-solid fa-eye" style="margin-right: 8px; color: white;"></i>
+                            Xem chi tiết
+                        </button>
+                    </div>
+                    <div class="modal1" id="addShiftModal">
+                        <div class="modal-content addShiftForm">
+                            <h3>Thêm Ca Làm</h3>
 
-                                                <div class="input-group">
-                                                    <label for="endTime"><strong>Thời gian kết thúc:</strong></label>
-                                                    <input type="datetime-local" id="endTime" required>
-                                                </div>
-
-                                                <div class="input-group">
-                                                    <label for="breakStartTime"><strong>Bắt đầu thời gian nghỉ:</strong></label>
-                                                    <input type="datetime-local" id="breakStartTime" required>
-                                                </div>
-
-                                                <div class="input-group">
-                                                    <label for="breakEndTime"><strong>Kết thúc thời gian nghỉ:</strong></label>
-                                                    <input type="datetime-local" id="breakEndTime" required>
-                                                </div>
-
-                                                <div class="input-group">
-                                                    <label for="isActive"><strong>Trạng thái ca làm:</strong></label>
-                                                    <select id="isActive" required>
-                                                        <option value="active">Active</option>
-                                                        <option value="inActive">inActive</option>
-                                                    </select>
-                                                </div>
-
-                                                <div class="input-group">
-                                                    <label for="isOT"><strong>Tăng ca:</strong></label>
-                                                    <select id="isOT" required>
-                                                        <option value="OT">Có</option>
-                                                        <option value="nonOT">Không</option>
-                                                    </select>
-                                                </div>
-
-                                                <div class="input-group">
-                                                    <label for="employees">
-                                                        <strong>Chọn nhân viên:</strong>
-                                                    </label>
-                                                    <button id="openAddEmployeeModal" class="arrow-button">>>>></button>
-                                                </div>
-
-
-
-                                                <input type="hidden" id="shiftStatus" value="true">
-                                                <input type="hidden" id="createAt">
-                                                <input type="hidden" id="updateAt">
-
-                                                <button id="saveShiftForAdd" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Lưu</button>
-                                                <button id="closeAddModal" style="margin-top: 1rem; background-color: #ff4d4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Đóng</button>
-                                            </div>
-                                        </div>
-
-                                        <div class="modal" id="addEmployeeModal" style="display: none;">
-                                            <div class="modal-content" style="position: relative; left: 940px; top: 220px">
-                                                <h3>Chọn nhân viên</h3>
-                                                <table id="addEmployeeTable" border="1" style="width: 100%; text-align: left;">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>ID</th>
-                                                            <th>Tên nhân viên</th>
-                                                            <th>Chọn</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody class="addEmployeeTableBody">
-                                                        <!-- Các hàng của bảng sẽ được thêm động ở đây -->
-                                                    </tbody>
-                                                </table>
-                                                <button id="saveSelectedEmployeesForAdd" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Chọn</button>
-                                                <button id="closeAddEmployeeModal" style="margin-top: 1rem; background-color: #ff4d4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Đóng</button>
-                                            </div>
-                                        </div>
-
-                                        <!-- Modal Sửa ca làm -->
-                                        <div class="modal" id="editShiftModal" style="display: none;"> <!-- Thêm style display: none; để ẩn modal ban đầu -->
-                                            <div class="modal-content editShiftForm">
-                                                <h3>Sửa ca làm</h3>
-
-                                                <div class="input-group">
-                                                    <label for="editShiftName"><strong>Tên ca làm:</strong></label>
-                                                    <input type="text" id="editShiftName" required placeholder="Nhập tên ca làm">
-                                                </div>
-
-                                                <div class="input-group">
-                                                    <label for="editStartTime"><strong>Thời gian bắt đầu:</strong></label>
-                                                    <input type="datetime-local" id="editStartTime" required>
-                                                </div>
-
-                                                <div class="input-group">
-                                                    <label for="editEndTime"><strong>Thời gian kết thúc:</strong></label>
-                                                    <input type="datetime-local" id="editEndTime" required>
-                                                </div>
-
-                                                <div class="input-group">
-                                                    <label for="editBreakStartTime"><strong>Bắt đầu thời gian nghỉ:</strong></label>
-                                                    <input type="datetime-local" id="editBreakStartTime" required>
-                                                </div>
-
-                                                <div class="input-group">
-                                                    <label for="editBreakEndTime"><strong>Kết thúc thời gian nghỉ:</strong></label>
-                                                    <input type="datetime-local" id="editBreakEndTime" required>
-                                                </div>
-
-                                                <div class="input-group">
-                                                    <label for="editIsActive"><strong>Trạng thái ca làm:</strong></label>
-                                                    <select id="editIsActive" required>
-                                                        <option value="active">Active</option>
-                                                        <option value="inActive">inActive</option>
-                                                    </select>
-                                                </div>
-
-                                                <div class="input-group">
-                                                    <label for="editIsOT"><strong>Tăng ca:</strong></label>
-                                                    <select id="editIsOT" required>
-                                                        <option value="OT">Có</option>
-                                                        <option value="nonOT">Không</option>
-                                                    </select>
-                                                </div>
-
-                                                <div class="input-group">
-                                                    <label for="employees">
-                                                        <strong>Chọn nhân viên:</strong>
-                                                    </label>
-                                                    <button id="openEditEmployeeModal" class="arrow-button">>>>></button>
-                                                </div>
-
-                                                <button id="saveEditShift" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Lưu thay đổi</button>
-                                                <button id="closeEditModal" style="margin-top: 1rem; background-color: #ff4d4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Đóng</button>
-                                            </div>
-                                        </div>
-
-                                        <div class="modal" id="editEmployeeModal" style="display: none;">
-                                            <div class="modal-content" style="position: relative; left: 940px; top: 220px">
-                                                <h3>Chọn nhân viên</h3>
-                                                <table id="editEmployeeTable" border="1" style="width: 100%; text-align: left;">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>ID</th>
-                                                            <th>Tên nhân viên</th>
-                                                            <th>Chọn</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody class="editEmployeeTableBody">
-                                                        <!-- Employee rows will be added here dynamically -->
-                                                    </tbody>
-                                                </table>
-                                                <button id="saveSelectedEmployeesForEdit" style="margin-top: 1rem; background-color: #007bff; color: white; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Lưu</button>
-                                                <button id="closeEditEmployeeModal" style="margin-top: 1rem; background-color: #ff4d4d; color: white; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Đóng</button>
-                                            </div>
-                                        </div>
-
-                                        <div class="Admin_boxTable__hLXRJ">
-                                            <table class="Table_table__BWPy" style="border-radius: 1rem;">
-                                                <thead class="Table_head__FTUog">
-                                                    <tr>
-                                                        <th class="Table_th__hCkcg col-small">Mã ca làm</th>
-                                                        <th class="Table_th__hCkcg col-large">Tên ca làm</th>
-                                                        <th class="Table_th__hCkcg col-normal">Thời gian bắt đầu</th>
-                                                        <th class="Table_th__hCkcg col-normal">Thời gian kết thúc</th>
-                                                        <th class="Table_th__hCkcg col-normal">Bắt đầu thời gian nghỉ</th>
-                                                        <th class="Table_th__hCkcg col-normal">Kết thúc thời gian nghỉ</th>
-                                                        <th class="Table_th__hCkcg col-normal">Tăng ca</th>
-                                                        <th class="Table_th__hCkcg col-normal">Trạng thái</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="tableBody">
-                                                </tbody>
-
-
-                                            </table>
-                                            <div class="pagination" id="pagination"></div>
-                                        </div>
-                                        <div class="modal" id="detailsModal">
-                                            <div class="modal-content" style="width: 400px; height: auto; border-radius: 10px;">
-                                                <h3 style="text-align: center;">Thông tin chi tiết</h3>
-                                                <div id="detailsContent" style="text-align: left; padding: 20px;">
-
-                                                </div>
-                                                <button id="closeModal" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer; display: block; margin-left: auto; margin-right: auto;">Đóng</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="input-group">
+                                <label for="shiftName"><strong>Tên ca làm:</strong></label>
+                                <input type="text" id="shiftName" required placeholder="Nhập tên ca làm">
                             </div>
+
+                            <div class="input-group">
+                                <label for="startTime"><strong>Thời gian bắt đầu:</strong></label>
+                                <input type="datetime-local" id="startTime" required>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="endTime"><strong>Thời gian kết thúc:</strong></label>
+                                <input type="datetime-local" id="endTime" required>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="breakStartTime"><strong>Bắt đầu thời gian nghỉ:</strong></label>
+                                <input type="datetime-local" id="breakStartTime" required>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="breakEndTime"><strong>Kết thúc thời gian nghỉ:</strong></label>
+                                <input type="datetime-local" id="breakEndTime" required>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="isActive"><strong>Trạng thái ca làm:</strong></label>
+                                <select id="isActive" required>
+                                    <option value="active">Active</option>
+                                    <option value="inActive">inActive</option>
+                                </select>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="isOT"><strong>Tăng ca:</strong></label>
+                                <select id="isOT" required>
+                                    <option value="OT">Có</option>
+                                    <option value="nonOT">Không</option>
+                                </select>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="employees">
+                                    <strong>Chọn nhân viên:</strong>
+                                </label>
+                                <button id="openAddEmployeeModal" class="arrow-button">>>>></button>
+                            </div>
+
+
+
+                            <input type="hidden" id="shiftStatus" value="true">
+                            <input type="hidden" id="createAt">
+                            <input type="hidden" id="updateAt">
+
+                            <button id="saveShiftForAdd" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Lưu</button>
+                            <button id="closeAddModal" style="margin-top: 1rem; background-color: #ff4d4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Đóng</button>
+                        </div>
+                    </div>
+
+                    <div class="modal" id="addEmployeeModal" style="display: none;">
+                        <div class="modal-content" style="position: relative; left: 940px; top: 220px">
+                            <h3>Chọn nhân viên</h3>
+                            <table id="addEmployeeTable" border="1" style="width: 100%; text-align: left;">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tên nhân viên</th>
+                                        <th>Chọn</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="addEmployeeTableBody">
+                                    <!-- Các hàng của bảng sẽ được thêm động ở đây -->
+                                </tbody>
+                            </table>
+                            <button id="saveSelectedEmployeesForAdd" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Chọn</button>
+                            <button id="closeAddEmployeeModal" style="margin-top: 1rem; background-color: #ff4d4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Đóng</button>
+                        </div>
+                    </div>
+
+                    <!-- Modal Sửa ca làm -->
+                    <div class="modal" id="editShiftModal" style="display: none;"> <!-- Thêm style display: none; để ẩn modal ban đầu -->
+                        <div class="modal-content editShiftForm">
+                            <h3>Sửa ca làm</h3>
+
+                            <div class="input-group">
+                                <label for="editShiftName"><strong>Tên ca làm:</strong></label>
+                                <input type="text" id="editShiftName" required placeholder="Nhập tên ca làm">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="editStartTime"><strong>Thời gian bắt đầu:</strong></label>
+                                <input type="datetime-local" id="editStartTime" required>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="editEndTime"><strong>Thời gian kết thúc:</strong></label>
+                                <input type="datetime-local" id="editEndTime" required>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="editBreakStartTime"><strong>Bắt đầu thời gian nghỉ:</strong></label>
+                                <input type="datetime-local" id="editBreakStartTime" required>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="editBreakEndTime"><strong>Kết thúc thời gian nghỉ:</strong></label>
+                                <input type="datetime-local" id="editBreakEndTime" required>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="editIsActive"><strong>Trạng thái ca làm:</strong></label>
+                                <select id="editIsActive" required>
+                                    <option value="active">Active</option>
+                                    <option value="inActive">inActive</option>
+                                </select>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="editIsOT"><strong>Tăng ca:</strong></label>
+                                <select id="editIsOT" required>
+                                    <option value="OT">Có</option>
+                                    <option value="nonOT">Không</option>
+                                </select>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="employees">
+                                    <strong>Chọn nhân viên:</strong>
+                                </label>
+                                <button id="openEditEmployeeModal" class="arrow-button">>>>></button>
+                            </div>
+
+                            <button id="saveEditShift" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Lưu thay đổi</button>
+                            <button id="closeEditModal" style="margin-top: 1rem; background-color: #ff4d4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Đóng</button>
+                        </div>
+                    </div>
+
+                    <div class="modal" id="editEmployeeModal" style="display: none;">
+                        <div class="modal-content" style="position: relative; left: 940px; top: 220px">
+                            <h3>Chọn nhân viên</h3>
+                            <table id="editEmployeeTable" border="1" style="width: 100%; text-align: left;">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tên nhân viên</th>
+                                        <th>Chọn</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="editEmployeeTableBody">
+                                    <!-- Employee rows will be added here dynamically -->
+                                </tbody>
+                            </table>
+                            <button id="saveSelectedEmployeesForEdit" style="margin-top: 1rem; background-color: #007bff; color: white; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Lưu</button>
+                            <button id="closeEditEmployeeModal" style="margin-top: 1rem; background-color: #ff4d4d; color: white; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Đóng</button>
+                        </div>
+                    </div>
+
+                    <div class="Admin_boxTable__hLXRJ">
+                        <table class="Table_table__BWPy" style="border-radius: 1rem;">
+                            <thead class="Table_head__FTUog">
+                                <tr>
+                                    <th class="Table_th__hCkcg col-small">Mã ca làm</th>
+                                    <th class="Table_th__hCkcg col-large">Tên ca làm</th>
+                                    <th class="Table_th__hCkcg col-normal">Thời gian bắt đầu</th>
+                                    <th class="Table_th__hCkcg col-normal">Thời gian kết thúc</th>
+                                    <th class="Table_th__hCkcg col-normal">Bắt đầu thời gian nghỉ</th>
+                                    <th class="Table_th__hCkcg col-normal">Kết thúc thời gian nghỉ</th>
+                                    <th class="Table_th__hCkcg col-normal">Tăng ca</th>
+                                    <th class="Table_th__hCkcg col-normal">Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                            </tbody>
+
+
+                        </table>
+                        <div class="pagination" id="pagination"></div>
+                    </div>
+                    <div class="modal" id="detailsModal">
+                        <div class="modal-content" style="width: 400px; height: auto; border-radius: 10px;">
+                            <h3 style="text-align: center;">Thông tin chi tiết</h3>
+                            <div id="detailsContent" style="text-align: left; padding: 20px;">
+
+                            </div>
+                            <button id="closeModal" style="margin-top: 1rem; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer; display: block; margin-left: auto; margin-right: auto;">Đóng</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    
 
     <script>
         var currentPage = 1;

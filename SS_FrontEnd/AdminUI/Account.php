@@ -45,75 +45,68 @@
 </head>
 
 <body>
-    <div id="root">
-        <div>
-            <div class="App">
-                <div class="StaffLayout_wrapper__CegPk">
-                    <div>
-                        <div>
-                            <div class="Manager_wrapper__vOYy">
-                                <div style="padding-left: 5%; width: 100%; padding-right: 5%">
-                                    <div class="wrapper">
-                                        <div style="
-                          display: flex;
-                          padding-top: 1rem;
-                          padding-bottom: 1rem;
-                          justify-content: center; 
-                            align-items: center;
-                            text-align: center;
-                        ">
-                                            <h2 style="font-size: 7rem; margin: 0; font-family: 'Poppins', sans-serif;">Quản lý tài khoản</h2>
-                                        </div>
-                                        <div class="Admin_boxFeature__ECXnm">
-                                            <div style="position: relative;">
-                                                <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #007bff;"></i>
-                                                <input id="searchInput" class="Admin_input__LtEE-" style="font-family: 'Poppins', sans-serif; padding-left: 35px; padding-right: 10px; border-radius: 1rem;" placeholder="Bạn cần tìm kiếm nhân viên nào?">
-                                            </div>
-                                            <select id="selectStatus" style="height: 3rem; padding: 0.3rem; font-family: 'Poppins', sans-serif; border-radius: 1rem;">
-                                                <option value="">Trạng thái: tất cả</option>
-                                                <option value="true">Active</option>
-                                                <option value="false">Inactive</option>
-                                            </select>
-                                            <button id="searchButton" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">
-                                                Tìm kiếm
-                                                <i class="fa-solid fa-magnifying-glass" style="margin-left: 8px; color: white;"></i>
-                                            </button>
-                                            <button id="editNV" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #B0C4DE; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">
-                                                <i class="fa-solid fa-edit" style="margin-right: 8px; color: white;"></i>
-                                                Đổi trạng thái
-                                            </button>
-                                        </div>
-                                        <div class="Admin_boxTable__hLXRJ">
-                                            <table class="Table_table__BWPy" style="border-radius: 1rem;">
-                                                <thead class="Table_head__FTUog">
-                                                    <tr>
-                                                        <th class="Table_th__hCkcg col-small">Mã tài khoản</th>
-                                                        <th class="Table_th__hCkcg col-large">Tên tài khoản</th>
-                                                        <th class="Table_th__hCkcg col-large">Tên nhân viên</th>
+    <?php include_once '../Header.php'; ?>
 
-                                                        <th class="Table_th__hCkcg col-large">Email</th>
-
-                                                        <th class="Table_th__hCkcg col-large">Số điện thoại</th>
-
-                                                        <th class="Table_th__hCkcg col-normal">Role</th>
-                                                        <th class="Table_th__hCkcg col-normal">Status</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="tableBody">
-                                                    <!-- Dữ liệu sẽ được thêm vào đây -->
-                                                </tbody>
-                                            </table>
-                                            <div class="pagination" id="pagination"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+    <div class="StaffLayout_wrapper__CegPk">
+        <div class="Manager_wrapper__vOYy">
+            <div style="padding-left: 5%; width: 100%; padding-right: 5%">
+                <div class="wrapper">
+                    <div style="
+                        display: flex;
+                        padding-top: 1rem;
+                        padding-bottom: 1rem;
+                        justify-content: center; 
+                        align-items: center;
+                        text-align: center;
+                    ">
+                        <h2 style="font-size: 7rem; margin: 0; font-family: 'Poppins', sans-serif;">Quản lý tài khoản</h2>
+                    </div>
+                    <div class="Admin_boxFeature__ECXnm">
+                        <div style="position: relative;">
+                            <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #007bff;"></i>
+                            <input id="searchInput" class="Admin_input__LtEE-" style="font-family: 'Poppins', sans-serif; padding-left: 35px; padding-right: 10px; border-radius: 1rem;" placeholder="Bạn cần tìm kiếm nhân viên nào?">
                         </div>
+                        <select id="selectStatus" style="height: 3rem; padding: 0.3rem; font-family: 'Poppins', sans-serif; border-radius: 1rem;">
+                            <option value="">Trạng thái: tất cả</option>
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                        <button id="searchButton" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">
+                            Tìm kiếm
+                            <i class="fa-solid fa-magnifying-glass" style="margin-left: 8px; color: white;"></i>
+                        </button>
+                        <button id="editNV" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #B0C4DE; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">
+                            <i class="fa-solid fa-edit" style="margin-right: 8px; color: white;"></i>
+                            Đổi trạng thái
+                        </button>
+                    </div>
+                    <div class="Admin_boxTable__hLXRJ">
+                        <table class="Table_table__BWPy" style="border-radius: 1rem;">
+                            <thead class="Table_head__FTUog">
+                                <tr>
+                                    <th class="Table_th__hCkcg col-small">Mã tài khoản</th>
+                                    <th class="Table_th__hCkcg col-large">Tên tài khoản</th>
+                                    <th class="Table_th__hCkcg col-large">Tên nhân viên</th>
+
+                                    <th class="Table_th__hCkcg col-large">Email</th>
+
+                                    <th class="Table_th__hCkcg col-large">Số điện thoại</th>
+
+                                    <th class="Table_th__hCkcg col-normal">Role</th>
+                                    <th class="Table_th__hCkcg col-normal">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <!-- Dữ liệu sẽ được thêm vào đây -->
+                            </tbody>
+                        </table>
+                        <div class="pagination" id="pagination"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+       
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -121,6 +114,11 @@
         const pageSize = 5;
         let currentPage = 1;
         let totalPages = 1;
+
+        // Khởi tạo danh sách tài khoản khi trang được tải
+        $(document).ready(function() {
+            getAllTaiKhoan("", "", currentPage);
+        });
 
         function getAllTaiKhoan(search, status, page) {
             $.ajax({
@@ -134,7 +132,7 @@
                     size: pageSize
                 },
                 headers: {
-                    'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcyODQ4MDQyOCwiZXhwIjoxNzMxMDcyNDI4fQ.7C3KggJVAVY2uTtqduQ-5lG-OSAqujQ8SivUUQDVcrQ'
+                    'Authorization': 'Bearer ' + localStorage.get("token")
                 },
                 success: function(response) {
                     $("#tableBody").empty();
@@ -258,7 +256,7 @@
                     processData: false, // Không xử lý dữ liệu
                     contentType: false, // Không đặt content type (để trình duyệt tự động thiết lập)
                     headers: {
-                        'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcyODQ4MDQyOCwiZXhwIjoxNzMxMDcyNDI4fQ.7C3KggJVAVY2uTtqduQ-5lG-OSAqujQ8SivUUQDVcrQ'
+                        'Authorization': 'Bearer ' + localStorage.get("token")
                     }
                 });
 
@@ -301,10 +299,7 @@
         });
 
 
-        // Khởi tạo danh sách tài khoản khi trang được tải
-        $(document).ready(function() {
-            getAllTaiKhoan("", "", currentPage);
-        });
+        
     </script>
 </body>
 

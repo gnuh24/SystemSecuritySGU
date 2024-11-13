@@ -32,6 +32,7 @@
     <div id="notification"></div> <!-- Notification Area -->
 
     <div class="shift-card">
+
         <hr class="horizontal-line">
         <h2 id="shiftName">Shift Name</h2>
         <hr class="horizontal-line">

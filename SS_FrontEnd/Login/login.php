@@ -34,7 +34,7 @@ ob_start();
                 <p id="error-message" style="color: red;"></p> <!-- Error message display -->
             </div>
             <div class="logo-box">
-                <img src="./logo-removebg.png" alt="Fingerprint Logo">
+                <img src="../logo-removebg.png" alt="Fingerprint Logo">
             </div>
         </div>
     </div>
@@ -78,13 +78,7 @@ ob_start();
                             text: `Welcome ${role}`,
                             confirmButtonText: 'Continue'
                         }).then(() => {
-                            if (role === 'Admin') {
-                                window.location.href = '../AdminUI/Account.php'; // Redirect to Admin Dashboard
-                            } else if (role === 'Manager') {
-                                window.location.href = '../ManagerUI/ManagerHomePageUI/ManagerHomePageUI.php'; // Redirect to Manager Dashboard
-                            } else {
-                                window.location.href = '/default-redirect-page'; // Fallback for other roles
-                            }
+                            window.location.href = '/SystemSecuritySGU/SS_FrontEnd/HomePage.php'; // Redirect to Admin Dashboard
                         });
                     },
 

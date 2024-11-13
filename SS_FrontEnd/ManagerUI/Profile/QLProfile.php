@@ -14,9 +14,8 @@
     <title>Quản lý nhân viên</title>
 
 </head>
-
 <body>
-
+    <?php include_once '../../Header.php'; ?>
     <div class="StaffLayout_wrapper__CegPk">
         <div class="Manager_wrapper__vOYy">
             <div style="padding-left: 5%; width: 100%; padding-right: 5%">
@@ -154,11 +153,6 @@
                             <button id="closeEditModal" style="margin-top: 1rem; background-color: #ff4d4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">Đóng</button>
                         </div>
                     </div>
-
-
-
-
-
                     <div class="Admin_boxTable__hLXRJ">
                         <table class="Table_table__BWPy" style="border-radius: 1rem;">
                             <thead class="Table_head__FTUog">
@@ -190,7 +184,7 @@
             </div>
         </div>
     </div>
-    
+
 
     <script>
         var currentPage = 1;

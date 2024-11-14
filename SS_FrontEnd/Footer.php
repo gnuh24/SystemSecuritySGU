@@ -47,6 +47,9 @@
 
 <!-- CSS cho icon hover animation -->
 <style>
+    body{
+        font-family: 'Poppins', sans-serif;
+    }
     #fb,
     #tw,
     #git,

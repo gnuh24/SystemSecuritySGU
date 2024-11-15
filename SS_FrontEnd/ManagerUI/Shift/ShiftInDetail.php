@@ -29,7 +29,7 @@
     </style>
 </head>
 <body>
-    <div id="notification"></div> <!-- Notification Area -->
+    <?php include_once '/xampp/htdocs/SystemSecuritySGU/SS_FrontEnd/Header.php'; ?>
 
     <div class="shift-card">
 

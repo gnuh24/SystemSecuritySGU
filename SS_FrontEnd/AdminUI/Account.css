@@ -22,13 +22,13 @@
   }
   .Table_data_quyen_1 {
     text-align: center;
-    font-family: "Poppins", sans-serif;
+    font-family: Arial, sans-serif;
     background-color: rgb(255, 255, 255);
     padding: 14px 0px;
   }
   .Table_data_quyen_2 {
     text-align: center;
-    font-family: "Poppins", sans-serif;
+    font-family: Arial, sans-serif;
     background-color: rgb(225, 227, 229);
     padding: 14px 0;
   }
@@ -81,7 +81,7 @@
 
   #createAccountButton{
     margin-left: auto; 
-    font-family: "Poppins", sans-serif; 
+    font-family: Arial, sans-serif; 
     font-size: 1.5rem; 
     font-weight: 700; 
     color: white; 
@@ -96,7 +96,7 @@
     color: white;
   }
   .StaffHeader_title__QxjW4 {
-    font-family: "Poppins", sans-serif;
+        fontamily: Arial, sans-serif;
     font-size: 3rem;
     font-weight: 700;
     color: #ffffff;
@@ -129,7 +129,7 @@
     width: 100%;
   }
   .Admin_title__1Tk48 {
-    font-family: "Poppins", sans-serif;
+    font-family: Arial, sans-serif;
     font-weight: bolder;
     font-size: 2.5rem;
     margin: 1rem;
@@ -166,7 +166,7 @@
     background-color: rgb(56, 55, 55);
   }
   .Table_th__hCkcg {
-    font-family: "Poppins", sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 14px;
     font-weight: 800;
     padding: 1rem;
@@ -198,7 +198,7 @@
     }
     #searchButton {
       font-weight: 700;
-      font-family: "Poppins", sans-serif;;
+      font-family: Arial, sans-serif;
       color: white;
       background-color: black;
       border-radius: 10px; 
@@ -277,7 +277,7 @@
   }
   
   body {
-    font-family: "Poppins", sans-serif; 
+    font-family: Arial, sans-serif;
     font-size: 1.6rem;
     line-height: 1.5;
     text-rendering: optimizespeed;
@@ -314,7 +314,7 @@
     position: relative;
   }
   .StaffHeader_title__QxjW4 {
-    font-family: "Poppins", sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 3rem;
     font-weight: 700;
     color: #ffffff;
@@ -402,7 +402,7 @@
     color: white;
   }
   .Table_th__RG2t4 {
-    font-family: "Poppins", sans-serif;
+     font-family: Arial, sans-serif;
     font-size: 14px;
     font-weight: 800;
 padding: 1rem;

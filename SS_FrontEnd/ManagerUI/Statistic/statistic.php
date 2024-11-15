@@ -119,9 +119,11 @@ if (!empty($data['data'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" type="image/png" href="/SystemSecuritySGU/SS_FrontEnd/logo-removebg.png">
+
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: Arial, sans-serif;
             background: aliceblue;
             margin: 0;
             padding: 20px;
@@ -195,7 +197,7 @@ if (!empty($data['data'])) {
 </head>
 
 <body>
-    <?php include_once '../../Header.php'; ?>
+    <?php include_once '/xampp/htdocs/SystemSecuritySGU/SS_FrontEnd/Header.php'; ?>
 
 
     <div class="container">

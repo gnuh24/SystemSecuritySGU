@@ -26,6 +26,7 @@
                     justify-content: center; 
                     align-items: center;
                     text-align: center;
+                    margin-top: 30px;
                 ">
                     <h2 style="font-size: 4rem; margin: 0; font-family: 'Poppins', sans-serif;">Quản lý nhân sự</h2>
                 </div>
@@ -168,7 +169,7 @@
                     <div class="pagination" id="pagination"></div>
                 </div>
                 <div class="modal" id="detailsModal">
-                    <div class="modal-content" style="width: 400px; height: auto; border-radius: 10px;">
+                    <div class="modal-content">
                         <h3 style="text-align: center;">Thông tin chi tiết</h3>
                         <div id="detailsContent" style="text-align: left; padding: 20px;">
 
@@ -508,65 +509,172 @@ $("#closeEditModal").on('click', function() {
 });
 
 function getEmployeeDetails(employeeCode) {
-            $.ajax({
-                url: `http://localhost:8080/api/Profile/Detail?code=${employeeCode}`,
-                type: 'GET',
-                dataType: "json",
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                },
-                success: function(response) {
-                    if (response.status === 200 && response.data) {
-                        const details = `
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-id-badge" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Mã nhân viên: </strong> ${response.data.code}
+    $.ajax({
+        url: `http://localhost:8080/api/Profile/Detail?code=${employeeCode}`,
+        type: 'GET',
+        dataType: "json",
+        headers: {
+            'Authorization': 'Bearer ' + token
+        },
+        success: function(response) {
+            if (response.status === 200 && response.data) {
+                const details = `
+                    <style>
+                    #detailsModal {
+
+                        display: none;
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background-color: rgba(0, 0, 0, 0.7); /* Mờ đen nền */
+                        justify-content: center;
+                        align-items: center;
+                        transition: opacity 0.4s ease;
+                    }
+
+                    /* Modal Content */
+                    .details-content {
+                        background-color: #ffffff;
+                        width: 80%; 
+                        max-width: 900px; 
+                        padding: 15px; 
+                        border-radius: 12px;
+                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                        max-height: 80vh; 
+                        overflow-y: auto; 
+                        transform: scale(0.9); 
+                        opacity: 0;
+                        animation: modalPopUp 0.5s ease-out forwards;
+                    }
+
+                    /* Animation cho Modal */
+                    @keyframes modalPopUp {
+                        0% {
+                            transform: scale(0.9);
+                            opacity: 0;
+                        }
+                        50% {
+                            transform: scale(1.05);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                    }
+
+                    /* Details Info Box */
+                    .details-info {
+                        display: flex;
+                        align-items: center;
+                        margin-bottom: 12px; 
+                        padding: 10px 15px; 
+                        border-radius: 10px;
+                        background-color: #f4f8fd;
+                        transition: background-color 0.3s, transform 0.3s ease;
+                        font-family: 'Poppins', sans-serif;
+                    }
+
+                    /* Hover Effect for Details */
+                    .details-info:hover {
+                        background-color: #e0eaff;
+                        transform: translateX(10px); 
+                    }
+
+                    /* Icon Style */
+                    .details-info i {
+                        margin-right: 12px;
+                        font-size: 26px; /* Giảm kích thước icon */
+                        color: #007bff; /* Màu xanh dương */
+                        transition: transform 0.3s ease;
+                    }
+
+                    /* Hover effect for icon */
+                    .details-info i:hover {
+                        transform: scale(1.3); /* Làm to icon khi hover */
+                    }
+
+                    /* Text Style */
+                    .details-info strong {
+                        font-size: 17px; /* Giảm kích thước chữ */
+                        color: #333;
+                        font-weight: 600;
+                    }
+
+                    .details-info span {
+                        font-size: 15px; /* Giảm kích thước chữ */
+                        color: #555;
+                    }
+
+                    /* Responsive Adjustments */
+                    @media (max-width: 768px) {
+                        .details-content {
+                            width: 90%; /* Giảm chiều rộng cho các thiết bị nhỏ */
+                        }
+
+                        .details-info {
+                            flex-direction: column;
+                            align-items: flex-start;
+                        }
+
+                        .details-info i {
+                            margin-right: 0;
+                            margin-bottom: 8px;
+                        }
+                    }
+
+                    </style>
+                    <div class="details-info">
+                        <i class="fa-solid fa-id-badge"></i>
+                        <strong>Mã nhân viên: </strong> <span>${response.data.code}</span>
                     </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-user" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Tên nhân viên: </strong> ${response.data.fullname}
+                    <div class="details-info">
+                        <i class="fa-solid fa-user"></i>
+                        <strong>Tên nhân viên: </strong> <span>${response.data.fullname}</span>
                     </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-venus-mars" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Giới tính: </strong> ${response.data.gender}
+                    <div class="details-info">
+                        <i class="fa-solid fa-venus-mars"></i>
+                        <strong>Giới tính: </strong> <span>${response.data.gender}</span>
                     </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-calendar-alt" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Ngày sinh: </strong> ${response.data.birthday}
+                    <div class="details-info">
+                        <i class="fa-solid fa-calendar-alt"></i>
+                        <strong>Ngày sinh: </strong> <span>${response.data.birthday}</span>
                     </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-phone" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Số điện thoại: </strong> ${response.data.phone}
+                    <div class="details-info">
+                        <i class="fa-solid fa-phone"></i>
+                        <strong>Số điện thoại: </strong> <span>${response.data.phone}</span>
                     </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-envelope" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Email: </strong> ${response.data.email}
+                    <div class="details-info">
+                        <i class="fa-solid fa-envelope"></i>
+                        <strong>Email: </strong> <span>${response.data.email}</span>
                     </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-check-circle" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Trạng thái: </strong> ${response.data.status ? 'Active' : 'Inactive'}
+                    <div class="details-info">
+                        <i class="fa-solid fa-check-circle"></i>
+                        <strong>Trạng thái: </strong> <span>${response.data.status ? 'Active' : 'Inactive'}</span>
                     </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-clock" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Ngày tạo: </strong> ${response.data.createAt}
+                    <div class="details-info">
+                        <i class="fa-solid fa-clock"></i>
+                        <strong>Ngày tạo: </strong> <span>${response.data.createAt}</span>
                     </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-clock" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Ngày cập nhật: </strong> ${response.data.updateAt}
+                    <div class="details-info">
+                        <i class="fa-solid fa-clock"></i>
+                        <strong>Ngày cập nhật: </strong> <span>${response.data.updateAt}</span>
                     </div>
                 `;
-                        $("#detailsContent").html(details);
-                        $("#detailsModal").css("display", "flex");
-                    } else {
-                        Swal.fire('Lỗi', 'Không tìm thấy thông tin chi tiết.', 'error');
-                    }
-                },
-                error: function() {
-                    console.error("Lỗi khi gọi API chi tiết nhân viên");
-                    Swal.fire('Lỗi', 'Không thể lấy thông tin chi tiết.', 'error');
-                }
-            });
+                $("#detailsContent").html(details);
+                $("#detailsModal").css("display", "flex");
+            } else {
+                Swal.fire('Lỗi', 'Không tìm thấy thông tin chi tiết.', 'error');
+            }
+        },
+        error: function() {
+            console.error("Lỗi khi gọi API chi tiết nhân viên");
+            Swal.fire('Lỗi', 'Không thể lấy thông tin chi tiết.', 'error');
         }
+    });
+}
 
     </script>
         

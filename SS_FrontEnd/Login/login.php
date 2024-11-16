@@ -29,7 +29,9 @@ ob_start();
                 <form id="loginForm">
                     <input type="text" name="username" id="username" placeholder="Username" required>
                     <input type="password" name="password" id="password" placeholder="Password" required>
-                    <input type="submit" value="Login" class="btn_login">
+                    <div>
+                    <input type="submit" value="Login" class="btn_login" >
+                    </div>
                 </form>
                 <p id="error-message" style="color: red;"></p> <!-- Error message display -->
             </div>

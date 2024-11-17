@@ -424,6 +424,7 @@ padding: 1rem;
     padding:6px 10px;
   }
   #pagination{
+    margin: auto;
     padding-top:4px;
   }
 
@@ -481,7 +482,7 @@ tbody tr:hover {
   border: none;
   padding: 10px 20px;
   margin: 0 5px;
-  border-radius: 5px;
+  border-radius: 50%;
   cursor: pointer;
 }
 

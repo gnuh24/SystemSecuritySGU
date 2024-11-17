@@ -16,6 +16,9 @@
         text-indent: 15px; 
         height: 35px;
     }
+    button {
+        background: linear-gradient(135deg, #67a5e5, #9b59b6) !important;
+    }
 </style>
 <body class="bg-gray-100">
 
@@ -175,10 +178,10 @@
             </div>
 
             <div class="mt-6 flex justify-around">
-                <button type="button" class="w-2/5 bg-blue-500 text-white py-2 px-4 rounded-md" onclick="window.location.href='/SystemSecuritySGU/SS_FrontEnd/ManagerUI/Profile/QLProfile.php';">
+                <button type="button" style="" class="w-2/5 text-white py-2 px-4 rounded-md" onclick="window.location.href='/SystemSecuritySGU/SS_FrontEnd/ManagerUI/Profile/QLProfile.php';">
                     Quay lại
                 </button>
-                <button id="updateButton" type="button" class="w-2/5 bg-blue-500 text-white py-2 px-4 rounded-md">
+                <button type="button" class="w-2/5 text-white py-2 px-4 rounded-md" id="updateButton">
                     Cập nhật
                 </button>
             </div>

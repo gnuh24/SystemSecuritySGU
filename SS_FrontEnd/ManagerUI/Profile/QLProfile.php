@@ -145,38 +145,38 @@
                                 <tr>
                                     <th
                                         scope="col"
-                                        class="px-3 py-3.5 text-left font-semibold text-gray-900 text-center"
+                                        class="px-3 py-3.5 text-left text-center"
                                     >
                                         Mã nhân viên 
                                     </th>
                                     <th
                                         scope="col"
-                                        class="py-3.5 pl-4 pr-3 text-left font-semibold text-gray-900 sm:pl-6 text-center"
+                                        class="py-3.5 pl-4 pr-3 text-left sm:pl-6 text-center"
                                     >
                                         Họ và tên
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-3 py-3.5 text-left font-semibold text-gray-900 text-center"
+                                        class="px-3 py-3.5 text-left text-center"
                                     >
                                         Trạng thái
                                     </th>
                                     
                                     <th
                                         scope="col"
-                                        class="px-3 py-3.5 text-left font-semibold text-gray-900 text-center"
+                                        class="px-3 py-3.5 text-left text-center"
                                     >
                                         Trạng thái
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-3 py-3.5 text-left font-semibold text-gray-900 text-center"
+                                        class="px-3 py-3.5 text-left text-center"
                                     >
                                         Vị trí
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-3 py-3.5 text-left font-semibold text-gray-900 text-center"
+                                        class="px-3 py-3.5 text-left text-center"
                                     >
                                         Action
                                     </th>
@@ -274,9 +274,9 @@
                                     <td class="whitespace-nowrap px-3 py-4 text-gray-500">
                                         ${account.position ? account.position : 'Member'}
                                     </td>
-                                    <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right font-medium sm:pr-6">
+                                    <td class="flex justify-center items-center h-full relative whitespace-nowrap py-4 pl-3 pr-4 text-right font-medium sm:pr-6" onclick="window.location.href = './UpdateProfileForm.php?code=${account.code}';">
                                         <a href="./UpdateProfileForm.php?code=${account.code}" class="text-indigo-600 hover:text-indigo-900">
-                                            Edit<span class="sr-only">, ${account.fullname}</span>
+                                            Edit
                                         </a>
                                     </td>
                                 </tr>

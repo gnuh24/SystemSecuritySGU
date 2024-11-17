@@ -17,6 +17,9 @@
         text-indent: 15px; 
         height: 35px;
     }
+    button {
+        background: linear-gradient(135deg, #67a5e5, #9b59b6) !important;
+    }
 </style>
 <body class="bg-gray-100">
     <?php include_once '/xampp/htdocs/SystemSecuritySGU/SS_FrontEnd/Header.php'; ?>
@@ -169,7 +172,7 @@
             </div>
 
             <div class="mt-6">
-                <button type="button" onclick="window.location.href='/SystemSecuritySGU/SS_FrontEnd/ManagerUI/Profile/QLProfile.php';" class="w-full bg-blue-500 text-white py-2 px-4 rounded-md">
+                <button type="button" onclick="window.location.href='/SystemSecuritySGU/SS_FrontEnd/ManagerUI/Profile/QLProfile.php';" class="w-full text-white py-2 px-4 rounded-md">
                     Quay lại
                 </button>
             </div>

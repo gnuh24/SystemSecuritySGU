@@ -39,6 +39,10 @@ public class ProfileSpecification implements Specification<Profile> {
             return criteriaBuilder.like(root.get("code"), "%" + value + "%");
         }
 
+        if (field.equalsIgnoreCase("fullname")) {
+            return criteriaBuilder.like(root.get("fullname"), "%" + value + "%");
+        }
+
 
         return null;
     }
@@ -49,9 +53,10 @@ public class ProfileSpecification implements Specification<Profile> {
         if (!StringUtils.isEmptyOrWhitespaceOnly(search)) {
             search = search.trim();
             ProfileSpecification code = new ProfileSpecification("code", search);
+            ProfileSpecification fullname = new ProfileSpecification("fullname", search);
             ProfileSpecification email = new ProfileSpecification("email", search);
 
-            where = Specification.where(code).or(email);
+            where = Specification.where(code).or(email).or(fullname);
         }
 
         if (form != null) {

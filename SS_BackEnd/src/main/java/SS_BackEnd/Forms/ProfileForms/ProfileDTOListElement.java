@@ -10,6 +10,7 @@ public class ProfileDTOListElement {
     private String code;
     private String fullname;
     private String phone;
+    private String position;
     private String email;
     private String status;
 

@@ -173,7 +173,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
 
-<body>
+<body style="display: flex; flex-direction: column;">
+    <?php include_once '/xampp/htdocs/SystemSecuritySGU/SS_FrontEnd/Header.php'; ?>
+
     <div class="container">
         <h2>Employee</h2>
         <div class="input-group">

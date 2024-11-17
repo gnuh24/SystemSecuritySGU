@@ -1,20 +1,21 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
+    font-size: 16px;
 }
 
-.shift-card {
-    padding: 30px;
+/* .shift-card {
+    padding: 5px 25px 30px 25px;
     width: 100vw;
     text-align: center;
-}
+} */
 
 .shift-info {
     display: flex;
     flex-direction: column;
     text-align: start;
     width: 25%;
-    padding-left: 5.5%;
+    padding-left: 1.5%;
     padding-bottom: 15px;
     margin-bottom: 15px;
 }
@@ -24,8 +25,17 @@ body {
 }
 .horizontal-line{
     border: 1px solid #333; 
-    width: 90%; 
     margin: 20px auto;
+}
+
+.vertical-line {
+    width: 2px; /* Độ dày của đường */
+    height: 500px; /* Chiều cao của đường */
+    background-color: #333; /* Màu của đường */
+    border: none; /* Loại bỏ viền mặc định */
+    display: block; /* Đảm bảo đường hiển thị như một khối */
+    margin: auto 20px ;
+
 }
 
 .employee-item {
@@ -63,7 +73,6 @@ body {
     border-radius: 5px;
     cursor: pointer;
     width: 100%;
-    font-size: 16px;
 }
 
 .edit-btn:hover {
@@ -97,15 +106,8 @@ body {
     top: 10px;
     right: 10px;
     cursor: pointer;
-    font-size: 18px;
-    font-weight: bold;
     color: #333;
 }
-
-
-
-
-
 
 
 /* General Table Styling */
@@ -124,7 +126,6 @@ body {
 #employeeTable th {
     background-color: #4CAF50;
     color: white;
-    font-weight: bold;
 }
 
 #employeeTable tr:nth-child(even) {
@@ -137,14 +138,12 @@ body {
 
 /* Table Header Styling */
 #employeeTable th {
-    font-size: 1rem;
     padding-top: 10px;
     padding-bottom: 10px;
 }
 
 /* Table Data Cell Styling */
 #employeeTable td {
-    font-size: 0.95rem;
     color: #333;
 }
 

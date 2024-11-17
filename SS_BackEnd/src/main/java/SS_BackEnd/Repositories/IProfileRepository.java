@@ -58,7 +58,7 @@ public interface IProfileRepository extends JpaRepository<Profile, String>, JpaS
                 ), 0) AS TotalMinutesLeavingEarly,
                 COALESCE(COUNT(DISTINCT ss.shiftId), 0) AS TotalShiftSignUp,
                 COALESCE(COUNT(ci.checkInTime), 0) AS TotalWorkingShift,
-                COALESCE(COUNT(DISTINCT ss.shiftId), 0) - COALESCE(COUNT(DISTINCT CASE WHEN ci.checkInTime IS NOT NULL THEN s.id END), 0) AS TotalDaysNotWorked
+                COALESCE(COUNT(DISTINCT ss.shiftId), 0) - COALESCE(COUNT(DISTINCT CASE WHEN ci.checkInTime IS NOT NULL THEN s.id END), 0) AS TotalShiftsMissed
             FROM
                 Profile p
             LEFT JOIN

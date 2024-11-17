@@ -275,7 +275,7 @@
                                         ${account.position ? account.position : 'Member'}
                                     </td>
                                     <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right font-medium sm:pr-6">
-                                        <a href="/edit/${account.id}" class="text-indigo-600 hover:text-indigo-900">
+                                        <a href="./UpdateProfileForm.php?code=${account.code}" class="text-indigo-600 hover:text-indigo-900">
                                             Edit<span class="sr-only">, ${account.fullname}</span>
                                         </a>
                                     </td>

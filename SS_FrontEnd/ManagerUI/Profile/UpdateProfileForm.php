@@ -11,10 +11,17 @@
     <title>Cập nhật nhân sự</title>
 
 </head>
-<body>
+<style>
+    input, select, option   {
+        text-indent: 15px; 
+        height: 35px;
+    }
+</style>
+<body class="bg-gray-100">
+
     <?php include_once '/xampp/htdocs/SystemSecuritySGU/SS_FrontEnd/Header.php'; ?>
 
-    <!-- This example requires Tailwind CSS v2.0+ -->
+        <!-- This example requires Tailwind CSS v2.0+ -->
     <nav class="flex border-b border-gray-200 bg-white" style="height: 44px;" aria-label="Breadcrumb">
         <ol role="list" class="mx-auto flex w-full max-w-screen-xl space-x-4 px-4 sm:px-6 lg:px-8">
             
@@ -82,9 +89,8 @@
                 href="#" 
                 class="ml-4 font-medium text-gray-500 hover:text-gray-700" 
                 aria-current="page"
-                id="shiftName" 
+                id="profileCodeBreadcrumb" 
                 >
-                
                 </a>
             </div>
             </li>
@@ -92,277 +98,277 @@
         </ol>
     </nav>
 
-    <script>
-      
-        function removeAccentsAndToLowerCase(str) {
-            return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-        }
+    <div class="m-20 my-8 p-12 py-8 bg-white rounded-lg shadow-lg">
+        <form>
+            <h2 class="text-base/7 font-semibold text-gray-900">Thông tin nhân viên</h2>
 
-        $(document).ready(function() {
+            <div class="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                <div class="sm:col-span-3">
+                    <label for="profileCode" class="block text-sm/6 font-medium text-gray-900">Mã nhân viên</label>
+                    <div class="mt-2">
+                        <input type="text" name="profileCode" id="profileCode" autocomplete="given-name" disabled class="block w-full rounded-md  py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6">
+                    </div>
+                </div>
 
-            $("#detailsNV").click(function() {
-                const selectedRow = $("tr.selected");
-                if (selectedRow.length === 0) {
-                    Swal.fire('Chưa chọn nhân viên!', 'Vui lòng chọn một nhân viên để xem chi tiết.', 'warning');
-                } else {
-                    const employeeCode = selectedRow.find("td").eq(0).text();
-                    getEmployeeDetails(employeeCode);
-                }
-            });
+                <div class="sm:col-span-3">
+                    <label for="fullname" class="block text-sm/6 font-medium text-gray-900">Tên nhân viên</label>
+                    <div class="mt-2">
+                        <input type="text" name="fullname" id="fullname" autocomplete="family-name" class="block w-full rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6">
+                    </div>
+                </div>
 
-            $("#closeModal").click(function() {
-                $("#detailsModal").hide();
-            });
+                <div class="sm:col-span-3">
+                    <label for="email" class="block text-sm/6 font-medium text-gray-900">Địa chỉ email</label>
+                    <div class="mt-2">
+                        <input id="email" name="email" type="email" autocomplete="email" class="block w-full rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6">
+                    </div>
+                </div>
 
-            $(document).on('click', 'tr', function() {
-                $('tr').removeClass('selected');
-                $(this).addClass('selected');
-            });
+                <div class="sm:col-span-3">
+                    <label for="phone" class="block text-sm/6 font-medium text-gray-900">Số điện thoại</label>
+                    <div class="mt-2">
+                        <input type="text" name="phone" id="phone" autocomplete="tel" class="block w-full rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6">
+                    </div>
+                </div>
 
+                <div class="sm:col-span-2">
+                    <label for="status" class="block text-sm/6 font-medium text-gray-900">Trạng thái</label>
+                    <div class="mt-2">
+                        <select name="status" id="status" class="block w-full rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
 
-            
-            $("#addNV").click(function() {
-            $("#employeeCode").val('');
-            $("#employeeName").val('');
-            $("#employeeGender").val('Male'); 
-            $("#employeeBirthday").val(''); 
-            $("#employeePhone").val('');
-            $("#employeeEmail").val('');
-            $("#employeePosition").val('Employee'); 
-            $("#addEmployeeModal").show();
-        });
+                <div class="sm:col-span-2">
+                    <label for="gender" class="block text-sm/6 font-medium text-gray-900">Giới tính</label>
+                    <div class="mt-2">
+                        <select name="gender" id="gender" class="block w-full rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6">
+                            <option value="Male">Nam</option>
+                            <option value="Female">Nữ</option>
+                            <option value="Other">Khác</option>
+                        </select>
+                    </div>
+                </div>
 
-        $("#closeAddModal").click(function() {
-            $("#addEmployeeModal").hide();
-        });
+                <div class="sm:col-span-2">
+                    <label for="birthday" class="block text-sm/6 font-medium text-gray-900">Ngày sinh</label>
+                    <div class="mt-2">
+                        <input type="date" name="birthday" id="birthday" class="block w-full rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6">
+                    </div>
+                </div>
 
+                <div class="sm:col-span-3">
+                    <label for="createAt" class="block text-sm/6 font-medium text-gray-900">Thời gian tạo profile</label>
+                    <div class="mt-2">
+                        <input type="text" name="createAt" id="createAt" autocomplete="createAt" disabled class="block w-full rounded-md  py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6">
+                    </div>
+                </div>
 
+                <div class="sm:col-span-3">
+                    <label for="updateAt" class="block text-sm/6 font-medium text-gray-900">Lần cập nhật gần nhất</label>
+                    <div class="mt-2">
+                        <input type="text" name="updateAt" id="updateAt" autocomplete="updateAt" disabled class="block w-full rounded-md  py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6">
+                    </div>
+                </div>
+            </div>
 
-        $("#closeAddModal").click(function () {
-            $("#addEmployeeModal").hide(); 
-        });
+            <div class="mt-6 flex justify-around">
+                <button type="button" class="w-2/5 bg-blue-500 text-white py-2 px-4 rounded-md" onclick="window.location.href='/SystemSecuritySGU/SS_FrontEnd/ManagerUI/Profile/QLProfile.php';">
+                    Quay lại
+                </button>
+                <button id="updateButton" type="button" class="w-2/5 bg-blue-500 text-white py-2 px-4 rounded-md">
+                    Cập nhật
+                </button>
+            </div>
+        </form>
+    </div>
 
+<script>
+    var employeeCode = '<?php echo $_GET['code'] ?>';
+    const token = localStorage.getItem('token');
 
-        $("#closeAddModal").click(function() {
-            $("#addEmployeeModal").hide();
-        });
+    $(document).ready(function() {
+        getEmployeeDetails(employeeCode);
 
-        $("#saveEmployee").click(function() {
-            const fullname = $("#employeeName").val().trim();
-            const gender = $("#employeeGender").val();
-            const birthday = $("#employeeBirthday").val(); 
-            const phone = $("#employeePhone").val().trim();
-            const email = $("#employeeEmail").val().trim();
-            const position = $("#employeePosition").val(); // Vị trí
-
-            if (!fullname || !gender || !birthday || !phone || !email || !position) {
-                Swal.fire('Lỗi', 'Vui lòng điền tất cả các trường bắt buộc.', 'error');
-                return; 
+        document.getElementById("updateButton").addEventListener("click", function() {
+            if (validUpdateForm()) {
+                callAPIUpdate();
             }
-
-            if (!/^\d{10}$/.test(phone)) {
-                Swal.fire('Lỗi', 'Số điện thoại phải có đúng 10 chữ số.', 'error');
-                return; 
-            }
-
-            const formData = new FormData();
-            formData.append('fullname', fullname);
-            formData.append('gender', gender);
-            formData.append('birthday', birthday);
-            formData.append('phone', phone);
-            formData.append('email', email);
-            formData.append('position', position);
-            formData.append('status', true);
-            formData.append('createAt', new Date().toISOString().split('T')[0] + " 08:00:00");
-            formData.append('updateAt', new Date().toISOString().split('T')[0] + " 08:00:00");
-
-
-            const imagesInput = document.getElementById('employeeImages'); 
-            const images = imagesInput.files; 
-
-            if (images.length > 0) {
-                for (let i = 0; i < images.length; i++) {
-                    formData.append('images', images[i]); 
-                }
-            } else {
-                Swal.fire('Lỗi', 'Vui lòng chọn ít nhất một ảnh.', 'error');
-                return;
-            }
-
-            $.ajax({
-                url: 'http://localhost:8080/api/Profile/Create',
-                type: 'POST',
-                processData: false, 
-                contentType: false, 
-                data: formData,
-                headers: {
-                    'Authorization': 'Bearer ' + token // Thay YOUR_JWT_TOKEN bằng token thật của bạn
-                },
-                success: function(response) {
-                    Swal.fire('Thành công', 'Thêm nhân viên thành công!', 'success');
-                    $("#addEmployeeModal").hide();
-                    getAllTaiKhoan('', '', currentPage); 
-                },
-                error: function(xhr) {
-                    console.error("Lỗi khi gọi API thêm nhân viên", xhr.responseJSON);
-                    if (xhr.responseJSON && xhr.responseJSON.error) {
-                        Swal.fire('Lỗi', xhr.responseJSON.error, 'error');
-                    } else {
-                        Swal.fire('Lỗi', 'Có lỗi xảy ra khi thêm nhân viên.', 'error');
-                    }
-                }
-            });
         });
 
+    });
 
-$("#editNV").click(function() {
-    const selectedRow = $("tr.selected"); 
-    if (selectedRow.length === 0) {
-        Swal.fire('Chưa chọn nhân viên!', 'Vui lòng chọn một nhân viên để sửa.', 'warning');
-    } else {
-        const employeeCode = selectedRow.find("td").first().text().trim(); 
-        openEditModal(employeeCode); 
-    }
-});
-
-$("#saveEditEmployee").on('click', function() {
-    const selectedRow = $("tr.selected"); 
-    if (selectedRow.length === 0) {
-        Swal.fire('Chưa chọn nhân viên!', 'Vui lòng chọn một nhân viên để sửa.', 'warning');
-        return; 
-    }
-
-    if (!/^\d{10}$/.test($("#editEmployeePhone").val().trim())) {
-        Swal.fire('Lỗi', 'Số điện thoại phải có đúng 10 chữ số.', 'error');
-        return; 
-    }
     
-    const employeeCode = selectedRow.find("td").first().text().trim(); 
-    const formData = new FormData(); 
 
-    formData.append('profileCode', employeeCode);
-    formData.append('fullname', $("#editEmployeeName").val().trim());
-    formData.append('gender', $("#editEmployeeGender").val());
-    formData.append('birthday', $("#editEmployeeBirthday").val());
-    formData.append('phone', $("#editEmployeePhone").val().trim());
-    formData.append('email', $("#editEmployeeEmail").val().trim());
-    formData.append('status', $("#status").is(":checked")); 
+    // Function to validate the update form
+    function validUpdateForm() {
+        let isValid = true;
 
-
-    $.ajax({
-        url: `http://localhost:8080/api/Profile/Update`, 
-        type: 'PATCH',
-        processData: false, 
-        contentType: false, 
-        data: formData,
-        headers: {
-            'Authorization': 'Bearer ' + token // Thay thế bằng token của bạn
-        },
-        success: function(response) {
-            Swal.fire('Thành công', 'Cập nhật thông tin nhân viên thành công!', 'success');
-            $("#editEmployeeModal").hide(); 
-            refreshEmployeeList(); 
-        },
-        error: function(xhr) {
-            if (xhr.responseJSON && xhr.responseJSON.error) {
-                const errors = Object.values(xhr.responseJSON.error).join(", ");
-                Swal.fire('Lỗi', `Có lỗi trong quá trình cập nhật: ${errors}`, 'error');
-            } else {
-                Swal.fire('Lỗi', 'Không thể cập nhật thông tin nhân viên.', 'error');
-            }
-        }
-    });
-});
-
-
-function openEditModal(employeeCode) {
-    $.ajax({
-        url: `http://localhost:8080/api/Profile/Detail?code=${employeeCode}`,
-        type: 'GET',
-        dataType: "json",
-        headers: {
-            'Authorization': 'Bearer ' + token
-        },
-        success: function(response) {
-            $("#editEmployeeId").val(response.data.id); 
-            $("#editEmployeeName").val(response.data.fullname);
-            $("#editEmployeeGender").val(response.data.gender);
-            $("#editEmployeeBirthday").val(response.data.birthday);
-            $("#editEmployeePhone").val(response.data.phone);
-            $("#editEmployeeEmail").val(response.data.email);
-            $("#editEmployeeModal").show();
-        },
-        error: function() {
-            console.error("Lỗi khi gọi API chi tiết nhân viên");
-            Swal.fire('Lỗi', 'Không thể lấy thông tin chi tiết.', 'error');
-        }
-    });
-}
-
-// Đóng modal
-$("#closeEditModal").on('click', function() {
-    $("#editEmployeeModal").hide();
-});
-});
-
-function getEmployeeDetails(employeeCode) {
-            $.ajax({
-                url: `http://localhost:8080/api/Profile/Detail?code=${employeeCode}`,
-                type: 'GET',
-                dataType: "json",
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                },
-                success: function(response) {
-                        const details = `
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-id-badge" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Mã nhân viên: </strong> ${response.data.code}
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-user" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Tên nhân viên: </strong> ${response.data.fullname}
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-venus-mars" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Giới tính: </strong> ${response.data.gender}
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-calendar-alt" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Ngày sinh: </strong> ${response.data.birthday}
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-phone" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Số điện thoại: </strong> ${response.data.phone}
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-envelope" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Email: </strong> ${response.data.email}
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-check-circle" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Trạng thái: </strong> ${response.data.status ? 'Active' : 'Inactive'}
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-clock" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Ngày tạo: </strong> ${response.data.createAt}
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <i class="fa-solid fa-clock" style="margin-right: 10px; color: #007bff;"></i>
-                        <strong>Ngày cập nhật: </strong> ${response.data.updateAt}
-                    </div>
-                `;
-                        $("#detailsContent").html(details);
-                        $("#detailsModal").css("display", "flex");
-                },
-                error: function() {
-                    console.error("Lỗi khi gọi API chi tiết nhân viên");
-                    Swal.fire('Lỗi', 'Không thể lấy thông tin chi tiết.', 'error');
-                }
+        // Validate Fullname
+        const fullname = document.getElementById("fullname").value;
+        if (!fullname || fullname.length > 255) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Họ tên không được để trống và không quá 255 ký tự.',
             });
+            isValid = false;
         }
 
-    </script>
+        // Validate Phone
+        const phone = document.getElementById("phone").value;
+        if (!phone) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Số điện thoại không được để trống.',
+            });
+            isValid = false;
+        }
+
+        // Validate Email
+        const email = document.getElementById("email").value;
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!email || !emailPattern.test(email)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Địa chỉ email không hợp lệ.',
+            });
+            isValid = false;
+        }
+
+        // Validate Birthday
+        const birthday = document.getElementById("birthday").value;
+        const today = new Date().toISOString().split('T')[0]; // Get current date in 'YYYY-MM-DD' format
+        if (birthday && birthday > today) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Ngày sinh không thể là ngày trong tương lai.',
+            });
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+
+    // Function to call the API for updating the profile
+    function callAPIUpdate() {
+
+        // Create FormData object to send only the changed fields
+        let formData = new FormData();
+
+        // Compare and add fields to FormData if changed
+        const profileCode = document.getElementById("profileCode").value;
+        formData.append("profileCode", profileCode);
+
+        const newBirthday = document.getElementById("birthday").value;
+        formData.append("birthday", newBirthday);
+
+        const status = document.getElementById("status").value;
+        formData.append("status", status === "active" ? true: false);
+        
+        const gender = document.getElementById("gender").value;
+        formData.append("gender", gender);
+        
+        const newFullname = document.getElementById("fullname").value;
+        formData.append("fullname", newFullname);
+
+        const newPhone = document.getElementById("phone").value;
+        formData.append("phone", newPhone);
+        
+        const newEmail = document.getElementById("email").value;
+        formData.append("email", newEmail);
+        
+
+        $.ajax({
+            url: 'http://localhost:8080/api/Profile/Update',
+            method: 'PATCH',
+            data: formData,
+            dataType: "json",
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            processData: false, // Prevent jQuery from processing the data
+            contentType: false, // Let the browser set the content type
+            success: function(response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Cập nhật thành công!',
+                    text: 'Thông tin nhân viên đã được cập nhật.',
+                }).then(() => {
+                    window.location.href = '/SystemSecuritySGU/SS_FrontEnd/ManagerUI/Profile/QLProfile.php';
+                });
+            },
+            error: function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Có lỗi xảy ra khi cập nhật thông tin.',
+                });
+            }
+        });
+       
+    }
+
+    function getEmployeeDetails(employeeCode) {
+        $.ajax({
+            url: `http://localhost:8080/api/Profile/Detail?code=${employeeCode}`,
+            type: 'GET',
+            dataType: "json",
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            success: function(response) {
+                if (response.status === 200 && response.data) {
+                    // Populate the form fields with the response data
+                    $('#profileCode').val(response.data.code);
+                    $('#profileCodeBreadcrumb').text(response.data.code);
+
+                    $('#fullname').val(response.data.fullname);
+                    $('#email').val(response.data.email);
+                    $('#phone').val(response.data.phone);
+
+                    // Gender handling (map the value to select options)
+                    let genderValue = response.data.gender;
+                    if (genderValue === 'Male') {
+                        $('#gender').val('Male');  // Set value to 'male'
+                    } else if (genderValue === 'Female') {
+                        $('#gender').val('Female');  // Set value to 'female'
+                    } else {
+                        $('#gender').val('Other');  // Set value to 'other'
+                    }
+
+                    // Birthday handling (convert 'dd/MM/yyyy' to 'yyyy-MM-dd' format for the date input)
+                    let birthday = response.data.birthday; // Assuming it's in 'dd/MM/yyyy' format
+                    if (birthday) {
+                        let parts = birthday.split('/');  // Split the date by '/'
+                        let formattedBirthday = `${parts[2]}-${parts[1]}-${parts[0]}`;  // Reformat as 'yyyy-MM-dd'
+                        $('#birthday').val(formattedBirthday);
+                    }
+
+                    $('#createAt').val(response.data.createAt);
+                    $('#updateAt').val(response.data.updateAt);
+
+                    // Status handling (map boolean value to 'active' or 'inactive')
+                    let statusValue = response.data.status ? 'active' : 'inactive';
+                    $('#status').val(statusValue);  // Set value to 'active' or 'inactive'
+                }
+            },
+            error: function() {
+                Swal.fire('Lỗi', 'Không thể lấy thông tin chi tiết.', 'error')
+                .then(() => {
+                    window.location.href = '/SystemSecuritySGU/SS_FrontEnd/ManagerUI/Profile/QLProfile.php';
+                });
+            }
+        });
+    }
+
+</script>
         
 </body>
 

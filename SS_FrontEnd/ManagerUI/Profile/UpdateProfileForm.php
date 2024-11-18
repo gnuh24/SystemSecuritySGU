@@ -15,6 +15,7 @@
     input, select, option   {
         text-indent: 15px; 
         height: 35px;
+        border: 1px solid black;
     }
     button {
         background: linear-gradient(135deg, #67a5e5, #9b59b6) !important;

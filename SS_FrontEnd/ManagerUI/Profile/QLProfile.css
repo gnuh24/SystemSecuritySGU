@@ -28,8 +28,9 @@ th {
     font-weight: bold; /* Đậm chữ tiêu đề */
 }
 
-tr:nth-child(even) {
-    background-color: #f2f2f2; /* Màu nền cho hàng chẵn */
+
+td {
+    vertical-align: middle; /* Canh giữa nội dung của td theo chiều dọc */
 }
 
 /* Hiệu ứng fade in */

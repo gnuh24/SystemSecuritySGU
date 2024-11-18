@@ -106,22 +106,27 @@
         </ol>
     </nav>
 
+
+
     <!-- This example requires Tailwind CSS v2.0+ -->
     <div class="px-4 sm:px-6 lg:px-8">
-        <div class="sm:flex sm:items-center">
-            <!-- <div class="sm:flex-auto">
-                <h1 class="text-xl font-semibold text-gray-900">Users</h1>
-                <p class="mt-2 text-gray-700">
-                    A list of all the users in your account including their name, title,
-                    email and role.
-                </p>
-            </div> -->
-            <div class="relative w-1/2">
-                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500"></i>
+
+        <div class="sm:flex-auto mt-1">
+            <h1 style="font-size: 20px;" class="font-semibold text-gray-900">Nhân sự</h1>
+            <p class="mt-2 text-gray-700">
+                Danh sách tất cả nhân viên của bạn bao gồm tên, chức danh,
+                email và vai trò của họ.
+            </p>
+        </div>
+
+        <div class="flex justify-between items-center mt-4">
+            <div class="w-2/3 relative">
+                <i style="top: 18px; left: 5px;" class="fa-solid fa-magnifying-glass text-blue-500 absolute transform -translate-y-1/2"></i>
                 <input id="searchInput" class="w-full pl-10 pr-3 py-2 border rounded-lg font-sans" placeholder="Bạn cần tìm kiếm nhân viên nào?" />
             </div>
 
-            <select id="selectQuyen" class="h-12 p-2 border rounded-lg font-sans">
+
+            <select id="selectQuyen" class="p-2 border rounded-lg font-sans">
                 <option value="">Trạng thái: tất cả</option>
                 <option value="true">Active</option>
                 <option value="false">InActive</option>
@@ -133,10 +138,12 @@
                     class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
                     onclick="window.location.href='./CreateProfileForm.php'"
                 >
-                    Add user
+                    Thêm nhân viên
                 </button>
             </div>
         </div>
+
+        
         <div class="mt-8 flex flex-col">
             <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
@@ -145,6 +152,7 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th
+                                        style="width: 10%;"
                                         scope="col"
                                         class="px-3 py-3.5 text-left text-center"
                                     >
@@ -157,6 +165,8 @@
                                         Họ và tên
                                     </th>
                                     <th
+                                    style="width: 10%;"
+
                                         scope="col"
                                         class="px-3 py-3.5 text-left text-center"
                                     >
@@ -164,18 +174,24 @@
                                     </th>
                                     
                                     <th
+                                    style="width: 10%;"
+
                                         scope="col"
                                         class="px-3 py-3.5 text-left text-center"
                                     >
                                         Trạng thái
                                     </th>
                                     <th
+                                    style="width: 10%;"
+
                                         scope="col"
                                         class="px-3 py-3.5 text-left text-center"
                                     >
                                         Vị trí
                                     </th>
                                     <th
+                                    style="width: 10%;"
+
                                         scope="col"
                                         class="px-3 py-3.5 text-left text-center"
                                     >
@@ -239,14 +255,14 @@
                     if (response.data.content.length > 0) {
                         response.data.content.forEach(function(account) {
                             var row = `
-                                <tr onclick="window.location.href='./DetailProfileForm.php?code=${account.code}'">                  
+                                <tr onclick="window.location.href='./DetailProfileForm.php?code=${account.code}'">                   
                                     <td class="whitespace-nowrap px-3 py-4 text-gray-500">
                                         <div class="font-medium text-gray-900">
-                                                ${account.code}
+                                            ${account.code}
                                         </div>
                                     </td>
                                     <td class="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-6">
-                                        <div class="flex items-center">
+                                        <div class="flex items-center ml-12">
                                             <div class="h-20 w-20 flex-shrink-0">
                                                 <img
                                                     class="h-20 w-20 rounded-full"
@@ -254,7 +270,7 @@
                                                     alt="${account.fullname}"
                                                 />
                                             </div>
-                                            <div class="ml-4">
+                                            <div style="margin-left: 20%;">
                                                 <div class="font-medium text-gray-900">
                                                     ${account.fullname}
                                                 </div>
@@ -268,20 +284,20 @@
                                         ${account.phone}
                                     </td>
                                     <td class="whitespace-nowrap px-3 py-4">
-                                        <span class="inline-flex rounded-full ${account.status === "true" ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} px-2 font-semibold leading-5">
-                                            ${account.status === "true" ? 'Active' : 'Inactive'}
+                                        <span class="inline-flex rounded-full ${account.status === 'true' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} px-2 font-semibold leading-5">
+                                            ${account.status === 'true' ? 'Active' : 'Inactive'}
                                         </span>
                                     </td>
                                     <td class="whitespace-nowrap px-3 py-4 text-gray-500">
                                         ${account.position ? account.position : 'Member'}
                                     </td>
-                                    <td class="flex justify-center items-center h-full relative whitespace-nowrap py-4 pl-3 pr-4 text-right font-medium sm:pr-6" onclick="window.location.href = './UpdateProfileForm.php?code=${account.code}';">
-                                        <a href="./UpdateProfileForm.php?code=${account.code}" class="text-indigo-600 hover:text-indigo-900">
-                                            Edit
-                                        </a>
+                                    <td class="whitespace-nowrap px-3 py-4 text-gray-500 text-blue-800" onclick="event.stopPropagation(); window.location.href = './UpdateProfileForm.php?code=${account.code}';">
+                                        Edit
                                     </td>
                                 </tr>
                             `;
+
+
                             $("#tableBody").append(row);
                         });
 

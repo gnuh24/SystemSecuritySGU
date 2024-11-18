@@ -131,6 +131,7 @@
                     id="addNV"
                     type="button"
                     class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+                    onclick="window.location.href='./CreateProfileForm.php'"
                 >
                     Add user
                 </button>
@@ -285,7 +286,7 @@
                         });
 
                     } else {
-                        $("#tableBody").append('<tr><td colspan="5" class="text-center py-4 text-base">Không có dữ liệu</td></tr>');
+                        $("#tableBody").append('<tr><td colspan="6" class="text-center py-4 text-base">Không có dữ liệu</td></tr>');
                     }
 
                     setupPagination(response.data.totalElements, pageNumber);  

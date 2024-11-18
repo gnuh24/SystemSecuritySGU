@@ -106,7 +106,7 @@
         <form>
             <h2 class="text-base/7 font-semibold text-gray-900">Thông tin nhân viên</h2>
 
-            <div class="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div class="border-b border-gray-900/10 pb-12 mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <div class="sm:col-span-3">
                     <label for="profileCode" class="block text-sm/6 font-medium text-gray-900">Mã nhân viên</label>
                     <div class="mt-2">

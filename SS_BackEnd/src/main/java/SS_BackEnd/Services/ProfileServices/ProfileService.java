@@ -81,10 +81,6 @@ public class ProfileService implements IProfileService {
             list.add(multipartFile);
         }
 
-        for (MultipartFile file: list){
-            System.err.println(file.getOriginalFilename());
-        }
-
         String bodyResponse = modelService.callAPITraining(profileCreateForm.getImages());
         System.err.println(bodyResponse);
 

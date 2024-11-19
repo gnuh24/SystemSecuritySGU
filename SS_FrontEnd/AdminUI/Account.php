@@ -5,9 +5,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./Account.css">
-    <link rel=" stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <title>Quản lý tài khoản</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.5/pagination.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.5/pagination.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" type="image/png" href="/SystemSecuritySGU/SS_FrontEnd/logo-removebg.png">
+
+    <title>Quản lý tài khoản</title>
     <style>
         table {
             width: 100%;
@@ -21,34 +27,14 @@
             border: 1px solid #ddd;
         }
 
-        .pagination button {
-            margin: 0 5px;
-            padding: 0.5rem 1rem;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-            border-radius: 4rem;
-        }
-
-        .pagination button.disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-
-        /* Đánh dấu dòng được chọn */
-        .selected {
-            background-color: #D0E6FF;
-            /* Màu nền cho dòng được chọn */
-        }
     </style>
 </head>
 
 <body>
     <?php include_once '../Header.php'; ?>
 
-    <!-- This example requires Tailwind CSS v2.0+ -->
-   <nav class="flex border-b border-gray-200 bg-white" style="height: 44px;" aria-label="Breadcrumb">
+        <!-- This example requires Tailwind CSS v2.0+ -->
+    <nav class="flex border-b border-gray-200 bg-white" style="height: 44px;" aria-label="Breadcrumb">
         <ol role="list" class="mx-auto flex w-full max-w-screen-xl space-x-4 px-4 sm:px-6 lg:px-8">
             
             <!-- Home breadcrumb -->
@@ -125,52 +111,95 @@
         </ol>
     </nav>
 
-    <div style="padding-left: 5%; width: 100%; padding-right: 5%">
-        <!-- <div style="display: flex; padding-top: 1rem; padding-bottom: 1rem; justify-content: center; align-items: center; text-align: center;">
-            <h2 style="font-size: 4rem; margin: 0; font-family: 'Poppins', sans-serif;">Quản lý tài khoản</h2>
-        </div> -->
-        
-        <div class="Admin_boxFeature__ECXnm">
-            <div style="position: relative;">
-                <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #007bff;"></i>
-                <input id="searchInput" class="Admin_input__LtEE-" style="font-family: 'Poppins', sans-serif; padding-left: 35px; padding-right: 10px; border-radius: 1rem;" placeholder="Bạn cần tìm kiếm nhân viên nào?">
-            </div>
-            <select id="selectStatus" style="height: 3rem; padding: 0.3rem; font-family: 'Poppins', sans-serif; border-radius: 1rem;">
-                <option value="">Trạng thái: tất cả</option>
-                <option value="true">Active</option>
-                <option value="false">Inactive</option>
-            </select>
-            <button id="searchButton" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">
-                Tìm kiếm
-                <i class="fa-solid fa-magnifying-glass" style="margin-left: 8px; color: white;"></i>
-            </button>
-            <button id="editNV" style="font-family: 'Poppins', sans-serif; display: flex; align-items: center; background-color: #B0C4DE; color: white; border: none; padding: 0.5rem 1rem; border-radius: 1rem; cursor: pointer;">
-                <i class="fa-solid fa-edit" style="margin-right: 8px; color: white;"></i>
-                Đổi trạng thái
-            </button>
+    <!-- This example requires Tailwind CSS v2.0+ -->
+    <div class="px-4 sm:px-6 lg:px-8">
+
+        <div class="sm:flex-auto mt-1">
+            <h1 style="font-size: 20px;" class="font-semibold text-gray-900">Tài khoản</h1>
+            <p class="mt-2 text-gray-700">
+                Danh sách tất cả tài khoản 
+            </p>
         </div>
 
-        <div class="Admin_boxTable__hLXRJ">
-            <table class="Table_table__BWPy" style="border-radius: 1rem;">
-                <thead class="Table_head__FTUog">
-                    <tr>
-                        <th class="Table_th__hCkcg col-small">ID</th>
-                        <th class="Table_th__hCkcg col-large">Tên tài khoản</th>
-                        <th class="Table_th__hCkcg col-large">Tên nhân viên</th>
+        <div class="flex justify-between items-center mt-4">
+            <div class="w-2/3 relative">
+                <i style="top: 18px; left: 5px;" class="fa-solid fa-magnifying-glass text-blue-500 absolute transform -translate-y-1/2"></i>
+                <input id="searchInput" class="w-full pl-10 pr-3 py-2 border rounded-lg font-sans" placeholder="Bạn cần tìm kiếm nhân viên nào?" />
+            </div>
 
-                        <th class="Table_th__hCkcg col-large">Email</th>
 
-                        <th class="Table_th__hCkcg col-large">Số điện thoại</th>
+            <select id="selectQuyen" class="p-2 border rounded-lg font-sans">
+                <option value="">Trạng thái: tất cả</option>
+                <option value="true">Active</option>
+                <option value="false">InActive</option>
+            </select>
+        </div>
 
-                        <th class="Table_th__hCkcg col-normal">Role</th>
-                        <th class="Table_th__hCkcg col-normal">Status</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <!-- Dữ liệu sẽ được thêm vào đây -->
-                </tbody>
-            </table>
-            <div class="pagination" id="pagination"></div>
+        
+        <div class="mt-8 flex flex-col">
+            <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                    <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-300">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th
+                                        style="width: 10%;"
+                                        scope="col"
+                                        class="px-3 py-3.5 text-left text-center"
+                                    >
+                                        Mã tài khoản
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="py-3.5 pl-4 pr-3 text-left sm:pl-6 text-center"
+                                    >
+                                        Tên tài khoản
+                                    </th>
+                                    <th
+                                    style="width: 25%;"
+
+                                        scope="col"
+                                        class="px-3 py-3.5 text-left text-center"
+                                    >
+                                        Tên người sở hữu
+                                    </th>
+                                    <th
+                                    style="width: 10%;"
+
+                                        scope="col"
+                                        class="px-3 py-3.5 text-left text-center"
+                                    >
+                                        Trạng thái
+                                    </th>
+                                    <th
+                                    style="width: 10%;"
+
+                                        scope="col"
+                                        class="px-3 py-3.5 text-left text-center"
+                                    >
+                                        Role
+                                    </th>
+                                    <th
+                                    style="width: 10%;"
+
+                                        scope="col"
+                                        class="px-3 py-3.5 text-left text-center"
+                                    >
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody" class="divide-y divide-gray-200 bg-white">
+                                
+
+                            </tbody>
+                        </table>
+                        <div id="pagination-container"></div>
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
        
@@ -207,14 +236,45 @@
                     if (response.data.content.length > 0) {
                         response.data.content.forEach(function(account) {
                             var row = `
-                                <tr>
-                                    <td>${account.id}</td>
-                                    <td>${account.username}</td>
-                                    <td>${account.profileFullname}</td>
-                                    <td>${account.profileEmail}</td>
-                                    <td>${account.profilePhone}</td>
-                                    <td>${account.role}</td>
-                                    <td class="status" data-id="${account.id}" style="cursor: pointer;">${account.status === true ? 'Active' : 'Inactive'}</td>
+                                <tr>                   
+                                    <td class="whitespace-nowrap px-3 py-4 text-gray-500">
+                                        <div class="font-medium text-gray-900">
+                                            ${account.code}
+                                        </div>
+                                    </td>
+                                    <td class="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-6">
+                                        <div class="flex items-center ml-12">
+                                            <div class="h-20 w-20 flex-shrink-0">
+                                                <img
+                                                    class="h-20 w-20 rounded-full"
+                                                    src="${'/SystemSecuritySGU/SS_FrontEnd/ManagerUI/Profile/16b2e2579118bf6fba3b56523583117f.jpg'}"
+                                                    alt="${account.username}"
+                                                />
+                                            </div>
+                                            <div style="margin-left: 20%;">
+                                                <div class="font-medium text-gray-900">
+                                                    ${account.username}
+                                                </div>
+                                                <div class="text-gray-500">
+                                                    ${account.profileEmail}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-gray-500">
+                                        ${account.profileFullname}
+                                    </td>
+                                    <td class="whitespace-nowrap px-3 py-4">
+                                        <span class="inline-flex rounded-full ${account.status === 'true' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} px-2 font-semibold leading-5">
+                                            ${account.status === 'true' ? 'Active' : 'Inactive'}
+                                        </span>
+                                    </td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-gray-500">
+                                        ${account.role ? account.role : 'Manager'}
+                                    </td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-gray-500 text-blue-800" onclick="event.stopPropagation(); window.location.href = './UpdateProfileForm.php?code=${account.code}';">
+                                        Edit
+                                    </td>
                                 </tr>
                             `;
                             $("#tableBody").append(row);
@@ -234,20 +294,6 @@
             });
         }
 
-        function renderPagination(currentPage, totalPages) {
-            $("#pagination").empty();
-            for (let i = 1; i <= totalPages; i++) {
-                let button = `<button class="${i === currentPage ? 'disabled' : ''}" onclick="goToPage(${i})">${i}</button>`;
-                $("#pagination").append(button);
-            }
-        }
-
-        function goToPage(page) {
-            if (page !== currentPage && page > 0 && page <= totalPages) {
-                currentPage = page;
-                searchTaiKhoan();
-            }
-        }
 
         function searchTaiKhoan() {
             const search = $("#searchInput").val(); // Lấy giá trị tìm kiếm từ input

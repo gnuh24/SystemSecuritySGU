@@ -4,7 +4,13 @@ USE `SGU_SystemSecurity`;
 -- Insert sample data into the `Account` table
 INSERT INTO `Account` 	(`username`, 	`password`	, 													`role`, `status`) VALUES
 						('admin', 		'$2a$10$W2neF9.6Agi6kAKVq8q3fec5dHW8KUA.b0VSIGdIZyUravfLpyIFi', "Admin", true),
-						('manager001', 	'$2a$10$W2neF9.6Agi6kAKVq8q3fec5dHW8KUA.b0VSIGdIZyUravfLpyIFi', "Manager", true);
+						('manager001', 	'$2a$10$W2neF9.6Agi6kAKVq8q3fec5dHW8KUA.b0VSIGdIZyUravfLpyIFi', "Manager", true),
+                        ('manager002', 	'$2a$10$W2neF9.6Agi6kAKVq8q3fec5dHW8KUA.b0VSIGdIZyUravfLpyIFi', "Manager", true),
+						('manager003', 	'$2a$10$W2neF9.6Agi6kAKVq8q3fec5dHW8KUA.b0VSIGdIZyUravfLpyIFi', "Manager", true),
+						('manager004', 	'$2a$10$W2neF9.6Agi6kAKVq8q3fec5dHW8KUA.b0VSIGdIZyUravfLpyIFi', "Manager", true),
+						('manager005', 	'$2a$10$W2neF9.6Agi6kAKVq8q3fec5dHW8KUA.b0VSIGdIZyUravfLpyIFi', "Manager", true),
+						('manager006', 	'$2a$10$W2neF9.6Agi6kAKVq8q3fec5dHW8KUA.b0VSIGdIZyUravfLpyIFi', "Manager", true);
+
 
 -- Insert sample data into the `Profile` table
 INSERT INTO `Profile` 	(`code`, 		`birthday`,    `status`, `createAt`, 				`updateAt`, 				`gender`, 		`fullname`, 		`phone`, 		`email`, 					`accountId`,		`position`) VALUES

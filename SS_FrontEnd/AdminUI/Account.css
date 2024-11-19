@@ -213,30 +213,6 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Bóng đổ */
   }
 
-  #addNV:hover{
-    background-color: #7FFF00; /* Màu nền khi hover */
-    transform: scale(1.05); /* Tăng kích thước nhẹ khi hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Bóng đổ */
-  }
-
-  #editNV:hover {
-    background-color: #0056b3; /* Màu nền khi hover */
-    transform: scale(1.05); /* Tăng kích thước nhẹ khi hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Bóng đổ */
-  }
-
-  #deleteNV:hover {
-      background-color: #e60000; /* Màu nền khi hover */
-      transform: scale(1.05); /* Tăng kích thước nhẹ khi hover */
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Bóng đổ */
-  }
-
-  #detailsNV:hover {
-    background-color: #e60000; /* Màu nền khi hover */
-    transform: scale(1.05); /* Tăng kích thước nhẹ khi hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Bóng đổ */
-}
-
     #tableBody{
       height: 400px;
       background-color: white !important;
@@ -419,23 +395,6 @@ padding: 1rem;
     background-color: rgb(189, 182, 182);
     
   }
-  .btn-patigation{
-    color:rgb(80, 80, 80);
-    padding:6px 10px;
-  }
-  #pagination{
-    margin: auto;
-    padding-top:4px;
-  }
-
-  tbody tr {
-    transition: background-color 0.3s, font-weight 0.3s;
-}
-
-tbody tr:hover {
-    background-color: #f0f0f0; 
-}
-
 
 
 .input-group {
@@ -470,29 +429,6 @@ tbody tr:hover {
   outline: none; /* Loại bỏ viền mặc định */
 }
 
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.pagination button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  margin: 0 5px;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.pagination button.active {
-  background-color: #0056b3;
-}
-
-.pagination button:hover {
-  background-color: #0056b3;
-}
 
 
   

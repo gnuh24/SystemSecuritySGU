@@ -27,6 +27,13 @@
             border: 1px solid #ddd;
         }
 
+        
+        .paginationjs {
+            display: flex;
+            justify-content: center;
+            padding: 20px 0;
+        }
+
     </style>
 </head>
 
@@ -203,21 +210,21 @@
         </div>
     </div>
        
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
     <script>
         const pageSize = 5;
         let currentPage = 1;
         let totalPages = 1;
         const token = localStorage.getItem("token");
 
+        var search = "";
+        var status = "";
+
         // Khởi tạo danh sách tài khoản khi trang được tải
         $(document).ready(function() {
-            getAllTaiKhoan("", "", currentPage);
+            getAllTaiKhoan(currentPage);
         });
 
-        function getAllTaiKhoan(search, status, page) {
+        function getAllTaiKhoan(page) {
             $.ajax({
                 url: 'http://localhost:8080/api/Account/List',
                 type: 'GET',
@@ -225,8 +232,8 @@
                 data: {
                     search: search,
                     status: status,
-                    page: page, // Chuyển page để API tính từ 0
-                    size: pageSize
+                    pageNumber: page, // Chuyển page để API tính từ 0
+                    pageSize: pageSize
                 },
                 headers: {
                     'Authorization': 'Bearer ' + token
@@ -239,7 +246,7 @@
                                 <tr>                   
                                     <td class="whitespace-nowrap px-3 py-4 text-gray-500">
                                         <div class="font-medium text-gray-900">
-                                            ${account.code}
+                                            ${account.id}
                                         </div>
                                     </td>
                                     <td class="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-6">
@@ -265,27 +272,36 @@
                                         ${account.profileFullname}
                                     </td>
                                     <td class="whitespace-nowrap px-3 py-4">
-                                        <span class="inline-flex rounded-full ${account.status === 'true' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} px-2 font-semibold leading-5">
-                                            ${account.status === 'true' ? 'Active' : 'Inactive'}
+                                        <span class="inline-flex rounded-full ${account.status === true || account.status === 'true' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} px-2 font-semibold leading-5">
+                                            ${account.status === true || account.status === 'true' ? 'Active' : 'Inactive'}
                                         </span>
                                     </td>
                                     <td class="whitespace-nowrap px-3 py-4 text-gray-500">
                                         ${account.role ? account.role : 'Manager'}
                                     </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-gray-500 text-blue-800" onclick="event.stopPropagation(); window.location.href = './UpdateProfileForm.php?code=${account.code}';">
-                                        Edit
+                                   <td class="whitespace-nowrap px-3 py-4 text-gray-500 text-blue-800">
+                                        <!-- Render button only if role is not Admin -->
+                                        ${account.role !== 'Admin' ? `
+                                            <button 
+                                                class="px-3 py-2 text-white font-medium rounded" 
+                                                onclick="event.stopPropagation(); handleButtonClick('${account.id}', '${account.status}');"
+                                                style="background-color: ${account.status === true ? 'red' : 'green'};">
+                                                ${account.status === true ? 'Khóa' : 'Mở khóa'}
+                                            </button>
+                                        ` : ''}
                                     </td>
                                 </tr>
-                            `;
+                                `;
+
+
                             $("#tableBody").append(row);
                         });
                     } else {
                         $("#tableBody").append('<tr><td colspan="7">Không có dữ liệu</td></tr>');
                     }
 
-                    // Cập nhật phân trang
-                    totalPages = response.data.totalPages;
-                    renderPagination(currentPage, totalPages);
+                    
+                    setupPagination(response.data.totalElements, page)
                 },
                 error: function() {
                     console.error("Lỗi khi gọi API");
@@ -294,119 +310,77 @@
             });
         }
 
+        // Sự kiện cho nút tìm kiếm
+        $("#selectQuyen").on("change", function() {
+            currentPage = 1; // Reset trang về 1 khi tìm kiếm
+            status = $("#selectQuyen").val(); // Lấy giá trị tìm kiếm từ input
+            getAllTaiKhoan(currentPage);
+        });
 
-        function searchTaiKhoan() {
-            const search = $("#searchInput").val(); // Lấy giá trị tìm kiếm từ input
-            const status = $("#selectStatus").val(); // Lấy trạng thái từ select
-            getAllTaiKhoan(search, status, currentPage);
-        }
 
         // Sự kiện cho nút tìm kiếm
-        $("#searchButton").on("click", function() {
+        $("#searchInput").on("change", function() {
             currentPage = 1; // Reset trang về 1 khi tìm kiếm
-            searchTaiKhoan();
+            search = $("#searchInput").val(); // Lấy giá trị tìm kiếm từ input
+            getAllTaiKhoan(currentPage);
         });
 
-        // Sự kiện cho các dòng trong bảng
-        $(document).on("click", "#tableBody tr", function() {
-            $(this).toggleClass("selected"); // Thêm hoặc xóa class 'selected'
-        });
+        function setupPagination(totalElements, currentPage) {
 
-        $("#editNV").on("click", function() {
-            const selectedRows = $("#tableBody tr.selected"); // Lấy các dòng được chọn
-            if (selectedRows.length === 0) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Thông báo!',
-                    text: 'Vui lòng chọn ít nhất một tài khoản!',
-                });
-                return;
-            }
+            //Kiểm tra xem nếu totalPage ít hơn 1 thì ẩn luôn =))
+            const totalPage = Math.ceil(totalElements / pageSize);
+            totalPage <= 1 ? $('#pagination-container').hide() : $('#pagination-container').show();
 
-            // Biến để theo dõi các yêu cầu cập nhật thành công
-            let updatePromises = [];
+            $('#pagination-container').pagination({
+                dataSource: Array.from({
+                    length: totalElements
+                }, (_, i) => i + 1),
 
-            selectedRows.each(function() {
-                const statusCell = $(this).find("td:last-child"); // Lấy ô trạng thái
-                const accountId = $(this).find("td:first-child").text().trim(); // Giả sử ID ở cột đầu tiên
-                const roleCell = $(this).find("td:nth-child(2)").text().trim(); // Giả sử vai trò ở cột thứ hai
-                const currentStatus = statusCell.text().trim() === 'Active'; // Kiểm tra trạng thái hiện tại
-                const newStatus = !currentStatus; // Chuyển đổi trạng thái
+                pageSize: pageSize,
+                showPrevious: true,
+                showNext: true,
+                pageNumber: currentPage,
 
-                // Kiểm tra xem tài khoản có vai trò admin hay không
-                if (roleCell.toLowerCase() === 'admin') { // Chuyển đổi thành chữ thường để so sánh chính xác
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Không được phép!',
-                        text: 'Tài khoản admin không thể thay đổi trạng thái!',
-                    });
-                    return; // Ngừng xử lý nếu vai trò là admin
-                }
-
-                // Kiểm tra xem accountId và newStatus có giá trị hợp lệ không
-                if (!accountId || newStatus === undefined) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi',
-                        text: 'Có lỗi xảy ra khi xác định ID hoặc trạng thái.',
-                    });
-                    return; // Ngừng xử lý nếu có lỗi
-                }
-
-                // Gọi API để cập nhật trạng thái
-                // Tạo đối tượng FormData
-                const formData = new FormData();
-                formData.append('id', parseInt(accountId)); // Thêm id vào FormData
-                formData.append('status', newStatus); // Thêm trạng thái mới vào FormData
-
-                const promise = $.ajax({
-                    url: 'http://localhost:8080/api/Account/Update',
-                    type: 'PATCH', // Sử dụng PATCH
-                    data: formData, // Sử dụng FormData thay vì JSON
-                    processData: false, // Không xử lý dữ liệu
-                    contentType: false, // Không đặt content type (để trình duyệt tự động thiết lập)
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.get("token")
+                callback: function(data, pagination) {
+                    if (pagination.pageNumber !== currentPage) {
+                        currentPage = pagination.pageNumber; 
+                        getAllTaiKhoan(currentPage);
                     }
-                });
-
-                promise.done(function(updateResponse) {
-                    // Xử lý kết quả từ server
-                    console.log("Cập nhật thành công:", updateResponse);
-                    if (updateResponse.status === 200) {
-                        // Cập nhật lại trạng thái hiển thị
-                        statusCell.text(newStatus ? 'Active' : 'Inactive'); // Cập nhật trạng thái hiển thị
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Cập nhật thành công!',
-                            text: updateResponse.message // Sử dụng thông báo từ server
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Cập nhật thất bại!',
-                            text: updateResponse.message || 'Có lỗi xảy ra khi cập nhật.',
-                        });
-                    }
-                }).fail(function(jqXHR) {
-                    console.error("Lỗi khi gọi API cập nhật trạng thái:", jqXHR.responseText);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi khi gọi API',
-                        text: 'Vui lòng kiểm tra lại yêu cầu.',
-                    });
-                });
-
-                // Thêm promise vào mảng để xử lý đồng thời
-                updatePromises.push(promise);
+                }
             });
+        }
 
-            // Sau khi tất cả các yêu cầu đã được gửi đi
-            $.when.apply($, updatePromises).then(function() {
-                // Không cần xử lý ở đây nữa vì đã xử lý thành công trong mỗi promise
+        // Function to handle button click
+        function handleButtonClick(accountId, currentStatus) {
+            // Determine the new status
+            const newStatus = currentStatus === 'true' ? 'false' : 'true';
+
+            // Call the update function with accountId and newStatus
+            update(accountId, newStatus);
+        }
+
+        // Mock update function for demonstration
+        function update(accountId, status) {
+            $.ajax({
+                url: 'http://localhost:8080/api/Account/Update',
+                type: 'PATCH',
+                dataType: "json",
+                data: {
+                    id: accountId,
+                    status: status,
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+                success: function(response) {
+                    getAllTaiKhoan(currentPage);
+                },
+                error: function() {
+                    console.error("Lỗi khi gọi API");
+                }
             });
-            console.log("ID:", accountId, "Status:", newStatus);
-        });
+        }
+
 
 
         

@@ -32,6 +32,21 @@ public class ShiftSignUpController {
     @Autowired
     private ModelMapper modelMapper;
 
+//    @GetMapping("/List")
+//    public ResponseEntity<Response<List<ShiftSignUpDTOForCreating>>> createShiftSignUp(@ModelAttribute @Valid ShiftSignUpCreateForm shiftSignUpCreateForm) {
+//
+//        List<ShiftSignUp> entities = shiftSignUpService.createSignUp(shiftSignUpCreateForm);
+//
+//        List<ShiftSignUpDTOForCreating> dto = modelMapper.map(entities , new TypeToken<List<ShiftSignUpDTOForCreating>>(){}.getType());
+//
+//        Response<List<ShiftSignUpDTOForCreating>> response = new Response<>();
+//        response.setStatus(201);
+//        response.setMessage("Đăng ký ca làm thành công !");
+//        response.setData(dto);
+//
+//        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+//    }
+
     @PostMapping("/Create")
     public ResponseEntity<Response<List<ShiftSignUpDTOForCreating>>> createShiftSignUp(@ModelAttribute @Valid ShiftSignUpCreateForm shiftSignUpCreateForm) {
 

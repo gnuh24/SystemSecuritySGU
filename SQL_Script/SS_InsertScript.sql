@@ -8,7 +8,7 @@ INSERT INTO `Account` 	(`username`, 	`password`	, 													`role`, `status`)
                         ('manager002', 	'$2a$10$W2neF9.6Agi6kAKVq8q3fec5dHW8KUA.b0VSIGdIZyUravfLpyIFi', "Manager", true),
 						('manager003', 	'$2a$10$W2neF9.6Agi6kAKVq8q3fec5dHW8KUA.b0VSIGdIZyUravfLpyIFi', "Manager", true),
 						('manager004', 	'$2a$10$W2neF9.6Agi6kAKVq8q3fec5dHW8KUA.b0VSIGdIZyUravfLpyIFi', "Manager", true),
-						('manager005', 	'$2a$10$W2neF9.6Agi6kAKVq8q3fec5dHW8KUA.b0VSIGdIZyUravfLpyIFi', "Manager", true),
+						('manager005', 	'$2accounta$10$W2neF9.6Agi6kAKVq8q3fec5dHW8KUA.b0VSIGdIZyUravfLpyIFi', "Manager", true),
 						('manager006', 	'$2a$10$W2neF9.6Agi6kAKVq8q3fec5dHW8KUA.b0VSIGdIZyUravfLpyIFi', "Manager", true);
 
 
@@ -35,7 +35,7 @@ INSERT INTO `Shift` (`createAt`, 			`updateAt`, 			`startTime`, 			`endTime`, 		
 					('2024-09-10 08:00:00', '2024-09-10 08:00:00', '2024-09-10 07:00:00', '2024-09-10 17:30:00', '2024-09-10 11:30:00', '2024-09-10 13:00:00', 'Ca chính thức 10/09/2024', 			TRUE, 			FALSE),
 					('2024-10-05 08:00:00', '2024-10-05 08:00:00', '2024-10-05 07:00:00', '2024-10-05 17:30:00', '2024-10-05 11:30:00', '2024-10-05 13:00:00', 'Ca chính thức 05/10/2024', 			TRUE, 			FALSE),
 					('2024-10-05 08:00:00', '2024-10-05 08:00:00', '2024-10-05 18:00:00', '2024-10-05 21:30:00', 				  NULL, 				 NULL, 'OT 05/10/2024', 					TRUE, 			TRUE),
-					('2024-11-29 08:00:00', '2024-11-29 08:00:00', '2024-11-29 07:00:00', '2024-11-29 17:30:00', '2024-11-29 11:30:00', '2024-11-29 13:00:00', 'Ca chính thức 29/10/2024', 			TRUE, 			FALSE);
+					(NOW(), 				'2024-11-29 08:00:00', NOW(), '2024-11-29 17:30:00', '2024-11-29 11:30:00', '2024-11-29 13:00:00', 'Ca chính thức 29/10/2024', 			TRUE, 			FALSE);
 
 
 -- Insert sample data into the `ShiftSignUp` table

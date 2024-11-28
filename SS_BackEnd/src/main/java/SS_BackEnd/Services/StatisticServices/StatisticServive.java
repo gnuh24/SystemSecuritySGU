@@ -1,16 +1,13 @@
 package SS_BackEnd.Services.StatisticServices;
 
 import SS_BackEnd.Forms.Query.IProfileWorkSummary;
-import SS_BackEnd.Forms.Query.ProfileWorkSummary;
+import SS_BackEnd.Forms.Query.IProfileWorkSummaryOT;
 import SS_BackEnd.Forms.Query.ShiftDetailDto;
 import SS_BackEnd.Repositories.IProfileRepository;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -23,12 +20,14 @@ public class StatisticServive implements IStatisticService {
     private ModelMapper modelMapper;
 
     @Override
-    public List<IProfileWorkSummary> getProfileWorkSummary(Boolean isOT, String startDate, String endDate, String sort) {
+    public List<IProfileWorkSummary> getProfileWorkSummary(String startDate, String endDate) {
 
-//        return profileRepository.getProfileStatistics(isOT, startDate, endDate, sort);
-        return profileRepository.getProfileStatistics(isOT, startDate, endDate);
+        return profileRepository.getProfileStatisticsOfficalShift(startDate, endDate);
+    }
 
-
+    @Override
+    public List<IProfileWorkSummaryOT> getProfileWorkSummaryOT(String startDate, String endDate) {
+        return profileRepository.getProfileStatisticsOTShift(startDate, endDate);
     }
 
     @Override

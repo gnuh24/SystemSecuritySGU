@@ -234,7 +234,7 @@
                             shiftId = selectedShiftId;
                         });
                     } else {
-                        listShiftContainer.html('<p class="text-gray-500">Không có ca làm nào trong ngày !.</p>');
+                        listShiftContainer.html('<p class="text-gray-500 text-center">Không có ca làm nào trong ngày !.</p>');
                     }
                 },
                 error: function(xhr) {

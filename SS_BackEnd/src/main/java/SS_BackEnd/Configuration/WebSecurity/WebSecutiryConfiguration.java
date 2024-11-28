@@ -83,6 +83,7 @@ public class WebSecutiryConfiguration {
                 .requestMatchers(HttpMethod.GET, "/api/CheckOut/Image").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/CheckOut/Create").permitAll()
 
+                .requestMatchers(HttpMethod.GET, "/api/Statistic/ProfileWorkSummaryOT").hasAnyAuthority("Manager")
                 .requestMatchers(HttpMethod.GET, "/api/Statistic/ProfileWorkSummary").hasAnyAuthority("Manager")
                 .requestMatchers(HttpMethod.GET, "/api/Statistic/ShiftDetail").hasAnyAuthority("Manager")
 

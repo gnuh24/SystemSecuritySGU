@@ -5,17 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thống kê giờ làm việc</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="icon" type="image/png" href="/SystemSecuritySGU/SS_FrontEnd/logo-removebg.png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <style>
-        body { margin: 0; }
-        canvas { display: block; }
+       
 </style>
 <body>
     <?php include_once '/xampp/htdocs/SystemSecuritySGU/SS_FrontEnd/Header.php'; ?>
@@ -72,48 +69,152 @@
         </ol>
     </nav>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r146/three.min.js"></script>
+    <div class="w-3/4 mx-auto mt-4">
+        <label for="fromDate">From:</label>
+        <input type="date" id="fromDate" class="border rounded p-2 mx-2" />
+
+        <label for="toDate">To:</label>
+        <input type="date" id="toDate" class="border rounded p-2 mx-2" />
+    </div>
+
+    <div class="w-3/4 mx-auto">
+        <canvas id="myChart" class="w-full h-96"></canvas>
+    </div>
+
     <script>
-        // Set up the scene, camera, and renderer
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(
-            75, 
-            window.innerWidth / window.innerHeight, 
-            0.1, 
-            1000
-        );
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
+    const token = localStorage.getItem("token");
 
-        // Create a cube
-        const geometry = new THREE.BoxGeometry();
-        const material = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
-        const cube = new THREE.Mesh(geometry, material);
-        scene.add(cube);
+    var officialSummary = null;
+    var otSummary = null;
 
-        // Add lighting
-        const light = new THREE.PointLight(0xffffff, 1, 100);
-        light.position.set(10, 10, 10);
-        scene.add(light);
+    var from = "";
+    var to = "";
 
-        // Position the camera
-        camera.position.z = 5;
+    fetchData();
 
-        // Animation loop
-        function animate() {
-            requestAnimationFrame(animate);
+    // Function to call API
+    function callApi(url) {
+        $.ajax({
+            url: url,
+            method: "GET",
+            dataType: "json",
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            success: function (response) {
+                if (url.includes("ProfileWorkSummary") && !url.includes("ProfileWorkSummaryOT")) {
+                    officialSummary = response;
+                    labels = officialSummary.data.map(item => item.profileName);
+                    totalHoursWorkedOfficial = officialSummary.data.map(item => item.totalHoursWorkedOfficial);
 
-            // Rotate the cube
-            cube.rotation.x += 0.01;
-            cube.rotation.y += 0.01;
+                } else if (url.includes("ProfileWorkSummaryOT")) {
+                    otSummary = response;
+                    totalHoursWorkedOT = otSummary.data.map(item => item.totalHoursWorkedOT);
 
-            // Render the scene
-            renderer.render(scene, camera);
+                }
+                // After fetching data, update the chart
+                updateChart();
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching data from:", url, error);
+            }
+        });
+    }
+
+    // Function to trigger API calls based on date inputs or default
+    function fetchData() {
+        let url1;
+        let url2;
+
+        if (from && to) {
+            url1 = `http://localhost:8080/api/Statistic/ProfileWorkSummary?startDate=${from}&endDate=${to}`;
+            url2 = `http://localhost:8080/api/Statistic/ProfileWorkSummaryOT?startDate=${from}&endDate=${to}`;
+        } else if (from) {
+            url1 = `http://localhost:8080/api/Statistic/ProfileWorkSummary?startDate=${from}`;
+            url2 = `http://localhost:8080/api/Statistic/ProfileWorkSummaryOT?startDate=${from}`;
+        } else if (to) {
+            url1 = `http://localhost:8080/api/Statistic/ProfileWorkSummary?endDate=${to}`;
+            url2 = `http://localhost:8080/api/Statistic/ProfileWorkSummaryOT?endDate=${to}`;
+        } else {
+            url1 = `http://localhost:8080/api/Statistic/ProfileWorkSummary`;
+            url2 = `http://localhost:8080/api/Statistic/ProfileWorkSummaryOT`;
         }
 
-        animate();
-    </script>
+        // Call the APIs
+        callApi(url1);
+        callApi(url2);
+    }
+
+    // Event listeners for date inputs
+    document.getElementById('fromDate').addEventListener('change', function (event) {
+        from = event.target.value;
+        fetchData(); // Call APIs when the "from" date changes
+    });
+
+    document.getElementById('toDate').addEventListener('change', function (event) {
+        to = event.target.value;
+        fetchData(); // Call APIs when the "to" date changes
+    });
+
+    // Data for the chart (empty initially)
+    var labels = [];
+    var totalHoursWorkedOfficial = [];
+    var totalHoursWorkedOT = [];
+
+    function updateChart() {
+        // Reset the arrays to update the chart data
+
+        const data = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Số giờ làm chính thức',
+                    data: totalHoursWorkedOfficial,
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)', // Blue
+                    stack: 'Stack 0',
+                },
+                {
+                    label: 'Số giờ làm tăng ca',
+                    data: totalHoursWorkedOT,
+                    backgroundColor: 'rgba(255, 99, 132, 0.7)', // Red
+                    stack: 'Stack 0',
+                },
+            ]
+        };
+
+        // Chart configuration
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Work Hours by Profile - Stacked'
+                    },
+                },
+                responsive: true,
+                interaction: {
+                    intersect: false,
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true
+                    }
+                }
+            }
+        };
+
+        // Render the chart
+        const ctx = document.getElementById('myChart').getContext('2d');
+        new Chart(ctx, config);
+    }
+</script>
+
+
  
 </body>
 

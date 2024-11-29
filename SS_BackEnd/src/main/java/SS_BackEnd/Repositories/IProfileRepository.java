@@ -1,7 +1,7 @@
 package SS_BackEnd.Repositories;
 
 import SS_BackEnd.Entities.Profile;
-import SS_BackEnd.Forms.Query.IProfileWorkSummary;
+import SS_BackEnd.Forms.Query.IProfileWorkSummaryOfficial;
 import SS_BackEnd.Forms.Query.IProfileWorkSummaryOT;
 import SS_BackEnd.Forms.Query.ShiftDetailDto;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -62,8 +62,8 @@ public interface IProfileRepository extends JpaRepository<Profile, String>, JpaS
             p.code, p.fullname
         ORDER BY TotalHoursWorkedOfficial DESC
         """, nativeQuery = true)
-    List<IProfileWorkSummary> getProfileStatisticsOfficalShift(@Param("startDate") String startDate,
-                                                               @Param("endDate") String endDate);
+    List<IProfileWorkSummaryOfficial> getProfileStatisticsOfficalShift(@Param("startDate") String startDate,
+                                                                       @Param("endDate") String endDate);
 
     @Query(value = """
             SELECT

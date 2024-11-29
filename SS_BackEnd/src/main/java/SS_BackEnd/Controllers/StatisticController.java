@@ -2,6 +2,7 @@ package SS_BackEnd.Controllers;
 
 import SS_BackEnd.Forms.Other.Response;
 import SS_BackEnd.Forms.Query.IProfileWorkSummary;
+import SS_BackEnd.Forms.Query.IProfileWorkSummaryOfficial;
 import SS_BackEnd.Forms.Query.IProfileWorkSummaryOT;
 import SS_BackEnd.Forms.Query.ShiftDetailDto;
 import SS_BackEnd.Services.StatisticServices.IStatisticService;
@@ -27,6 +28,28 @@ public class StatisticController {
 
         // Prepare response
         Response<List<IProfileWorkSummary>> response = new Response<>();
+        response.setData(entities);
+
+        String responseMessage = "Thống kê thành công. ";
+        if (entities.isEmpty()) {
+            responseMessage = "Không có bất cứ thông tin nào để thống kê.";
+        }
+
+        response.setStatus(200);
+        response.setMessage(responseMessage);
+        return ResponseEntity.ok(response);
+    }
+
+
+    @GetMapping("/ProfileWorkSummaryOfficial")
+    public ResponseEntity<Response<List<IProfileWorkSummaryOfficial>>> getProfileWorkSummaryOfficial(
+        @RequestParam(required = false) String startDate,
+        @RequestParam(required = false) String endDate) {
+
+        List<IProfileWorkSummaryOfficial> entities = statisticService.getProfileWorkSummaryOfficial(startDate, endDate);
+
+        // Prepare response
+        Response<List<IProfileWorkSummaryOfficial>> response = new Response<>();
         response.setData(entities);
 
         String responseMessage = "Thống kê thành công. ";

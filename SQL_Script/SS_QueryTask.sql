@@ -132,9 +132,10 @@ LEFT JOIN
     CheckOut co ON ci.shiftId = co.shiftId AND ci.profileCode = co.profileCode
 WHERE 
 	s.`isActive` = true
-    AND p.code = :profileCode
+	AND p.code = :profileCode
 	AND DATE(s.startTime) >= COALESCE(:startDate, DATE_FORMAT(NOW(), '%Y-%m-01'))
     AND DATE(s.endTime) <= COALESCE(:endDate, LAST_DAY(NOW()))
+   
 ORDER BY 
     s.startTime;
 

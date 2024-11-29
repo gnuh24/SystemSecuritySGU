@@ -66,16 +66,33 @@
             </div>
             </li>
 
+
+            <!-- Divider and Projects breadcrumb -->
+            <li class="flex">
+            <div class="flex items-center">
+                <svg 
+                class="h-full w-6 flex-shrink-0 text-gray-200" 
+                viewBox="0 0 24 44" 
+                preserveAspectRatio="none" 
+                fill="currentColor" 
+                xmlns="http://www.w3.org/2000/svg" 
+                aria-hidden="true"
+                >
+                <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
+                </svg>
+                <a 
+                href="#" 
+                class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
+                >
+              
+                </a>
+            </div>
+            </li>
+
         </ol>
     </nav>
 
-    <div class="w-3/4 mx-auto mt-4">
-        <label for="fromDate">From:</label>
-        <input type="date" id="fromDate" class="border rounded p-2 mx-2" />
 
-        <label for="toDate">To:</label>
-        <input type="date" id="toDate" class="border rounded p-2 mx-2" />
-    </div>
 
     <div class="w-3/4 mx-auto">
         <canvas id="myChart" class="w-full h-96"></canvas>
@@ -215,7 +232,7 @@
             options: {
                 plugins: {
                     title: {
-                        display: false,
+                        display: true,
                         text: 'Work Hours by Profile - Stacked'
                     },
                 },

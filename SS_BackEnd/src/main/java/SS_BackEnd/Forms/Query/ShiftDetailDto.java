@@ -6,6 +6,8 @@ public interface ShiftDetailDto {
     String getProfileCode();
     String getProfileName();
     Long getShiftId();
+
+
     LocalDateTime getShiftStartTime();
     LocalDateTime getShiftEndTime();
     Boolean getIsOvertime();

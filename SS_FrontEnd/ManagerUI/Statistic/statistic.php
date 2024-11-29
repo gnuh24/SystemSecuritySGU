@@ -103,6 +103,7 @@
                         // Process response data
                         const data = response.data;
                         labels = data.map(item => item.profileName);
+                        profileCodes = data.map(item => item.profileCode); // Add this line
                         totalHoursWorkedOfficial = data.map(item => item.totalHoursWorkedOfficial);
                         totalHoursWorkedOT = data.map(item => item.totalHoursWorkedOT);
                         totalLateMinutes = data.map(item => item.totalLateMinutes);
@@ -123,7 +124,6 @@
             });
         });
     }
-
 
     function fetchData() {
         let url = `http://localhost:8080/api/Statistic/ProfileWorkSummary`;
@@ -147,7 +147,6 @@
             });
     }
 
-
     // Event listeners for date inputs
     document.getElementById('fromDate').addEventListener('change', function (event) {
         from = event.target.value;
@@ -161,6 +160,7 @@
 
     // Data for the chart (empty initially)
     var labels = [];
+    var profileCodes = []; // Add this array to store profile codes
     var totalHoursWorkedOfficial = [];
     var totalHoursWorkedOT = [];
     var totalLateMinutes = [];
@@ -169,9 +169,7 @@
     var totalMissedShifts = [];
     var myChart = null;
 
-
     function updateChart() {
-
         // Check if the chart already exists and destroy it
         if (myChart) {
             myChart.destroy();
@@ -179,7 +177,7 @@
 
         // Chart data
         const data = {
-            labels: labels,
+            labels: labels, // Profile names
             datasets: [
                 {
                     label: 'Số giờ làm chính thức',
@@ -230,6 +228,29 @@
                     y: {
                         stacked: true
                     }
+                },
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        // Get the index of the clicked bar
+                        const clickedIndex = elements[0].index;
+
+                        // Get the corresponding profile code
+                        const profileCode = profileCodes[clickedIndex];
+
+                        // Construct query parameters dynamically
+                        const params = new URLSearchParams();
+                        params.append("profileCode", profileCode);
+                        if (from) {
+                            params.append("from", from);
+                        }
+                        if (to) {
+                            params.append("to", to);
+                        }
+
+                        // Navigate to the constructed URL
+                        const url = `./detailSummary.php?${params.toString()}`;
+                        window.location.href = url;
+                    }
                 }
             }
         };
@@ -238,8 +259,8 @@
         const ctx = document.getElementById('myChart').getContext('2d');
         myChart = new Chart(ctx, config); // Save the chart instance to `window.myChart`
     }
-
 </script>
+
 
 
 

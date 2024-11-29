@@ -56,8 +56,8 @@ public interface IProfileRepository extends JpaRepository<Profile, String>, JpaS
         WHERE 
             s.isActive = TRUE
             AND s.isOT = FALSE
-            AND DATE(s.startTime) >= COALESCE(:startDate, DATE_FORMAT(NOW(), '%Y-%m-01'))
-            AND DATE(s.endTime) <= COALESCE(:endDate, LAST_DAY(NOW()))
+            AND DATE(s.startTime) >= COALESCE(:startDate, '2012-02-04')
+            AND DATE(s.endTime) <= COALESCE(:endDate, CURRENT_DATE())
         GROUP BY 
             p.code, p.fullname
         ORDER BY TotalHoursWorkedOfficial DESC
@@ -112,8 +112,8 @@ public interface IProfileRepository extends JpaRepository<Profile, String>, JpaS
             WHERE
                 s.isActive = TRUE
                 AND s.isOT = TRUE
-                AND DATE(s.startTime) >= COALESCE(:startDate, DATE_FORMAT(NOW(), '%Y-%m-01'))
-                AND DATE(s.endTime) <= COALESCE(:endDate, LAST_DAY(NOW()))
+                AND DATE(s.startTime) >= COALESCE(:startDate, '2012-02-04')
+                AND DATE(s.endTime) <= COALESCE(:endDate, CURRENT_DATE())
             GROUP BY
                 p.code, p.fullname
             ORDER BY TotalHoursWorkedOT DESC
@@ -146,8 +146,8 @@ public interface IProfileRepository extends JpaRepository<Profile, String>, JpaS
             WHERE
                 s.isActive = TRUE
                 AND p.code = :profileCode
-                AND DATE(s.startTime) >= COALESCE(:startDate, DATE_FORMAT(NOW(), '%Y-%m-01'))
-                AND DATE(s.endTime) <= COALESCE(:endDate, LAST_DAY(NOW()))
+                AND DATE(s.startTime) >= COALESCE(:startDate, '2012-02-04')
+                AND DATE(s.endTime) <= COALESCE(:endDate, CURRENT_DATE())
             ORDER BY
                 s.startTime
             """, nativeQuery = true)

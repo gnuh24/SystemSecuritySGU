@@ -12,7 +12,17 @@
 
 </head>
 <style>
-       
+       .burning-effect {
+            color: #6f6f6f;
+            font-weight: bold;
+            animation: burn 1.5s infinite;
+        }
+
+        @keyframes burn {
+            0% { text-shadow: 0 0 5px red, 0 0 10px orange; }
+            50% { text-shadow: 0 0 10px red, 0 0 20px orange; }
+            100% { text-shadow: 0 0 5px red, 0 0 10px orange; }
+        }
 </style>
 <body>
     <?php include_once '/xampp/htdocs/SystemSecuritySGU/SS_FrontEnd/Header.php'; ?>
@@ -81,6 +91,7 @@
                 <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
                 </svg>
                 <a 
+                id = "target"
                 href="#" 
                 class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
                 >
@@ -94,15 +105,31 @@
 
 
 
-    <div class="w-3/4 mx-auto">
-        <canvas id="myChart" class="w-full h-96"></canvas>
+    <div class="w-3/4 mx-auto mt-6">
+        <table id="shiftTable" class="min-w-full bg-white border border-gray-300">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="px-4 py-2 border text-left">Check-in Time</th>
+                    <th class="px-4 py-2 border text-left">Check-out Time</th>
+                    <th class="px-4 py-2 border text-left">Shift Start Time</th>
+                    <th class="px-4 py-2 border text-left">Shift End Time</th>
+                    <th class="px-4 py-2 border text-left">Check-in Status</th>
+                    <th class="px-4 py-2 border text-left">Check-out Status</th>
+                    <th class="px-4 py-2 border text-left">Loại ca làm</th>
+                </tr>
+            </thead>
+            <tbody id="shiftTableBody">
+                <!-- Rows will be populated here via JavaScript -->
+            </tbody>
+        </table>
     </div>
 
     <script>
     const token = localStorage.getItem("token");
-
-    var from = "";
-    var to = "";
+    const profileCode = '<?php $_GET['profileCode']; ?>'
+    const from = '<?php echo isset($_GET['from']) ? $_GET['from'] : ""; ?>';
+    const to = '<?php echo isset($_GET['to']) ? $_GET['to'] : ""; ?>';
+    var data = null;
 
     fetchData();
 
@@ -118,14 +145,7 @@
                 success: function (response) {
                     if (response.status === 200) {
                         // Process response data
-                        const data = response.data;
-                        labels = data.map(item => item.profileName);
-                        totalHoursWorkedOfficial = data.map(item => item.totalHoursWorkedOfficial);
-                        totalHoursWorkedOT = data.map(item => item.totalHoursWorkedOT);
-                        totalLateMinutes = data.map(item => item.totalLateMinutes);
-                        totalEarlyLeavingMinutes = data.map(item => item.totalEarlyLeavingMinutes);
-                        totalWorkedShifts = data.map(item => item.totalWorkedShifts);
-                        totalMissedShifts = data.map(item => item.totalMissedShifts);
+                        data = response.data;                        
 
                         resolve(); // Resolve when data is successfully processed
                     } else {
@@ -143,118 +163,73 @@
 
 
     function fetchData() {
-        let url = `http://localhost:8080/api/Statistic/ProfileWorkSummary`;
+        let url = `http://localhost:8080/api/Statistic/ShiftDetail?profileCode=NV00000001&`;
 
         if (from && to) {
-            url += `?startDate=${from}&endDate=${to}`;
+            url += `startDate=${from}&endDate=${to}`;
         } else if (from) {
-            url += `?startDate=${from}`;
+            url += `startDate=${from}`;
         } else if (to) {
-            url += `?endDate=${to}`;
+            url += `endDate=${to}`;
         }
 
-        // Wait for the API data to load before updating the chart
+        // Wait for the API data to load before updating the table
         callApi(url)
-            .then(() => {
-                console.log("Data fetched successfully, updating chart.");
-                updateChart();
-            })
-            .catch((error) => {
-                console.error("Failed to fetch data:", error);
-            });
+        .then(() => {
+            console.log("Data fetched successfully, updating table.");
+            updateTable(data);
+        })
+        .catch((error) => {
+            console.error("Failed to fetch data:", error);
+        });
     }
 
+    function updateTable(data) {
+        // Get the table body element
+        const tableBody = document.getElementById('shiftTableBody');
 
-    // Event listeners for date inputs
-    document.getElementById('fromDate').addEventListener('change', function (event) {
-        from = event.target.value;
-        fetchData(); // Call API when the "from" date changes
-    });
+        // Clear any existing rows
+        tableBody.innerHTML = '';
+        var code = "";
+        var name = "";
 
-    document.getElementById('toDate').addEventListener('change', function (event) {
-        to = event.target.value;
-        fetchData(); // Call API when the "to" date changes
-    });
+        
+        // Loop through the fetched data and create rows
+        data.forEach(shift => {
+            // Create a new row
+            const row = document.createElement('tr');
 
-    // Data for the chart (empty initially)
-    var labels = [];
-    var totalHoursWorkedOfficial = [];
-    var totalHoursWorkedOT = [];
-    var totalLateMinutes = [];
-    var totalEarlyLeavingMinutes = [];
-    var totalWorkedShifts = [];
-    var totalMissedShifts = [];
-    var myChart = null;
+            code = shift.profileCode;
+            name = shift.profileName;
 
+            row.innerHTML = `
+                <td class="px-4 py-2 border ${shift.checkInTime ? "" : "burning-effect"}">
+                    ${shift.checkInTime || "Chưa check-in"}
+                </td>
+                <td class="px-4 py-2 border ${shift.checkOutTime ? "" : "burning-effect"}">
+                    ${shift.checkOutTime || "Chưa check-out"}
+                </td>
+                <td class="px-4 py-2 border">${shift.shiftStartTime || "N/A"}</td>
+                <td class="px-4 py-2 border">${shift.shiftEndTime || "N/A"}</td>
+                 <td class="px-4 py-2 border ${shift.checkInStatus ? "" : "burning-effect"}">
+                    ${shift.checkInStatus || "Chưa check-in"}
+                </td>
+                <td class="px-4 py-2 border ${shift.checkOutStatus ? "" : "burning-effect"}">
+                    ${shift.checkOutStatus || "Chưa check-out"}
+                </td>
+                <td class="px-4 py-2 border">${shift.isOvertime ? "OT" : "Tiêu chuẩn"}</td>
+            `;
 
-    function updateChart() {
+            // Append the row to the table body
+            tableBody.appendChild(row);
+        });
 
-        // Check if the chart already exists and destroy it
-        if (myChart) {
-            myChart.destroy();
-        }
+        document.getElementById("target").textContent = `${code} - ${name}`;
 
-        // Chart data
-        const data = {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Số giờ làm chính thức',
-                    data: totalHoursWorkedOfficial,
-                    backgroundColor: 'rgba(54, 162, 235, 0.7)', // Blue
-                    stack: 'Stack 0',
-                },
-                {
-                    label: 'Số giờ làm tăng ca',
-                    data: totalHoursWorkedOT,
-                    backgroundColor: 'rgba(255, 99, 132, 0.7)', // Red
-                    stack: 'Stack 0',
-                },
-                {
-                    label: 'Số phút đi trễ',
-                    data: totalLateMinutes,
-                    backgroundColor: 'rgba(152, 99, 132, 0.7)', // Red
-                    stack: 'Stack 1',
-                },
-                {
-                    label: 'Số phút về sớm',
-                    data: totalEarlyLeavingMinutes,
-                    backgroundColor: 'rgba(152, 15, 132, 0.7)', // Red
-                    stack: 'Stack 1',
-                },
-            ]
-        };
-
-        // Chart configuration
-        const config = {
-            type: 'bar',
-            data: data,
-            options: {
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Work Hours by Profile - Stacked'
-                    },
-                },
-                responsive: true,
-                interaction: {
-                    intersect: false,
-                },
-                scales: {
-                    x: {
-                        stacked: true,
-                    },
-                    y: {
-                        stacked: true
-                    }
-                }
-            }
-        };
-
-        // Render the new chart
-        const ctx = document.getElementById('myChart').getContext('2d');
-        myChart = new Chart(ctx, config); // Save the chart instance to `window.myChart`
     }
+
+ 
+
 
 </script>
 

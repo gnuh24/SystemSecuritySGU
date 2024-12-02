@@ -1,16 +1,17 @@
-import random
-from PIL import Image
-import io
+
 from flask import Flask, request, jsonify
-import tensorflow as tf
-import numpy as np
-import cv2
-import os
+
 from tensorflow.keras import Sequential, Model
 from keras.layers import Input, Dense, Conv2D, MaxPooling2D, Flatten
 from tensorflow.keras import optimizers
+
+import os
+import numpy as np
+import cv2
+import tensorflow as tf
+from sklearn.metrics import classification_report, confusion_matrix
 import matplotlib.pyplot as plt
-import pandas as pd
+from flask import request, jsonify
 
 app = Flask(__name__)
 
@@ -37,6 +38,7 @@ def preprocess_image(image_path):
 
 
 @app.route('/recognize', methods=['POST'])
+
 def recognize():
     label_mapping = load_label_mapping('label_mapping.txt')
 
@@ -53,67 +55,57 @@ def recognize():
     file_path = os.path.join('temp', file.filename)
     file.save(file_path)
 
-    # Tiến hành nhận dạng
-    processed_image = preprocess_image(file_path)
+    try:
+        # Tiến hành nhận dạng
+        processed_image = preprocess_image(file_path)
 
-    predictions = loaded_model.predict(processed_image)
-    predicted_idx = np.argmax(predictions, axis=1)[0]
-    predicted_probabilities = predictions.tolist()
+        predictions = loaded_model.predict(processed_image)
+        predicted_idx = np.argmax(predictions, axis=1)[0]
+        predicted_probabilities = predictions.tolist()
+        predicted_label = list(label_mapping.keys())[list(label_mapping.values()).index(predicted_idx)]
 
-    # Ánh xạ giá trị dự đoán sang nhãn
-    predicted_label = list(label_mapping.keys())[list(label_mapping.values()).index(predicted_idx)]
+        # Kiểm tra kiểu dữ liệu của predicted_probabilities
+        if isinstance(predicted_probabilities, list):
+            # Nếu là list, kiểm tra xem nó có phải là list đơn hay list chứa list con
+            if all(isinstance(i, (list, np.ndarray)) for i in predicted_probabilities):
+                # Nếu predicted_probabilities là một list chứa các list con (mảng 2D)
+                filtered_probabilities = [prob for sublist in predicted_probabilities for prob in sublist if prob < 1]
+            else:
+                # Nếu predicted_probabilities là list một chiều
+                filtered_probabilities = [prob for prob in predicted_probabilities if prob < 1]
 
-    return jsonify({
-        'predicted_label': predicted_label,
-        'predicted_probabilities': predicted_probabilities
-    })
+            # Nếu có giá trị nhỏ hơn 1, lấy giá trị lớn nhất trong số đó
+            if filtered_probabilities:
+                max_value_less_than_1 = max(filtered_probabilities)
+            else:
+                max_value_less_than_1 = 0  # Nếu không có giá trị nào nhỏ hơn 1, gán mặc định là 0
+        else:
+            # Nếu predicted_probabilities là mảng NumPy hoặc kiểu khác
+            predicted_probabilities = np.array(predicted_probabilities).flatten()  # Biến đổi thành mảng một chiều
+            filtered_probabilities = [prob for prob in predicted_probabilities if prob < 1]
 
+            if filtered_probabilities:
+                max_value_less_than_1 = max(filtered_probabilities)
+            else:
+                max_value_less_than_1 = 0  # Nếu không có giá trị nào nhỏ hơn 1, gán mặc định là 0
+
+        # Trả về kết quả JSON
+        return jsonify({
+            'predicted_label': predicted_label,
+            'predicted_probabilities': predicted_probabilities,
+            'Accuracy': 100 * max_value_less_than_1
+        })
+
+    finally:
+        # Xóa tệp tạm thời sau khi xử lý xong
+        if os.path.exists(file_path):
+            os.remove(file_path)
 
 def save_label_mapping(new_label_dict, filename):
     with open(filename, 'a') as f:  # Mở file ở chế độ append
         for label, index in new_label_dict.items():
             f.write(f"{label}: {index}\n")
 
-def expand_output_layer(model, new_output_units):
-    """
-    Mở rộng lớp đầu ra của mô hình để thêm nhãn mới, giữ nguyên các trọng số của các nhãn cũ.
-    """
-    try:
-        # Lấy lớp đầu ra hiện tại
-        old_output_layer = model.layers[-1]
-        old_weights, old_biases = old_output_layer.get_weights()
-        old_output_units = old_weights.shape[1]  # Số lượng nhãn cũ
-
-        # Xác định đầu vào của mô hình hiện tại
-        input_shape = model.input_shape[1:]  # Tránh batch size
-        new_input = Input(shape=input_shape)  # Định nghĩa lớp Input với kích thước tương tự
-
-        # Tạo mô hình mới với các lớp trước lớp đầu ra cuối cùng
-        x = new_input
-        for layer in model.layers[:-1]:
-            x = layer(x)
-
-        # Tạo lớp Dense mới với số nhãn mới
-        new_output_layer = Dense(new_output_units, activation='softmax', name='output_layer_expanded')(x)
-
-        # Tạo mô hình mới
-        new_model = Model(inputs=new_input, outputs=new_output_layer)
-
-        # Khởi tạo trọng số mới cho lớp đầu ra
-        new_weights = np.zeros((old_weights.shape[0], new_output_units))
-        new_biases = np.zeros(new_output_units)
-
-        # Giữ lại trọng số của các nhãn cũ
-        new_weights[:, :old_output_units] = old_weights
-        new_biases[:old_output_units] = old_biases
-
-        # Đặt trọng số mới cho lớp đầu ra mở rộng
-        new_model.layers[-1].set_weights([new_weights, new_biases])
-
-        return new_model
-    except Exception as e:
-        print(f"Lỗi khi mở rộng lớp đầu ra: {str(e)}")
-        raise
 
 @app.route('/train', methods=['POST'])
 def train():
@@ -167,6 +159,7 @@ def train():
         with open(test_file_path, 'wb') as f:
             f.write(file_bytes)
 
+    # Tải và xử lý dữ liệu
     train_data = loading_data(dataPath)
     img, labels = [], []
 
@@ -192,13 +185,60 @@ def train():
 
     # Đánh giá mô hình trên dữ liệu kiểm tra
     test_data, test_labels = prepare_test_data(test_path, label_dict)
-    model.evaluate(test_data, test_labels)
+    loss, accuracy = model.evaluate(test_data, test_labels)
+    print(f"Test Loss: {loss}")
+    print(f"Test Accuracy: {accuracy}")
+
+    # Dự đoán trên tập kiểm tra
+    predictions = model.predict(test_data)
+    predicted_labels = np.argmax(predictions, axis=1)
+
+    # Lọc các nhãn hợp lệ cho classification_report và confusion_matrix
+    valid_labels = np.unique(test_labels)
+    valid_label_names = [key for key, value in label_dict.items() if value in valid_labels]
+
+    # Hiển thị báo cáo phân loại
+    print("Classification Report:")
+    print(classification_report(
+        test_labels,
+        predicted_labels,
+        target_names=valid_label_names,
+        labels=valid_labels
+    ))
+
+    # Ma trận nhầm lẫn
+    cm = confusion_matrix(test_labels, predicted_labels, labels=valid_labels)
+    print("Confusion Matrix:")
+    print(cm)
+
+    # Vẽ ma trận nhầm lẫn
+    plt.figure(figsize=(8, 8))
+    plt.imshow(cm, cmap='Blues')
+    plt.title("Confusion Matrix")
+    plt.colorbar()
+    plt.xlabel("Predicted Labels")
+    plt.ylabel("True Labels")
+    plt.xticks(ticks=np.arange(len(valid_labels)), labels=valid_label_names, rotation=45)
+    plt.yticks(ticks=np.arange(len(valid_labels)), labels=valid_label_names)
+    plt.savefig('confusion_matrix.png')  # Lưu hình ảnh ma trận nhầm lẫn vào file
+
+    # Hiển thị một vài hình ảnh kiểm tra và dự đoán
+    plt.figure(figsize=(10, 10))
+    for i in range(min(9, len(test_data))):
+        ax = plt.subplot(3, 3, i + 1)
+        plt.imshow(test_data[i].reshape(128, 128), cmap='gray')
+        true_label = valid_label_names[np.where(valid_labels == test_labels[i])[0][0]]
+        predicted_label = valid_label_names[np.where(valid_labels == predicted_labels[i])[0][0]]
+        plt.title(f"True: {true_label}\nPred: {predicted_label}")
+        plt.axis("off")
 
     # Lưu mô hình và ánh xạ nhãn
     model.save('my_model.h5')  # Ghi đè tệp cũ
     save_label_mapping(label_dict, 'label_mapping.txt')
 
-    return jsonify({'status': 'Training completed and model saved'})
+    return jsonify({'status': 'Training completed and model saved',
+                    'Accuracy':accuracy})
+
 # Tạo mô hình mới
 def create_model(num_classes):
     model = Sequential([

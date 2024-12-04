@@ -75,6 +75,7 @@ public class ModelService implements IModelService {
         for (File file : convertedFiles) {
             body.add("files[]", new FileSystemResource(file));
         }
+        System.err.println(body);
 
         // Wrap the body and headers into an HttpEntity
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);

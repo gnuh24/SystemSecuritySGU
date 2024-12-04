@@ -1,9 +1,3 @@
-<?php
-// Start session to store login information
-session_start();
-ob_start();
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,7 +27,6 @@ ob_start();
                     <input type="submit" value="Login" class="btn_login" >
                     </div>
                 </form>
-                <p id="error-message" style="color: red;"></p> <!-- Error message display -->
             </div>
             <div class="logo-box">
                 <img src="../logo-removebg.png" alt="Fingerprint Logo">

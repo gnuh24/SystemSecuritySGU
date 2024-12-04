@@ -20,7 +20,11 @@ INSERT INTO `Profile` 	(`code`, 		`birthday`,    `status`, `createAt`, 				`upda
 						('NV00000002', 	'1988-11-30', 	TRUE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Other', 		'Nguyễn Minh Phúc',	'555-555-5555', 'alice.johnson@example.com', 	NULL,			'Employee'),
 						('NV00000003', 	'1985-06-15', 	TRUE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Male', 		'Trương Mậu Điền', 	'123-456-7890', 'john.doe@example.com', 		NULL,			'Employee'),
 						('NV00000004', 	'1990-03-22', 	TRUE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Female', 		'Đào Thanh Tú',		'098-765-4321', 'jane.smith@example.com', 		NULL,			'Employee'),
-						('NV00000005', 	'1988-11-30', 	FALSE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Other', 		'Đoàn Ánh Dương', 	'555-555-5555', 'alice.johnson@example.com', 	NULL,			'Employee');
+						('NV00000005', 	'1988-11-30', 	FALSE, 	'2024-01-01 08:00:00', 		'2024-01-01 08:00:00', 		'Other', 		'Đoàn Ánh Dương', 	'555-555-5555', 'alice.johnson@example.com', 	NULL,			'Employee'),
+						('NV00000006', '1992-07-18', TRUE,  '2024-01-01 08:00:00', '2024-01-01 08:00:00', 'Male',    'Nguyễn Văn Bình',   '111-222-3333', 'binh.nguyen@example.com',    3, 'Manager'),
+						('NV00000007', '1995-09-25', TRUE,  '2024-01-01 08:00:00', '2024-01-01 08:00:00', 'Female',  'Phạm Thị Hoa',      '444-555-6666', 'hoa.pham@example.com',       4, 'Manager'),
+						('NV00000008', '1987-04-12', FALSE, '2024-01-01 08:00:00', '2024-01-01 08:00:00', 'Other',   'Lê Minh Trí',       '777-888-9999', 'tri.le@example.com',         5, 'Manager'),
+						('NV00000009', '1993-11-05', TRUE,  '2024-01-01 08:00:00', '2024-01-01 08:00:00', 'Male',    'Võ Anh Khoa',       '222-333-4444', 'khoa.vo@example.com',        6, 'Manager');
 
 -- Insert sample data into the `FingerPrint` table
 INSERT INTO `FingerPrint` (`profileCode`, `imageName`,`path`, `createAt`) VALUES

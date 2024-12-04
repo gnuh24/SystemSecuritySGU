@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +65,8 @@ public class ProfileService implements IProfileService {
         return profileRepository.findAll(where, pageable);
     }
 
+    private static final SecureRandom RANDOM = new SecureRandom();
+
     @Override
     @Transactional
     public Profile createProfile(ProfileCreateForm profileCreateForm) throws IOException {
@@ -80,12 +83,14 @@ public class ProfileService implements IProfileService {
             MultipartFile multipartFile = ImageService.createMultipartFileFromPath(fingerPrint.getPath());
             list.add(multipartFile);
         }
+        System.err.println(list);
 
         double bodyResponse;
         int count = 1;
         do{
-            bodyResponse = Double.parseDouble( modelService.callAPITraining(profileCreateForm.getImages()) );
-            System.err.println("Lần "+ count++ +" " + (int) bodyResponse*100 + "%");
+            bodyResponse = Double.parseDouble( modelService.callAPITraining(list) );
+            double per = bodyResponse * 100;
+            System.err.println("Lần "+ count++ +" " + (int) per + "%");
 
         }while (bodyResponse < 0.6);
 

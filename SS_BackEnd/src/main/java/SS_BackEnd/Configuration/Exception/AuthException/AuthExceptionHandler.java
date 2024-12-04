@@ -37,7 +37,6 @@ public class AuthExceptionHandler implements AuthenticationEntryPoint, AccessDen
         String message = "Lỗi xác thực danh tính !!";
 
         String detailMessage = authException.getLocalizedMessage();
-        log.warn(authException.getLocalizedMessage());
 
         int code = 8;
         String moreInformation = "http://localhost:8080/api/v1/exception/8";

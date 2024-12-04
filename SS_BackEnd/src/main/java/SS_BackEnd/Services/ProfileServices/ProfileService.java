@@ -81,8 +81,14 @@ public class ProfileService implements IProfileService {
             list.add(multipartFile);
         }
 
-        String bodyResponse = modelService.callAPITraining(profileCreateForm.getImages());
-        System.err.println(bodyResponse);
+        double bodyResponse;
+        int count = 1;
+        do{
+            bodyResponse = Double.parseDouble( modelService.callAPITraining(profileCreateForm.getImages()) );
+            System.err.println("Lần "+ count++ +" " + (int) bodyResponse*100 + "%");
+
+        }while (bodyResponse < 0.6);
+
 
         return profile;
     }

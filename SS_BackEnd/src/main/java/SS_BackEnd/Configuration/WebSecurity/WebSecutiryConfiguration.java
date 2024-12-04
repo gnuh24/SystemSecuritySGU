@@ -58,6 +58,7 @@ public class WebSecutiryConfiguration {
                 .requestMatchers(HttpMethod.GET, "/api/Account/List").hasAnyAuthority("Admin")
                 .requestMatchers(HttpMethod.PATCH, "/api/Account/Update").hasAnyAuthority("Admin")
 
+                .requestMatchers(HttpMethod.GET, "/api/Auth/testJWT").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/Auth/Login").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/Auth/Refresh").permitAll()
 

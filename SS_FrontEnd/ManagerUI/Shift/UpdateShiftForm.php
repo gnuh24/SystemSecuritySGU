@@ -419,32 +419,15 @@
         });
     }
 
-    function convertDateFormat(inputDate) {
-        // Phân tách chuỗi thành thời gian và ngày
-        let [time, date] = inputDate.split(' '); // time = "12:00:00", date = "29/11/2024"
+    function convertDateFormat(input) {
+        // Split the input into time and date
+        const [time, date] = input.split(" ");
+        
+        // Split the date into day, month, and year
+        const [day, month, year] = date.split("/");
 
-        // Tách ngày, tháng, năm từ chuỗi date
-        let [day, month, year] = date.split('/');
-
-        // Kiểm tra xem ngày, tháng, năm có hợp lệ không
-        if (!day || !month || !year || !time) {
-            console.error('Dữ liệu ngày giờ không hợp lệ!');
-            return null;
-        }
-
-        // Tạo đối tượng Date từ dữ liệu, phải chuyển đổi thành định dạng ISO
-        let formattedDate = new Date(`${year}-${month}-${day}T${time}`);
-
-        // Kiểm tra nếu đối tượng Date không hợp lệ
-        if (isNaN(formattedDate.getTime())) {
-            console.error('Lỗi tạo đối tượng Date');
-            return null;
-        }
-
-        // Định dạng lại thành "yyyy-MM-dd HH:mm:ss"
-        let formattedDateString = formattedDate.toISOString().replace("T", " ").slice(0, 19);
-
-        return formattedDateString;
+        // Rearrange the components into the desired format
+        return `${year}-${month}-${day} ${time}`;
     }
 
 
@@ -470,8 +453,20 @@
                     document.getElementById("shiftName").value = shiftData.shiftName || '';
                     document.getElementById("status").value = shiftData.status ? '1' : '0';
                     document.getElementById("isOT").value = shiftData.isOT ? '1' : '0';
-                    document.getElementById("startTime").value = convertDateFormat(shiftData.startTime) || '';
-                    document.getElementById("endTime").value = convertDateFormat(shiftData.endTime) || '';
+                    console.log("StartTime: " + shiftData.startTime);
+                    console.log("EndTime: " + shiftData.endTime);
+
+                    var startTimeFormated = convertDateFormat(shiftData.startTime) || '';
+                    var endTimeFormated = convertDateFormat(shiftData.endTime) || '';
+
+                    console.log("StartTimeFormated: " + startTimeFormated);
+                    console.log("EndTimeFormated: " + endTimeFormated);
+
+                    document.getElementById("startTime").value = startTimeFormated;
+                    document.getElementById("endTime").value = endTimeFormated;
+
+
+
                     if (shiftData.isOT == '0') {
                         document.getElementById("breakFields").style.display = 'block';
                         document.getElementById("breakEndField").style.display = 'block';

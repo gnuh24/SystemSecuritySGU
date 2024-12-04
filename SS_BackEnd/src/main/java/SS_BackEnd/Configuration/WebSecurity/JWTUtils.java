@@ -1,22 +1,22 @@
 package SS_BackEnd.Configuration.WebSecurity;
 
-import SS_BackEnd.Configuration.Exception.AuthException.TokenExpiredException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+import lombok.Data;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.security.spec.*;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.function.Function;
 
 @Component
+@Data
 public class JWTUtils {
 
     private final SecretKey secretKeyForAccessToken ;
@@ -24,6 +24,10 @@ public class JWTUtils {
 
     private  static  final long EXPIRATION_TIME_FOR_TOKEN =  30L * 24 * 60 * 60 * 1000; // 30 ngày
     private  static  final long EXPIRATION_TIME_FOR_REFRSH_TOKEN = 30L * 24 * 60 * 60 * 1000; // 30 ngày
+
+    /**
+     * CÁC BƯỚC MÃ HÓA ĐỂ TẠO RA 1 SECRECT KEY
+     */
 
     public JWTUtils(){
         //Khởi tạo Secret key
@@ -85,7 +89,6 @@ public class JWTUtils {
         );
 
     }
-
 
     // TODO: Các phương thức Custom
 

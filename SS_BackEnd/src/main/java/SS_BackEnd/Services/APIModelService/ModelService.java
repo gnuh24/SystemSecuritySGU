@@ -94,7 +94,8 @@ public class ModelService implements IModelService {
 
         // Process and return the response
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(response.getBody());
+        JsonNode jsonNode = objectMapper.readTree(response.getBody()).get("Accuracy");
+        System.err.println("Object: " + objectMapper.readTree(response.getBody()).toString());
 
         // Assuming the API returns a message or status in the response
         return jsonNode.toString();  // Adjust this based on the exact response structure

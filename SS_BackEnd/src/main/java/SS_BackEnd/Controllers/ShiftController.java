@@ -67,7 +67,7 @@ public class ShiftController {
 
 
     @PostMapping("/Create")
-    public ResponseEntity<Response<ShiftDTOListElement>> createShift(@ModelAttribute @Valid ShiftCreateForm shiftCreateForm) {
+    public ResponseEntity<Response<ShiftDTOListElement>> createShift(@ModelAttribute @Valid ShiftCreateForm shiftCreateForm) throws Exception {
         Shift createdShift = shiftService.createShift(shiftCreateForm);
             ShiftDTOListElement dto = modelMapper.map(createdShift, ShiftDTOListElement.class);
 

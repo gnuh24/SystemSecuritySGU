@@ -248,7 +248,7 @@ def create_model(num_classes):
         MaxPooling2D(2),
         Flatten(),
         Dense(128, kernel_initializer='he_uniform', activation='relu'),
-        Dense(num_classes, activation='softmax')
+        Dense(num_classes, activation='softmax') 
     ])
     model.compile(optimizer=optimizers.Adam(1e-3), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     return model

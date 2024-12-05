@@ -760,8 +760,8 @@
             },
             error: function(xhr) {
                 let errorMessage = 'Có lỗi xảy ra khi thêm ca làm vào hệ thống.';
-                if (xhr.error) {
-                    errorMessage = xhr.error; // Hiển thị thông báo chi tiết từ server nếu có
+                if (xhr.status === 400) {
+                    errorMessage = xhr.responseJSON.detailMessage; // Hiển thị thông báo chi tiết từ server nếu có
                 }
                 Swal.fire({
                     icon: 'error',

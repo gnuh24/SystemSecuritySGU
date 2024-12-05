@@ -418,8 +418,6 @@
         const position = document.getElementById("position").value;
         formData.append("position", position);
 
-        console.log(images);
-
         // Handle file uploads for images (if any)
         if (images.length > 0) {
             for (let i = 0; i < images.length; i++) {
@@ -457,7 +455,10 @@
                     window.location.href = '/SystemSecuritySGU/SS_FrontEnd/ManagerUI/Profile/QLProfile.php';
                 });
             },
-            error: function() {
+            error: function(xhr, textStatus, errorThrown) {
+                console.log(xhr);
+                console.log(textStatus);
+                console.log(errorThrown);
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi',

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ShiftService implements IShiftService {
@@ -52,7 +53,22 @@ public class ShiftService implements IShiftService {
     // Create a new shift
     @Override
     @Transactional
-    public Shift createShift(ShiftCreateForm form) {
+    public Shift createShift(ShiftCreateForm form) throws Exception {
+
+        if (form.getIsActive()){
+            List<Shift> testStartTime = shiftRepository.findShiftsByTime(String.valueOf(form.getStartTime()));
+
+            if (testStartTime.size() > 0){
+                throw new Exception("Thời gian bắt đầu đã trùng với 1 ca làm trong hệ thống !!");
+            }
+
+            List<Shift> testEndTime = shiftRepository.findShiftsByTime(String.valueOf(form.getEndTime()));
+
+            if (testEndTime.size() > 0){
+                throw new Exception("Thời gian kết thúc đã trùng với 1 ca làm trong hệ thống !!");
+            }
+        }
+
         Shift shift = modelMapper.map(form, Shift.class);
         shift = shiftRepository.save(shift);
         shiftSignUpService.createSignUp(shift.getId(), form.getProfileCodes());

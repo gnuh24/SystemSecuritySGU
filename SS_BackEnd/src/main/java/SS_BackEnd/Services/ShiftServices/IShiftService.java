@@ -12,6 +12,6 @@ public interface IShiftService {
     Boolean isShiftExistsById(Integer id);
     Page<Shift> getAllShiftByManager(Pageable pageable, ShiftFilterForm form, String search);
     Shift getShiftById(Integer id);
-    Shift createShift(ShiftCreateForm form);
+    Shift createShift(ShiftCreateForm form) throws Exception;
     Shift updateShift(ShiftUpdateForm form);
 }
